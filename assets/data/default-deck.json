@@ -1,0 +1,172 @@
+[
+  {
+    "id": "topik-101",
+    "korean": "한국말",
+    "phoneticHangul": "한궁말",
+    "english": "Korean language (spoken)",
+    "audioUrl": "audio/topik_101.mp3",
+    "tags": ["noun", "topik1", "language"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Nouns"
+      }
+    ]
+  },
+  {
+    "id": "topik-102",
+    "korean": "국물",
+    "phoneticHangul": "궁물",
+    "english": "Soup / Broth",
+    "audioUrl": "audio/topik_102.mp3",
+    "tags": ["noun", "topik1", "food"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Nouns"
+      }
+    ]
+  },
+  {
+    "id": "topik-103",
+    "korean": "같이",
+    "phoneticHangul": "가치",
+    "english": "Together",
+    "audioUrl": "audio/topik_103.mp3",
+    "tags": ["adverb", "topik1", "basics"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Adverbs"
+      }
+    ]
+  },
+  {
+    "id": "topik-104",
+    "korean": "학교",
+    "phoneticHangul": "학꾜",
+    "english": "School",
+    "audioUrl": "audio/topik_104.mp3",
+    "tags": ["noun", "topik1", "places"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Nouns"
+      }
+    ]
+  },
+  {
+    "id": "topik-105",
+    "korean": "먹는",
+    "phoneticHangul": "멍는",
+    "english": "Eating (modifier form)",
+    "audioUrl": "audio/topik_105.mp3",
+    "tags": ["verb", "topik1", "grammar"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Verbs"
+      }
+    ]
+  },
+  {
+    "id": "topik-106",
+    "korean": "물",
+    "phoneticHangul": null,
+    "english": "Water",
+    "audioUrl": "audio/topik_106.mp3",
+    "tags": ["noun", "topik1", "basics"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Nouns"
+      }
+    ]
+  },
+  {
+    "id": "topik-107",
+    "korean": "감사합니다",
+    "phoneticHangul": "감사함니다",
+    "english": "Thank you",
+    "audioUrl": "audio/topik_107.mp3",
+    "tags": ["phrase", "topik1", "greetings"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Expressions"
+      }
+    ]
+  },
+  {
+    "id": "topik-108",
+    "korean": "십년",
+    "phoneticHangul": "심년",
+    "english": "10 years",
+    "audioUrl": "audio/topik_108.mp3",
+    "tags": ["noun", "topik1", "time"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Nouns"
+      }
+    ]
+  },
+  {
+    "id": "topik-109",
+    "korean": "독립",
+    "phoneticHangul": "동닙",
+    "english": "Independence",
+    "audioUrl": "audio/topik_109.mp3",
+    "tags": ["noun", "topik1", "concepts"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Nouns"
+      }
+    ]
+  },
+  {
+    "id": "topik-110",
+    "korean": "좋다",
+    "phoneticHangul": "조타",
+    "english": "To be good / fine",
+    "audioUrl": "audio/topik_110.mp3",
+    "tags": ["adjective", "topik1", "basics"],
+    "rating": 0,
+    "bestTimeSeconds": null,
+    "streakHistory": [],
+    "tracks": [
+      {
+        "trackName": "Essentials",
+        "groupName": "TOPIK 1 Adjectives"
+      }
+    ]
+  }
+]
