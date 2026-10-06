@@ -48,11 +48,29 @@ h1{
    font-weight: 800;
 }
 
+.section {
+    /* margin-top: 2rem;
+    margin-bottom: 2rem; */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
 .korean-text{
     font-family: var(--korean-font);
     font-weight: 500;
 }
 
+.text-white{
+    color: var(--neutral-color-white);
+}
+
+.text-cyan {
+    color: var(--selection-color-base);
+}
+
+.text-study-blue{
+    color: var(--secondary-color-light);
+}
 
 /* Navbar */
 #navbar{
@@ -143,3 +161,37 @@ h1{
     box-shadow: 0 0 0 0.25rem rgba(120, 223, 255, 0.4);
 } 
 */
+
+
+/* --- Footer Styling --- */
+#footer {
+    background-color: var(--primary-color-base); /* Deep Ocean background */
+    border-top: 2px solid rgba(120, 223, 255, 0.15);
+}
+
+.footer-brand-desc{
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-links a {
+    color: var(--neutral-color-white);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    
+}
+
+.footer-links a:hover {
+    color: var(--selection-color-base);
+}
+
+.footer-social-link {
+    color: var(--neutral-color-white);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-social-link:hover {
+    color: var(--selection-color-base);
+    transform: translateY(-2px);
+}
