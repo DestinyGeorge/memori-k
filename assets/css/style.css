@@ -1,16 +1,54 @@
 /* Google fonts import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+KR:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+/* CSS Variables */
+:root {
+    /* Fonts */
+    --primary-font: "Inter", sans-serif;          /* Navigation, UI text, English definitions */
+    --korean-font: "Noto Sans KR", sans-serif;   /* Korean vocabulary & Hangul text */
+    --brand-font: "Nunito", sans-serif;          /* Logo & branding identity */
+
+    /* 60% Primary Color (Deep Ocean - Structural Foundation) */
+    --primary-color-base: #1B3764;  /* Nav, footer, dark sections, primary headings */
+
+    /* 30% Secondary Colors (Blue Palette - Actions, Cards & Panels) */
+    --secondary-color-dark: #438BFF;  /* Memory Blue: Primary action buttons (Study, Quiz, Save) */
+    --secondary-color-base: #7BADFF;  /* Sky Blue: Secondary action buttons, filters, tags */
+    --secondary-color-light: #DAE8FF; /* Study Blue: Flashcard surfaces, dashboard panels, cards */
+
+    /* 10% Accent Colors (Progress & Achievements) */
+    --accent-purple-base: #7C5CFF;   /* Royal Purple: Progress bars, completion badges, milestones */
+    --accent-gold-base: #FBBF24;     /* Achievement Gold: Earned stars, trophies, streak badges */
+    --empty: #D1D5DB;            /* Unearned star, broken streak grey */
+
+    /* Selection Colors (Cyan - Active States & Hovers) */
+    --selection-color-base: #78DFFF;  /* Logo Cyan: Active borders, selected deck outlines */
+    --selection-color-light: #CEF3FF; /* Soft Cyan: Selection backgrounds, active hover states */
+
+    /* Status Colors (Feedback & Performance) */
+    --green: #00FF11;  /* Correct answers, completed reviews, fast response times */
+    --yellow: #FFD600; /* Medium response times, moderate performance */
+    --red: #FF3B3B;    /* Incorrect answers, slow response times, missed reviews */
+
+    /* Neutral Colors (Backgrounds, Text & Disabled States) */
+    --neutral-color-white: #FFFFFF;  /* Page background, form inputs, modal backgrounds */
+    --neutral-color-dark: #1B3764;   /* Navy text (soft readability on white backgrounds) */
+    --neutral-color-muted: #9CA3AF;  /* Slate grey for subtitles, placeholders, inactive text */
+    --neutral-color-light: #E5E7EB;  /* Mist grey for disabled buttons & borders */
+}
+
+/* Global Styles */
 body{
-    font-family: "Inter", sans-serif;
+    font-family: var(--primary-font);
+    color: var(--neutral-color-dark);
 }
 
 h1{
-   font-family: "Nunito", sans-serif;
+   font-family: var(--brand-font);
    font-weight: 800;
 }
 
 .korean-text{
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: var(--korean-font);
     font-weight: 500;
 }
