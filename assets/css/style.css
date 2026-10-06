@@ -52,3 +52,94 @@ h1{
     font-family: var(--korean-font);
     font-weight: 500;
 }
+
+
+/* Navbar */
+#navbar{
+    background-color: var(--primary-color-base);
+}
+
+#nav-logo{
+    height: 40px;
+    width: auto;
+}   
+
+/* .navbar-brand{
+    font-family: var(--secondary-font);
+} */
+
+/* --- Brand Logo Text Styling --- */
+.brand-text {
+    font-family: var(--brand-font);
+    font-weight: 800; /* ExtraBold */
+    font-size: 1.8rem;
+    color: var(--neutral-color-white);
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+/* Gradient effect specifically for the 'K' */
+.brand-k {
+    /* font-weight: 1000; */
+    background: linear-gradient(135deg, var(--accent-purple-base) 0%, var(--selection-color-base) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+
+}
+
+
+/* Library */
+
+/* SAVE FOR SEARCH BAR IN LIBRARY */
+/* .custom-search-input{
+    background-color: var(--primary-color-base);
+    color: var(--neutral-color-white);
+    border: 1px solid var(--secondary-color-base);
+} */
+
+/* Style when clicking into or typing in the search box */
+/* .custom-search-input:focus {
+    background-color: var(--primary-color-base);
+    color: var(--neutral-color-white);
+    border-color: var(--selection-color-base);
+    box-shadow: 0 0 0 0.25rem rgba(120, 223, 255, 0.25); /* Cyan outline glow using --selection-color-base */
+/* } */ 
+
+/* Placeholder text color inside dark search input */
+/* .custom-search-input::placeholder {
+    color: var(--neutral-color-muted);
+} */
+
+/* --- Search Button Styles --- */
+/* .custom-search-button {
+    border: 2px solid var(--neutral-color-white);
+    background-color: var(--primary-color-base);
+    color: var(--neutral-color-white);
+    transition: all 0.2s ease-in-out;
+} */
+
+/* Hover state */
+/* .custom-search-button:hover {
+    border-color: var(--neutral-color-white);
+    background-color: var(--neutral-color-white);
+
+     border-color: var(--secondary-color-base);
+    background-color: var(--secondary-color-base);
+    color: var(--primary-color-base);
+} */
+
+/* 1. Clicked moment (while holding mouse click down) */
+/* .custom-search-button:active {
+    background-color: var(--secondary-color-base) !important;
+    border-color: var(--secondary-color-base) !important;
+    color: var(--primary-color-base) !important;
+    transform: scale(0.96);  Subtle physical click effect 
+} */
+
+/* 2. Focused state (keyboard accessibility / remaining focused) */
+/* .custom-search-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(120, 223, 255, 0.4);
+} 
+*/
