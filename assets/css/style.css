@@ -1,4 +1,16 @@
+/* Google fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+KR:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 body{
-    background-color: lightblue;
+    font-family: "Inter", sans-serif;
+}
+
+h1{
+   font-family: "Nunito", sans-serif;
+   font-weight: 800;
+}
+
+.korean-text{
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 500;
 }
