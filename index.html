@@ -20,12 +20,12 @@
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navigation -->
 
-    <nav id="navbar" class="navbar navbar-expand-lg" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img id="nav-logo" src="assets/images/logo-icon.png">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top" data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img id="nav-logo" src="assets/images/logo-icon.png">
             
             <!-- CSS Text Logo -->
             <span class="brand-text">Memori<span class="brand-k">K</span></span>
@@ -50,10 +50,12 @@
                     <a class="nav-link" href="library.html">Library</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Study</a>
+                    <a class="nav-link disabled" href="study.html" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
+                        Study<i class="fa-solid fa-lock fs-6 ms-1"></i></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Quiz</a>
+                    <a class="nav-link disabled" href="quiz.html" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
+                        Quiz<i class="fa-solid fa-lock fs-6 ms-1"></i></a>
                     </li>
                 </ul>
             </div>
@@ -84,7 +86,7 @@
                         <img src="assets/images/logo-icon.png" alt="MemoriK Logo" style="height: 35px;" class="me-2">
                         <span class="brand-text fs-4">Memori<span class="brand-k">K</span></span>
                     </a>
-                    <p class="footer-brand-desc textsmall text-white-50 mb-3">Interactive Korean vocabulary study platform built for TOPIK 1 learners.</p>
+                    <p class="footer-brand-desc small text-white-50 mb-3">Interactive Korean vocabulary study platform built for TOPIK 1 learners.</p>
                     
                     <!-- Social Links -->
                     <div class="footer-links d-flex justify-content-center gap-3">
@@ -111,8 +113,8 @@
                 <!-- Contact Details -->
                 <div class="section col-12 col-md-4 text-center ">
                     <h5 class="text-uppercase fs-6 fw-bold mb-3 text-cyan">Get in Touch</h5>
-
-                    <p><i class="fa-solid fa-phone"></i> 012 345 6789<br></p>
+                    
+                    <p><i class="fa-solid fa-phone"></i> 012 345 6789</p>
                     <p><i class="fa-regular fa-paper-plane"></i> support@memorik.app</p>
 
 
