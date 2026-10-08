@@ -63,15 +63,72 @@
     </nav>
     
     <!-- Header -->
-    <header>
+    <!-- <header>
 
         <h1>MemoriK</h1>
 
-    </header>
+    </header> -->
     <!-- Main -->
-    <main>
+    <main id="library-page">
 
-        <p class="korean-text"> 감사하다 </p>
+        <!-- LIBRARY PAGE HEADER -->
+        <header id="library-header" class="mb-4">
+            <!-- 1. Breadcrumbs -->
+            <nav id="library-breadcrumbs" aria-label="breadcrumb" class="mb-3">
+                <div class="container">
+                    <!-- Library > Study Tracks > Track Name > Group Name -->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Library</li>
+                    </ol>
+                </div>
+            </nav>
+
+            <!-- 2. Section Title & Summary Stats -->
+            <div id="library-overview-panel" class="p-3">
+                <!-- Title, Mastery Doughnut/Percentage, Word Count Stats -->
+                <div id="overview-actions" class="mt-3">
+                    <!-- Action Buttons: "Study" and "Quizzes" -->
+                </div>
+            </div>
+        </header>
+
+        <!-- <section class="container section">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-6">View Title</h1>
+                </div>
+            </div>
+        </section> -->
+
+        <!-- MAIN LIBRARY CONTENT AREA -->
+        <section id="library-content" class="container section">
+            <!-- 3. View Mode Tab Bar -->
+            <div id="library-tabs" class="mb-3">
+                <!-- Tabs: "All Cards", "Decks", "Study Tracks" -->
+            </div>
+
+            <!-- 4. Card Selection Toolbar -->
+            <div id="selection-toolbar" class="mb-3">
+                <!-- Select All / Dropdown -->
+            </div>
+
+            <!-- 5. Filter & Sort Control Bar -->
+            <div id="filter-sort-bar" class="mb-4">
+                <!-- Filter, Results Count ("20 Results"), Sort -->
+            </div>
+
+            <!-- 6. Card / Deck Grid -->
+            <div id="library-grid-container" class="mb-5">
+                <div id="grid-header" class="d-flex justify-content-between align-items-center mb-3">
+                    <!-- Current Group Name & Cancel Selection -->
+                </div>
+
+                <!-- Dynamic Card Grid (populated via JS) -->
+                <div id="cards-container" class="row g-3">
+                    <!-- (+) Create New Card tile + Vocab cards -->
+                </div>
+            </div>
+        </section>
 
     </main>
 

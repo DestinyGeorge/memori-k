@@ -163,6 +163,14 @@ h1{
 */
 
 
+/* Library Bred Crumbs */
+#library-breadcrumbs{
+    background-color: var(--secondary-color-light);
+    color: var(--neutral-color-dark);
+
+}
+
+
 /* --- Footer Styling --- */
 #footer {
     background-color: var(--primary-color-base); /* Deep Ocean background */
