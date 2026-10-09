@@ -6,7 +6,7 @@
     "english": "Korean language (spoken)",
     "audioUrl": "audio/topik_101.mp3",
     "tags": ["noun", "topik1", "language"],
-    "rating": 0,
+    "rating": 3,
     "bestTimeSeconds": null,
     "streakHistory": [],
     "tracks": [
@@ -23,7 +23,7 @@
     "english": "Soup / Broth",
     "audioUrl": "audio/topik_102.mp3",
     "tags": ["noun", "topik1", "food"],
-    "rating": 0,
+    "rating": 1,
     "bestTimeSeconds": null,
     "streakHistory": [],
     "tracks": [
@@ -40,7 +40,7 @@
     "english": "Together",
     "audioUrl": "audio/topik_103.mp3",
     "tags": ["adverb", "topik1", "basics"],
-    "rating": 0,
+    "rating": 2,
     "bestTimeSeconds": null,
     "streakHistory": [],
     "tracks": [

@@ -2,6 +2,40 @@
 const STORAGE_KEY = 'memorik_cards_data';
 
 /**
+ Page Initialization
+ */
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    const cards = await loadFlashcardData();
+    updateLibraryOverviewStats(cards);
+
+
+    //DASHBOARD
+
+    // 2. Attach reset event listener safely
+    const resetButton = document.getElementById("reset-app-data");
+    if (resetButton) {
+        resetButton.addEventListener("click", resetAppData);
+    }
+
+    
+});
+
+
+// DASHBOARD
+function resetAppData() {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload(); // Reloads page to re-trigger default-deck.json fetch
+    console.log("App Data Reset")
+}
+
+
+
+// document.getElementById("reset-app-data").addEventListener("click", resetAppData);
+
+
+// LIBRARY
+/**
  * 1. Load Data: Checks LocalStorage first; if empty, fetches default-data.json
  */
 async function loadFlashcardData() {
@@ -56,7 +90,7 @@ function updateLibraryOverviewStats(cards) {
     // Calculate total mastery percentage
     const totalCards = cards.length;
     // Example formula: Memorised = 100% value, Familiar = 50% value
-    const masteryScore = Math.round((memorised  / totalCards) * 100);
+    const masteryScore = Math.round(((memorised + (familiar * 0.5)) / totalCards) * 100);
 
     // Update DOM Spans
     document.getElementById('memorised-words').textContent = memorised;
@@ -68,10 +102,3 @@ function updateLibraryOverviewStats(cards) {
 
 
 
-/**
- * 3. Page Initialization
- */
-document.addEventListener('DOMContentLoaded', async () => {
-    const cards = await loadFlashcardData();
-    updateLibraryOverviewStats(cards);
-});
