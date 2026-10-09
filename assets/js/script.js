@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateLibraryOverviewStats(cards);
 
 
-    //DASHBOARD
+    // DASHBOARD
 
-    // 2. Attach reset event listener safely
+    // Attach reset event listener safely
     const resetButton = document.getElementById("reset-app-data");
     if (resetButton) {
         resetButton.addEventListener("click", resetAppData);

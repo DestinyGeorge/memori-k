@@ -44,10 +44,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto ">
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">Dashboard</a>
+                    <a class="nav-link"  href="index.html">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="library.html">Library</a>
+                    <a class="nav-link active" aria-current="page" href="library.html">Library</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link disabled" href="study.html" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
@@ -103,7 +103,6 @@
                         <div class="mastery-progress-bar">
                             Circular Progrss Bar
                         </div>
-                        
                         <p>Mastery: <span id="mastery-percentage">0</span>%</p>
                     </div>
                     <div class="col-4">
@@ -115,12 +114,19 @@
                     <!-- Action Buttons: "Study" and "Quizzes" -->
                     <div class="row text-center">
                         <div class="col-12 col-md-6">
-                            <button type="button" class="btn library-action-button">
-                                Study <i class="fa-solid fa-play"></i></button>
+                            <!-- <button type="button" class="btn library-action-button">
+                                Study <i class="fa-solid fa-play"></i></button> -->
+
+                            <a href="study.html" class="btn library-action-button">
+                            Study <i class="fa-solid fa-play ms-1"></i>
+                            </a>
                         </div>
                         <div class="col-12 col-md-6">
-                            <button type="button" class="btn library-action-button">
-                                Quiz <i class="fa-solid fa-play"></i></button>
+                            <!-- <button type="button" class="btn library-action-button">
+                                Quiz <i class="fa-solid fa-play"></i></button> -->
+                            <a href="quiz.html" class="btn library-action-button">
+                            Quiz <i class="fa-solid fa-play ms-1"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -140,28 +146,143 @@
             <!-- 3. View Mode Tab Bar -->
             <div id="library-tabs" class="mb-3">
                 <!-- Tabs: "All Cards", "Decks", "Study Tracks" -->
+                 <ul class="nav nav-tabs nav-fill">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#all-cards">All Cards</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#decks">Decks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#study-tracks">Study Tracks</a>
+                    </li>
+                </ul>
             </div>
 
             <!-- 4. Card Selection Toolbar -->
-            <div id="selection-toolbar" class="mb-3">
+            <div id="selection-toolbar" class="">
                 <!-- Select All / Dropdown -->
+                 <p>
+                    <!-- <i class="fa-solid fa-circle-check"></i> -->
+                    <!-- <span> Select All </span> -->
+                     <form action="">
+                        <label for="select-card-count"> <i class="fa-solid fa-circle-check text-cyan"></i> Select:</label>
+                        <select name="select-card-count" id="select-card-count">
+                            <option selected value="all">All</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
+                        <!-- <br><br>
+                        <input type="submit" value="Submit"> -->
+                    </form>
+                </p>
             </div>
 
             <!-- 5. Filter & Sort Control Bar -->
             <div id="filter-sort-bar" class="mb-4">
                 <!-- Filter, Results Count ("20 Results"), Sort -->
+                <div class="row">
+                    <div class="col-4">
+                        <div id="filter">
+                            <i class="fa-solid fa-sliders "></i> Filter
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div id="search-results-num">
+                            <span>0</span> Results
+                        </div>
+                    </div>
+                    <div class="col-4 text-end">
+                        <div id="sort">
+                            Sort
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 6. Card / Deck Grid -->
             <div id="library-grid-container" class="mb-5">
-                <div id="grid-header" class="d-flex justify-content-between align-items-center mb-3">
-                    <!-- Current Group Name & Cancel Selection -->
+
+                <!-- TAB 1: ALL CARDS VIEW (Active by Default) -->
+                <div id="all-cards-view" class="tab-view">
+                    <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
+                        <!-- Current Group Name & Cancel Selection -->
+                        <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Cards</h2>
+                        <button id="cancel-selection-btn" class="btn  text-decoration-none d-none">
+                            Cancel Selection
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Card Grid (populated via JS) -->
+                    <div id="cards-container" class="row g-3">
+                        <!-- (+) Create New Card tile + Vocab cards -->
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="card flashcard" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title">Card title</h5> -->
+                                        <p class="card-text"> <i class="fa-solid fa-plus"></i> Create New Flashacrd</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Dynamic Card Grid (populated via JS) -->
-                <div id="cards-container" class="row g-3">
-                    <!-- (+) Create New Card tile + Vocab cards -->
+                <!-- TAB 2: DECKS VIEW (Hidden initially) -->
+                <div id="decks" class="tab-view">
+                    <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
+                        <!-- Current Group Name & Cancel Selection -->
+                        <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
+                        <button id="cancel-selection-btn" class="btn  text-decoration-none d-none">
+                            Cancel Selection
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Card Grid (populated via JS) -->
+                    <div id="cards-container" class="row g-3">
+                        <!-- (+) Create New Deck tile -->
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="card flashcard" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title">Card title</h5> -->
+                                        <p class="card-text"> <i class="fa-solid fa-plus"></i> Create New Deck</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- TAB 3: STUDY TRACKS VIEW (Hidden initially) -->
+                <div id="study-tracks" class="tab-view">
+                    <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
+                        <!-- Current Group Name & Cancel Selection -->
+                        <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Tracks</h2>
+                        <button id="cancel-selection-btn" class="btn  text-decoration-none d-none">
+                            Cancel Selection
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Card Grid (populated via JS) -->
+                    <div id="cards-container" class="row g-3">
+                        <!-- (+) Create New Card track -->
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="card flashcard" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title">Card title</h5> -->
+                                        <p class="card-text"> <i class="fa-solid fa-plus"></i> Create New Track</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </section>
 

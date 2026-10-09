@@ -183,6 +183,15 @@ h1{
 }
 
 
+/*  */
+#selection-toolbar{
+    border: 1px solid var(--primary-color-base);
+}
+
+#filter-sort-bar{
+    border: 1px solid var(--primary-color-base);
+}
+
 
 /* --- Footer Styling --- */
 #footer {

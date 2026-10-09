@@ -57,7 +57,7 @@
     "english": "School",
     "audioUrl": "audio/topik_104.mp3",
     "tags": ["noun", "topik1", "places"],
-    "rating": 0,
+    "rating": 3,
     "bestTimeSeconds": null,
     "streakHistory": [],
     "tracks": [
@@ -91,7 +91,7 @@
     "english": "Water",
     "audioUrl": "audio/topik_106.mp3",
     "tags": ["noun", "topik1", "basics"],
-    "rating": 0,
+    "rating": 3,
     "bestTimeSeconds": null,
     "streakHistory": [],
     "tracks": [
@@ -108,7 +108,7 @@
     "english": "Thank you",
     "audioUrl": "audio/topik_107.mp3",
     "tags": ["phrase", "topik1", "greetings"],
-    "rating": 0,
+    "rating": 2,
     "bestTimeSeconds": null,
     "streakHistory": [],
     "tracks": [
