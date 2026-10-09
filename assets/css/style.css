@@ -72,6 +72,11 @@ h1{
     color: var(--secondary-color-light);
 }
 
+.memory-blue-button{
+    background-color: var(--secondary-color-dark);
+    color: var(--neutral-color-white);
+}
+
 /* Navbar */
 #navbar{
     background-color: var(--primary-color-base);
@@ -169,6 +174,14 @@ h1{
     color: var(--neutral-color-dark);
 
 }
+
+.library-action-button{
+    background-color: var(--secondary-color-dark);
+    color: var(--neutral-color-white);
+    border-radius: 50px;
+    padding: 10px 70px 10px 70px;
+}
+
 
 
 /* --- Footer Styling --- */

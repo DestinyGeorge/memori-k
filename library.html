@@ -79,15 +79,50 @@
                     <!-- Library > Study Tracks > Track Name > Group Name -->
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item active" aria-current="page">Library</li>
+                        <!-- Tabs -->
+                        <li class="breadcrumb-item d-none"><a href="#">All Cards</a></li>
+                        <li class="breadcrumb-item d-none"><a href="#">Decks</a></li>
+                        <li class="breadcrumb-item d-none"><a href="#">Study Tracks</a></li>
                     </ol>
                 </div>
             </nav>
 
+            <div id="more-options" class="d-flex justify-content-end">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+
             <!-- 2. Section Title & Summary Stats -->
             <div id="library-overview-panel" class="p-3">
                 <!-- Title, Mastery Doughnut/Percentage, Word Count Stats -->
+                 <div class="row text-center">
+                    <div class="col-4">
+                        <p>Memorised Words: <span id="memorised-words">0</span></p>
+                        <p>Familiar Words: <span id="familiar-words">0</span></p>
+                    </div>
+                    <div class="col-4">
+                        <div class="mastery-progress-bar">
+                            Circular Progrss Bar
+                        </div>
+                        
+                        <p>Mastery: <span id="mastery-percentage">0</span>%</p>
+                    </div>
+                    <div class="col-4">
+                        <p>Weak Words: <span id="weak-words">0</span></p>
+                        <p>Unkown Words: <span id="unkown-words">0</span></p>
+                    </div>
+                 </div>
                 <div id="overview-actions" class="mt-3">
                     <!-- Action Buttons: "Study" and "Quizzes" -->
+                    <div class="row text-center">
+                        <div class="col-12 col-md-6">
+                            <button type="button" class="btn library-action-button">
+                                Study <i class="fa-solid fa-play"></i></button>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <button type="button" class="btn library-action-button">
+                                Quiz <i class="fa-solid fa-play"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
