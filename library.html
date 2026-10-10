@@ -144,17 +144,16 @@
         <!-- MAIN LIBRARY CONTENT AREA -->
         <section id="library-content" class="container section">
             <!-- 3. View Mode Tab Bar -->
-            <div id="library-tabs" class="mb-3">
-                <!-- Tabs: "All Cards", "Decks", "Study Tracks" -->
-                 <ul class="nav nav-tabs nav-fill">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#all-cards">All Cards</a>
+            <div id="library-tabs" class="mb-3"></div>
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-cards-tab" data-bs-toggle="tab" data-bs-target="#all-cards-tab-pane" type="button" role="tab" aria-controls="all-cards-tab-pane" aria-selected="true">All Cards</button>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#decks">Decks</a>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="decks-tab" data-bs-toggle="tab" data-bs-target="#decks-tab-pane" type="button" role="tab" aria-controls="decks-tab-pane" aria-selected="false">Decks</button>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#study-tracks">Study Tracks</a>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="study-tracks-tab" data-bs-toggle="tab" data-bs-target="#study-tracks-tab-pane" type="button" role="tab" aria-controls="study-tracks-tab-pane" aria-selected="false">Study Tracks</button>
                     </li>
                 </ul>
             </div>
@@ -202,10 +201,10 @@
             </div>
 
             <!-- 6. Card / Deck Grid -->
-            <div id="library-grid-container" class="mb-5">
+            <div id="library-tab-content" class="tab-content mx-3 mb-5">
 
                 <!-- TAB 1: ALL CARDS VIEW (Active by Default) -->
-                <div id="all-cards-view" class="tab-view">
+                <div id="all-cards-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="all-cards-tab" tabindex="0">
                     <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
                         <!-- Current Group Name & Cancel Selection -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Cards</h2>
@@ -231,7 +230,7 @@
                 </div>
 
                 <!-- TAB 2: DECKS VIEW (Hidden initially) -->
-                <div id="decks" class="tab-view">
+                <div id="decks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="decks-tab" tabindex="0">
                     <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
                         <!-- Current Group Name & Cancel Selection -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
@@ -257,7 +256,7 @@
                 </div>
 
                 <!-- TAB 3: STUDY TRACKS VIEW (Hidden initially) -->
-                <div id="study-tracks" class="tab-view">
+                <div id="study-tracks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="study-tracks-tab" tabindex="0">
                     <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
                         <!-- Current Group Name & Cancel Selection -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Tracks</h2>
