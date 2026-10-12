@@ -98,6 +98,24 @@ function updateLibraryOverviewStats(cards) {
     document.getElementById('weak-words').textContent = weak;
     document.getElementById('unkown-words').textContent = unknown;
     document.getElementById('mastery-percentage').textContent = masteryScore;
+
+
+    // TABS
+
+    const allCardsTabButton = document.getElementById("all-cards-tab");
+    const decksTabButton = document.getElementById("decks-tab");
+    const studyTracksTabButton = document.getElementById("study-tracks-tab");
+
+    const breadCrumbsElement = document.getElementById("library-breadcrumbs");
+
+    allCardsTabButton.addEventListener("click", updateBreadCrumbs)
+
+    function updateBreadCrumbs(){
+        
+    }
+
+
+
 }
 
 

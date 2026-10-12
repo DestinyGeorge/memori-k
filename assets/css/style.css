@@ -57,11 +57,15 @@ h1{
 
 .korean-text{
     font-family: var(--korean-font);
-    font-weight: 500;
+    /* font-weight: 500; */
 }
 
 .text-white{
     color: var(--neutral-color-white);
+}
+
+.text-dark-blue{
+    color: var(--primary-color-base);
 }
 
 .text-cyan {
@@ -75,6 +79,75 @@ h1{
 .memory-blue-button{
     background-color: var(--secondary-color-dark);
     color: var(--neutral-color-white);
+}
+
+
+/* Apply dark navy blue text globally to all flashcard text elements */
+.flashcard,
+.flashcard-body,
+.card-korean,
+/* .card-english, */
+.card-phonetic {
+    color: var(--neutral-color-dark) !important;
+}
+
+
+/* Reusable Primary Outline Action Button*/
+.btn-custom-primary-outline {
+    color: var(--primary-color-base);
+    border: 1.5px solid var(--primary-color-base);
+    background-color: transparent;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover State */
+.btn-custom-primary-outline:hover {
+    color: var(--neutral-color-white);
+    background-color: var(--primary-color-base);
+    border-color: var(--primary-color-base);
+}
+
+/* Clicked / Active Moment */
+.btn-custom-primary-outline:active {
+    background-color: var(--primary-color-base) !important;
+    color: var(--neutral-color-white) !important;
+    transform: scale(0.97);
+}
+
+/* Focus Outline (Accessibility) */
+.btn-custom-primary-outline:focus {
+    box-shadow: 0 0 0 0.2rem rgba(67, 139, 255, 0.25);
+}
+
+
+/* Reusable Secondary  Action Button*/
+.btn-custom-secondary-dark {
+    background-color: var(--secondary-color-dark);
+    color: var(--neutral-color-white);
+    border: 1.5px solid var(--secondary-color-dark);
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover State (Slightly brighter/darker shift) */
+.btn-custom-secondary-dark:hover {
+    background-color: var(--neutral-color-white);
+    border-color: var(--secondary-color-dark);
+    color: var(--secondary-color-dark);
+}
+
+/* Clicked / Active Moment */
+.btn-custom-secondary-dark:active {
+    background-color: var(--neutral-color-white) !important;
+    border-color: var(--secondary-color-dark) !important;
+    color: var(--secondary-color-dark) !important;
+    transform: scale(0.97);
+}
+
+/* Focus Outline (Accessibility) */
+.btn-custom-secondary-dark:focus {
+    box-shadow: 0 0 0 0.2rem rgba(67, 139, 255, 0.25);
 }
 
 /* Navbar */
@@ -190,6 +263,66 @@ h1{
 
 #filter-sort-bar{
     border: 1px solid var(--primary-color-base);
+}
+
+.tab-grid-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+
+
+/* Library Flashcards */
+.flashcard{
+    margin: 25px;
+    min-width: 285px;
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.flashcard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(27, 55, 100, 0.08);
+}
+
+.flashcard .card-body{
+    height: 100%;
+}
+
+.icon-header-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-selection-btn{
+    text-decoration: none;
+}
+
+.card-rating-stars{
+    color: var(--yellow);
+}
+
+.card-tags{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.card-tags span{
+    color: var(--primary-color-base);
+}
+
+
+.card-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 

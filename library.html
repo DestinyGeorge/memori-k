@@ -78,9 +78,9 @@
                 <div class="container">
                     <!-- Library > Study Tracks > Track Name > Group Name -->
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">Library</li>
+                        <li class="breadcrumb-item">Library</li>
                         <!-- Tabs -->
-                        <li class="breadcrumb-item d-none"><a href="#">All Cards</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="#">All Cards</a></li>
                         <li class="breadcrumb-item d-none"><a href="#">Decks</a></li>
                         <li class="breadcrumb-item d-none"><a href="#">Study Tracks</a></li>
                     </ol>
@@ -88,7 +88,7 @@
             </nav>
 
             <div id="more-options" class="d-flex justify-content-end">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                    <i class="fa-solid fa-ellipsis-vertical fa-2x"></i>
                 </div>
 
             <!-- 2. Section Title & Summary Stats -->
@@ -117,14 +117,14 @@
                             <!-- <button type="button" class="btn library-action-button">
                                 Study <i class="fa-solid fa-play"></i></button> -->
 
-                            <a href="study.html" class="btn library-action-button">
+                            <a href="study.html" class="btn library-action-button btn-custom-secondary-dark">
                             Study <i class="fa-solid fa-play ms-1"></i>
                             </a>
                         </div>
                         <div class="col-12 col-md-6">
                             <!-- <button type="button" class="btn library-action-button">
                                 Quiz <i class="fa-solid fa-play"></i></button> -->
-                            <a href="quiz.html" class="btn library-action-button">
+                            <a href="quiz.html" class="btn library-action-button btn-custom-secondary-dark">
                             Quiz <i class="fa-solid fa-play ms-1"></i>
                             </a>
                         </div>
@@ -162,8 +162,6 @@
             <div id="selection-toolbar" class="">
                 <!-- Select All / Dropdown -->
                  <p>
-                    <!-- <i class="fa-solid fa-circle-check"></i> -->
-                    <!-- <span> Select All </span> -->
                      <form action="">
                         <label for="select-card-count"> <i class="fa-solid fa-circle-check text-cyan"></i> Select:</label>
                         <select name="select-card-count" id="select-card-count">
@@ -172,8 +170,6 @@
                             <option value="10">10</option>
                             <option value="20">20</option>
                         </select>
-                        <!-- <br><br>
-                        <input type="submit" value="Submit"> -->
                     </form>
                 </p>
             </div>
@@ -205,12 +201,12 @@
 
                 <!-- TAB 1: ALL CARDS VIEW (Active by Default) -->
                 <div id="all-cards-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="all-cards-tab" tabindex="0">
-                    <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
+                    <div class="tab-grid-header">
                         <!-- Current Group Name & Cancel Selection -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Cards</h2>
-                        <button id="cancel-selection-btn" class="btn  text-decoration-none d-none">
+                        <!-- <button id="cancel-selection-btn" class="btn text-decoration-none d-none">
                             Cancel Selection
-                        </button>
+                        </button> -->
                     </div>
 
                     <!-- Dynamic Card Grid (populated via JS) -->
@@ -218,20 +214,88 @@
                         <!-- (+) Create New Card tile + Vocab cards -->
                         <div class="row">
                             <div class="col-4">
-                                <div class="card flashcard" style="width: 18rem;">
-                                    <div class="card-body">
+                                <div id="create-flashcard" class="card flashcard create-card text-center text-dark-blue cursor-pointer" >
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                         <!-- <h5 class="card-title">Card title</h5> -->
-                                        <p class="card-text"> <i class="fa-solid fa-plus"></i> Create New Flashacrd</p>
+                                        <p class="card-text"><i class="fa-solid fa-plus fs-3"></i>
+                                        <span class="fw-bold ">Create New Flashcard</span></p>
                                     </div>
                                 </div>
                             </div>
+
+                            <template id="card-template">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div id="library-flashcard" class="card flashcard">
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title">Card title</h5> -->
+                                        <div class="icon-header-row">
+                                            <!-- Select Toggle -->
+                                            <button type="button" class="btn card-select-btn" aria-label="Select card">
+                                                <i class="fa-regular fa-circle text-muted fs-3 select-icon-off d-none"></i>
+                                                <i class="fa-solid fa-circle-check text-cyan fs-3 select-icon-on "></i>
+                                            </button>
+
+                                            <!-- Audio Playback Button -->
+                                            <button type="button" class="btn btn-sm btn-light rounded-circle audio-play-btn" aria-label="Play pronunciation audio">
+                                                <i class="fa-solid fa-volume-high text-secondary"></i>
+                                            </button>
+
+                                            <!-- Mastery Rating Stars -->
+                                            <div class="card-rating-stars fs-6" title="Rating: 3/3 (Memorized)">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- <p class="card-text text-center" id="korean-word">  Korean </p>
+                                        <p class="card-text text-center" id="english-word">  English </p>
+                                        <p class="card-text" id="tags">  Tags: </p> -->
+
+                                        <!-- Core Vocab Info -->
+                                        <div class="text-center my-auto py-2">
+                                            <h3 class="card-korean fw-bold mb-1 fs-3">한국말</h3>
+                                            <div class="card-phonetic text-muted small mb-2">[한궁말]</div>
+                                            <p class="card-english text-secondary mb-0">Korean language (spoken)</p>
+                                        </div>
+
+                                         <!-- Tags Row -->
+                                        <div class="card-tags mt-3 pt-2 border-top">
+                                            <span class="badge border">#noun</span>
+                                            <span class="badge border">#topik1</span>
+                                            <span class="badge border">#language</span>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Card Footer Actions -->
+                                    <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
+                                        <!-- Primary View Action with Text -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary btn-view-details">
+                                            <i class="fa-solid fa-eye me-1"></i> View Details
+                                        </button>
+
+                                        <!-- Secondary Actions (Icon-Only) -->
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-card" title="Edit Card" aria-label="Edit Card">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-card" title="Delete Card" aria-label="Delete Card">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            </template>
                         </div>
                     </div>
                 </div>
 
                 <!-- TAB 2: DECKS VIEW (Hidden initially) -->
                 <div id="decks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="decks-tab" tabindex="0">
-                    <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
+                    <div class="tab-grid-header">
                         <!-- Current Group Name & Cancel Selection -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
                         <button id="cancel-selection-btn" class="btn  text-decoration-none d-none">
@@ -257,7 +321,7 @@
 
                 <!-- TAB 3: STUDY TRACKS VIEW (Hidden initially) -->
                 <div id="study-tracks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="study-tracks-tab" tabindex="0">
-                    <div id="grid-header" class="d-flex justify-content-between align-items-center mb-5">
+                    <div class="tab-grid-header">
                         <!-- Current Group Name & Cancel Selection -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Tracks</h2>
                         <button id="cancel-selection-btn" class="btn  text-decoration-none d-none">
