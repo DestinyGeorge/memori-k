@@ -215,8 +215,8 @@
                     
 
                     <div class="col-4 text-center">
-                        <div id="search-results-num">
-                            <span>0</span> Results
+                        <div id="results">
+                            <span id="results-count"></span> Results
                         </div>
                     </div>
 
@@ -304,75 +304,9 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <template id="card-template">
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <div id="library-flashcard" class="card flashcard">
-                                    <div class="card-body">
-                                        <!-- <h5 class="card-title">Card title</h5> -->
-                                        <div class="icon-header-row">
-                                            <!-- Select Toggle -->
-                                            <button type="button" class="btn card-select-btn" aria-label="Select card">
-                                                <i class="fa-regular fa-circle text-muted fs-3 select-icon-off d-none"></i>
-                                                <i class="fa-solid fa-circle-check text-cyan fs-3 select-icon-on "></i>
-                                            </button>
-
-                                            <!-- Audio Playback Button -->
-                                            <button type="button" class="btn btn-sm btn-light rounded-circle audio-play-btn" aria-label="Play pronunciation audio">
-                                                <i class="fa-solid fa-volume-high text-secondary"></i>
-                                            </button>
-
-                                            <!-- Mastery Rating Stars -->
-                                            <div class="card-rating-stars fs-6" title="Rating: 3/3 (Memorized)">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </div>
-                                        </div>
-
-                                        <!-- <p class="card-text text-center" id="korean-word">  Korean </p>
-                                        <p class="card-text text-center" id="english-word">  English </p>
-                                        <p class="card-text" id="tags">  Tags: </p> -->
-
-                                        <!-- Core Vocab Info -->
-                                        <div class="text-center my-auto py-2">
-                                            <h3 class="card-korean fw-bold mb-1 fs-3">한국말</h3>
-                                            <div class="card-phonetic text-muted small mb-2">[한궁말]</div>
-                                            <p class="card-english text-secondary mb-0">Korean language (spoken)</p>
-                                        </div>
-
-                                         <!-- Tags Row -->
-                                        <div class="card-tags mt-3 pt-2 border-top">
-                                            <span class="badge border">#noun</span>
-                                            <span class="badge border">#topik1</span>
-                                            <span class="badge border">#language</span>
-                                        </div>
-
-                                    </div>
-
-                                    <!-- Card Footer Actions -->
-                                    <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
-                                        <!-- Primary View Action with Text -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary btn-view-details">
-                                            <i class="fa-solid fa-eye me-1"></i> View Details
-                                        </button>
-
-                                        <!-- Secondary Actions (Icon-Only) -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-card" title="Edit Card" aria-label="Edit Card">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-card" title="Delete Card" aria-label="Delete Card">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            </template>
                         </div>
                     </div>
+                
                 </div>
 
                 <!-- TAB 2: DECKS VIEW (Hidden initially) -->
@@ -432,6 +366,74 @@
         </section>
 
     </main>
+
+
+    <template id="card-template">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div id="library-flashcard" class="card flashcard">
+                <div class="card-body">
+                    <!-- <h5 class="card-title">Card title</h5> -->
+                    <div class="icon-header-row">
+                        <!-- Select Toggle -->
+                        <button type="button" class="btn card-select-btn" aria-label="Select card">
+                            <i class="fa-regular fa-circle text-muted fs-3 select-icon-off d-none"></i>
+                            <i class="fa-solid fa-circle-check text-cyan fs-3 select-icon-on "></i>
+                        </button>
+
+                        <!-- Audio Playback Button -->
+                        <button type="button" class="btn btn-sm btn-light rounded-circle audio-play-btn" aria-label="Play pronunciation audio">
+                            <i class="fa-solid fa-volume-high text-secondary"></i>
+                        </button>
+
+                        <!-- Mastery Rating Stars -->
+                        <div class="card-rating-stars fs-6" title="Rating: 3/3 (Memorized)">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+
+                    <!-- <p class="card-text text-center" id="korean-word">  Korean </p>
+                    <p class="card-text text-center" id="english-word">  English </p>
+                    <p class="card-text" id="tags">  Tags: </p> -->
+
+                    <!-- Core Vocab Info -->
+                    <div class="text-center my-auto py-2">
+                        <h3 class="card-korean fw-bold mb-1 fs-3">한국말</h3>
+                        <div class="card-phonetic text-muted small mb-2">[한궁말]</div>
+                        <p class="card-english text-secondary mb-0">Korean language (spoken)</p>
+                    </div>
+
+                        <!-- Tags Row -->
+                    <div class="card-tags mt-3 pt-2 border-top">
+                        <span class="badge border">#noun</span>
+                        <span class="badge border">#topik1</span>
+                        <span class="badge border">#language</span>
+                    </div>
+
+                </div>
+
+                <!-- Card Footer Actions -->
+                <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
+                    <!-- Primary View Action with Text -->
+                    <button type="button" class="btn btn-sm btn-outline-primary btn-view-details">
+                        <i class="fa-solid fa-eye me-1"></i> View Details
+                    </button>
+
+                    <!-- Secondary Actions (Icon-Only) -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-card" title="Edit Card" aria-label="Edit Card">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete-card" title="Delete Card" aria-label="Delete Card">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
 
     <!-- Footer -->
     <footer id="footer" class=" mt-auto py-5 text-white">

@@ -2,12 +2,26 @@
 const STORAGE_KEY = 'memorik_cards_data';
 const selectedCardIds = new Set(); // Set prevents duplicates automatically
 
+// Master cards array
+let cards = [];
+
+
+let createTile = null;
+
+
+
 /**
  Page Initialization
  */
 document.addEventListener('DOMContentLoaded', async () => {
+
+    // Cache the Create Tile element ONCE before doing anything else
+    const createTileEl = document.getElementById("create-flashcard");
+    if (createTileEl) {
+        createTile = createTileEl.parentElement; // Stores the column wrapper in memory
+    }
     
-    const cards = await loadFlashcardData();
+    cards = await loadFlashcardData();
     updateLibraryOverviewStats(cards);
 
 
@@ -29,6 +43,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupSectionToggle("ratings-toggle", "ratings-options");
     setupSectionToggle("tags-toggle", "dynamic-tags-container");
 
+    // ATTACH FILTER CHANGE EVENT LISTENER
+    const filterPanel = document.getElementById("collapseFilters");
+    if (filterPanel) {
+        filterPanel.addEventListener("change", (e) => {
+            applyFilters(e);
+        });
+    }
+
+    // Run initial filter check (sets results count correctly)
+    applyFilters();
+
     
 });
 
@@ -39,8 +64,6 @@ function resetAppData() {
     location.reload(); // Reloads page to re-trigger default-deck.json fetch
     console.log("App Data Reset")
 }
-
-
 
 // document.getElementById("reset-app-data").addEventListener("click", resetAppData);
 
@@ -129,10 +152,9 @@ function updateBreadCrumbs(){
 function renderFlashcards(cardsArray) {
     const container = document.getElementById("cards-container");
     const template = document.getElementById("card-template");
-
-    const createTile = document.getElementById("create-flashcard").parentElement;
+    
     container.innerHTML = "";
-    // if (createTile) container.appendChild(createTile);
+
     container.appendChild(createTile);
         
     cardsArray.forEach(card => {
@@ -220,12 +242,7 @@ function renderFlashcards(cardsArray) {
             console.log(selectedCardIds);
         });
 
-        
-
-
         starsContainer.innerHTML = starsHTML;
-
-
 
         // Append cloned card to grid
         container.appendChild(clone);
@@ -234,15 +251,15 @@ function renderFlashcards(cardsArray) {
 }
 
 
+// FILTERS
+
 function populateTagFilters(cards) {
     const tagsContainer = document.getElementById("dynamic-tags-container");
     if (!tagsContainer) return;
 
     // Collect unique tags
     const allTags = new Set();
-    cards.forEach(card => card.tags?.forEach(tag => allTags.add(tag)));
-
-    // let tagsHTML = "";
+    cards.forEach(card => card.tags?.forEach(tag => allTags.add(tag))); // Optional chaining (?.) safely reads nested properties without throwing a TypeError if 'e' or 'target' is null/undefined
 
     let tagsHTML = `
         <div class="form-check">
@@ -250,7 +267,6 @@ function populateTagFilters(cards) {
             <label class="form-check-label fw-semibold" for="checkTagAll">All Tags</label>
         </div>
     `;
-
 
     allTags.forEach(tag => {
         tagsHTML += `
@@ -285,4 +301,75 @@ function setupSectionToggle(toggleBtnId, contentContainerId) {
     });
 }
 
+function handleAllCheckboxSync(groupSelector, allCheckboxId, changedElement) {
+    const allCheckbox = document.getElementById(allCheckboxId);
+    if (!allCheckbox) return;
 
+    // List of all individual options (excluding "All")
+    const filterOptions = Array.from(document.querySelectorAll(groupSelector))
+                               .filter(cb => cb.value !== "all");
+
+    // Boolean check: returns true if AT LEAST ONE individual option is ticked
+    const isAnyFilterSelected = filterOptions.some(cb => cb.checked);
+
+    if (changedElement === allCheckbox) {
+        if (allCheckbox.checked) {
+            // User checked "All" -> clear individual options
+            filterOptions.forEach(cb => cb.checked = false);
+        } else if (!isAnyFilterSelected) {
+            // User unchecked "All" directly -> force "All" back on if nothing else is selected
+            allCheckbox.checked = true;
+        }
+    } else {
+        if (isAnyFilterSelected) {
+            // An individual option is selected -> uncheck "All"
+            allCheckbox.checked = false;
+        } else {
+            // Last individual option was unchecked -> revert back to "All"
+            allCheckbox.checked = true;
+        }
+    }
+}
+
+function applyFilters(e) {
+
+    // Run mutual exclusion sync if triggered by a checkbox change
+    if (e?.target?.classList.contains("rating-checkbox")) { // Optional chaining (?.)
+        handleAllCheckboxSync(".rating-checkbox", "checkRatingAll", e.target);
+    }
+    if (e?.target?.classList.contains("tag-checkbox")) { // Optional chaining (?.)
+        handleAllCheckboxSync(".tag-checkbox", "checkTagAll", e.target);
+    }
+
+    // Collect checked rating numbers (ensure integer conversion with radix 10)
+    const checkedRatings = Array.from(document.querySelectorAll('.rating-checkbox:checked'))
+                                 .map(cb => cb.value)
+                                 .filter(val => val !== "all") //exclude all
+                                 .map(val => parseInt(val, 10)); //must convert string to int as ratings are numbers
+
+    // Collect checked tag strings
+    const checkedTags = Array.from(document.querySelectorAll('.tag-checkbox:checked'))
+                             .map(cb => cb.value)
+                             .filter(val => val !== "all"); //exclude all
+
+    // Filter global 'cards' array
+    const filteredCards = cards.filter(card => {
+        //If "All Ratings" is active (or no other filter options are checked), checkedRatings is [] so Length is 0 -> remember all is excluded from options
+        // Rating check: matches if "All" selected OR card rating matches any checked integer
+        const ratingMatch = checkedRatings.length === 0 || checkedRatings.includes(Number(card.rating));
+        //If "All Tags" is active (or no other filter options are checked), checkedTags is [] so Length is 0 -> remember all is excluded from options
+        // Tag check: matches if "All" selected OR card contains at least one checked tag (.some)
+        const tagMatch = checkedTags.length === 0 || checkedTags.some(tag => card.tags?.includes(tag));
+
+        // A card must satisfy both active rating rules AND active tag rules to be included in filteredCards
+        return ratingMatch && tagMatch;
+    });
+
+    // Update DOM counter and re-render card grid
+    const resultsCountEl = document.getElementById("results-count");
+    if (resultsCountEl) {
+        resultsCountEl.textContent = filteredCards.length;
+    }
+
+    renderFlashcards(filteredCards);
+}
