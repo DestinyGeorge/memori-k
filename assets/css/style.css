@@ -76,6 +76,10 @@ h1{
     color: var(--secondary-color-light);
 }
 
+.bg-secondary-color-light{
+    background-color: var(--secondary-color-light);
+}
+
 .memory-blue-button{
     background-color: var(--secondary-color-dark);
     color: var(--neutral-color-white);
@@ -256,13 +260,35 @@ h1{
 }
 
 
-/*  */
+/* Tool Bars */
 #selection-toolbar{
     border: 1px solid var(--primary-color-base);
 }
 
 #filter-sort-bar{
     border: 1px solid var(--primary-color-base);
+}
+
+.toolbar{
+    padding: 1rem;
+    border-radius: 0.5rem;
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between; */
+}
+
+/* make checkboxes rounded (circle style) */
+.form-check-input[type="checkbox"] {
+    border-radius: 50% !important;
+    width: 1.15em;
+    height: 1.15em;
+    cursor: pointer;
+}
+
+/* match checkmark accent color to theme */
+.form-check-input:checked {
+    background-color: var(--primary-color-base);
+    border-color: var(--primary-color-base);
 }
 
 .tab-grid-header{

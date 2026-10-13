@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderFlashcards(cards);
 
+    populateTagFilters(cards);
+
+    // Attach Filter Toggles
+    setupSectionToggle("ratings-toggle", "ratings-options");
+    setupSectionToggle("tags-toggle", "dynamic-tags-container");
+
     
 });
 
@@ -190,11 +196,31 @@ function renderFlashcards(cardsArray) {
         const iconOff = selectBtn.querySelector(".select-icon-off");
         const iconOn = selectBtn.querySelector(".select-icon-on");
 
+        // selectBtn.addEventListener("click", () => {
+        //     iconOff.classList.toggle("d-none");
+        //     iconOn.classList.toggle("d-none");
+        // });
+
         selectBtn.addEventListener("click", () => {
-            iconOff.classList.toggle("d-none");
-            iconOn.classList.toggle("d-none");
-            cardElement.classList.toggle("border-cyan");
+            const isSelected = iconOff.classList.contains("d-none");
+
+            if (isSelected) {
+                // Unselecting
+                iconOff.classList.remove("d-none");
+                iconOn.classList.add("d-none");
+                selectedCardIds.delete(card.id);
+            } else {
+                // Selecting
+                iconOff.classList.add("d-none");
+                iconOn.classList.remove("d-none");
+                selectedCardIds.add(card.id);
+            }
+
+            // updateSelectionToolbarCount();
+            console.log(selectedCardIds);
         });
+
+        
 
 
         starsContainer.innerHTML = starsHTML;
@@ -206,4 +232,57 @@ function renderFlashcards(cardsArray) {
     });
 
 }
+
+
+function populateTagFilters(cards) {
+    const tagsContainer = document.getElementById("dynamic-tags-container");
+    if (!tagsContainer) return;
+
+    // Collect unique tags
+    const allTags = new Set();
+    cards.forEach(card => card.tags?.forEach(tag => allTags.add(tag)));
+
+    // let tagsHTML = "";
+
+    let tagsHTML = `
+        <div class="form-check">
+            <input class="form-check-input tag-checkbox" type="checkbox" value="all" id="checkTagAll" checked>
+            <label class="form-check-label fw-semibold" for="checkTagAll">All Tags</label>
+        </div>
+    `;
+
+
+    allTags.forEach(tag => {
+        tagsHTML += `
+            <div class="form-check">
+                <input class="form-check-input tag-checkbox" type="checkbox" value="${tag}" id="tag-${tag}">
+                <label class="form-check-label" for="tag-${tag}">#${tag}</label>
+            </div>
+        `;
+    });
+
+    tagsContainer.innerHTML = tagsHTML;
+}
+
+function setupSectionToggle(toggleBtnId, contentContainerId) {
+    const toggleBtn = document.getElementById(toggleBtnId);
+    const contentContainer = document.getElementById(contentContainerId);
+
+    if (!toggleBtn || !contentContainer) return;
+
+    toggleBtn.addEventListener("click", () => {
+        // Hide or show the checkbox list
+        contentContainer.classList.toggle("d-none");
+
+        // Swap down/up arrows
+        const angleDown = toggleBtn.querySelector(".angle-down");
+        const angleUp = toggleBtn.querySelector(".angle-up");
+
+        if (angleDown && angleUp) {
+            angleDown.classList.toggle("d-none");
+            angleUp.classList.toggle("d-none");
+        }
+    });
+}
+
 

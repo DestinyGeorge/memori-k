@@ -159,9 +159,9 @@
             </div>
 
             <!-- 4. Card Selection Toolbar -->
-            <div id="selection-toolbar" class="">
+            <!-- <div id="selection-toolbar" class=""> -->
                 <!-- Select All / Dropdown -->
-                 <p>
+                 <!-- <p>
                      <form action="">
                         <label for="select-card-count"> <i class="fa-solid fa-circle-check text-cyan"></i> Select:</label>
                         <select name="select-card-count" id="select-card-count">
@@ -172,28 +172,110 @@
                         </select>
                     </form>
                 </p>
+            </div> -->
+
+            <!-- 4. Card Selection Toolbar -->
+            <div id="selection-toolbar" class=" toolbar border d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <!-- Left: Batch Selection Control -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Icon Toggle Button (Matches card structure) -->
+                    <button type="button" id="toolbar-select-toggle-btn" class="btn p-0 border-0" aria-label="Toggle batch selection">
+                        <i id="toolbar-icon-off" class="fa-regular fa-circle text-muted fs-4"></i>
+                        <i id="toolbar-icon-on" class="fa-solid fa-circle-check text-cyan fs-4 d-none"></i>
+                    </button>
+
+                    <label for="select-card-count" class="fw-semibold mb-0">Select Batch:</label>
+                    
+                    <select id="select-card-count" class="form-select form-select-sm w-auto">
+                        <option value="manual" selected>Manual Selection</option>
+                        <option value="5">5 Cards</option>
+                        <option value="10">10 Cards</option>
+                        <option value="20">20 Cards</option>
+                        <option value="all">All Visible Cards</option>
+                    </select>
+                </div>
+
+                <!-- Right: Live Selected Counter -->
+                <div class="selected-count-display">
+                    <span class="text-muted">Selected: </span>
+                    <strong id="selected-count-text" class="text-primary">0</strong> cards
+                </div>
+
             </div>
 
             <!-- 5. Filter & Sort Control Bar -->
-            <div id="filter-sort-bar" class="mb-4">
+            <div id="filter-sort-bar" class=" toolbar mb-4">
                 <!-- Filter, Results Count ("20 Results"), Sort -->
                 <div class="row">
                     <div class="col-4">
-                        <div id="filter">
+                        <button type="button" id="filter" class="btn p-0 border-0" data-bs-toggle="collapse" data-bs-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
                             <i class="fa-solid fa-sliders "></i> Filter
-                        </div>
+                        </button>
                     </div>
+                    
+
                     <div class="col-4 text-center">
                         <div id="search-results-num">
                             <span>0</span> Results
                         </div>
                     </div>
+
                     <div class="col-4 text-end">
                         <div id="sort">
                             Sort
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Collapsible Multi-Select Filter Panel -->
+            <div class="collapse mt-3 p-3 border rounded bg-secondary-color-light" id="collapseFilters">
+                <h3 class="h6 fw-bold mb-3">Filter By</h3>
+
+                <div id="ratings-filter" class="mb-3">
+                    <!-- <p>Ratings <i class="fa-solid fa-angle-down d-none"></i> <i class="fa-solid fa-angle-up"></i></p> -->
+                    <button type="button" class="btn p-0 border-0 fw-semibold filter-toggle-btn d-flex align-items-center gap-2 mb-2" id="ratings-toggle">
+                        <span>Ratings</span>
+                        <i class="fa-solid fa-angle-down angle-down d-none"></i>
+                        <i class="fa-solid fa-angle-up angle-up"></i>
+                    </button>
+
+                    <div id="ratings-options">
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="all" id="checkRatingAll" checked>
+                            <label class="form-check-label fw-semibold" for="checkRatingAll">All Ratings</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="0" id="checkUnkown">
+                            <label class="form-check-label" for="checkUnkown">Unkown</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="1" id="checkWeak">
+                            <label class="form-check-label" for="checkWeak">Weak</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="2" id="checkFamiliar">
+                            <label class="form-check-label" for="checkFamiliar">Familiar</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="3" id="checkMemorised">
+                            <label class="form-check-label" for="checkMemorised">Memorised</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tag-filter"></div>
+
+                <!-- Tag filter template -->
+                <!-- <p>Tags <i class="fa-solid fa-angle-down d-none"></i><i class="fa-solid fa-angle-up"></i></p> -->
+                 <button type="button" class="btn p-0 border-0 fw-semibold filter-toggle-btn d-flex align-items-center gap-2 mb-2" id="tags-toggle">
+                    <span>Tags</span>
+                    <i class="fa-solid fa-angle-down angle-down d-none"></i>
+                    <i class="fa-solid fa-angle-up angle-up"></i>
+                </button>
+                <div id="dynamic-tags-container">
+                </div>
+
             </div>
 
             <!-- 6. Card / Deck Grid -->
