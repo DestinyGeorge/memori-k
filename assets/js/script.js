@@ -218,29 +218,34 @@ function renderFlashcards(cardsArray) {
         const iconOff = selectBtn.querySelector(".select-icon-off");
         const iconOn = selectBtn.querySelector(".select-icon-on");
 
-        // selectBtn.addEventListener("click", () => {
-        //     iconOff.classList.toggle("d-none");
-        //     iconOn.classList.toggle("d-none");
-        // });
 
+        // Check if card ID is in selectedCardIds on initial load
+        const isSelected = selectedCardIds.has(card.id);
+
+        if (isSelected) {
+            iconOff.classList.add("d-none");
+            iconOn.classList.remove("d-none");
+        } else {
+            iconOff.classList.remove("d-none");
+            iconOn.classList.add("d-none");
+        }
+
+        // Click event toggles the state & updates selectedCardIds
         selectBtn.addEventListener("click", () => {
-            const isSelected = iconOff.classList.contains("d-none");
-
-            if (isSelected) {
-                // Unselecting
+            if (selectedCardIds.has(card.id)) {
+                // Currently selected -> Unselect it
+                selectedCardIds.delete(card.id);
                 iconOff.classList.remove("d-none");
                 iconOn.classList.add("d-none");
-                selectedCardIds.delete(card.id);
             } else {
-                // Selecting
+                // Currently unselected -> Select it
+                selectedCardIds.add(card.id);
                 iconOff.classList.add("d-none");
                 iconOn.classList.remove("d-none");
-                selectedCardIds.add(card.id);
             }
-
-            // updateSelectionToolbarCount();
-            console.log(selectedCardIds);
+            console.log("Selected Card IDs:", Array.from(selectedCardIds));
         });
+
 
         starsContainer.innerHTML = starsHTML;
 
