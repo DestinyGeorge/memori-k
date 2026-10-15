@@ -295,6 +295,7 @@ function renderFlashcards(cardsArray) {
 
 /**
  * Updates the selection toolbar counters and toggle icons based on current "selectedCardIds" size.
+ * Enables and Disables the Study and Quiz buttons based on minumum required selected cards.
  */
 function updateSelectionToolBarUI(){
 
@@ -313,6 +314,39 @@ function updateSelectionToolBarUI(){
         iconOff.classList.add("d-none");
         iconOn.classList.remove("d-none");
     }
+
+    // Toggle Study & Quiz buttons and swap lock/play icons
+    const studyBtn = document.getElementById("study-btn");
+    const quizBtn = document.getElementById("quiz-btn");
+    const minRequiredCards = 1;
+
+    const isEnabled = selectedCardIds.size >= minRequiredCards;
+
+    [studyBtn, quizBtn].forEach(btn => {
+        if (!btn) return;
+
+        const iconEl = btn.querySelector(".action-icon");
+
+        if (isEnabled) {
+            btn.classList.remove("disabled");
+            btn.removeAttribute("aria-disabled");
+            
+            // Swap Lock icon to Play icon
+            if (iconEl) {
+                iconEl.classList.remove("fa-lock");
+                iconEl.classList.add("fa-play");
+            }
+        } else {
+            btn.classList.add("disabled");
+            btn.setAttribute("aria-disabled", "true");
+
+            // Swap Play icon back to Lock icon
+            if (iconEl) {
+                iconEl.classList.remove("fa-play");
+                iconEl.classList.add("fa-lock");
+            }
+        }
+    });
 
 
 }
