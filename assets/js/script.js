@@ -4,8 +4,10 @@ const selectedCardIds = new Set(); // Set prevents duplicates automatically
 
 // Master cards array
 let cards = [];
+let decks = [];
 
 let createTile = null;
+let createDeckTile = null;
 
 let filteredCards = []; // Active dataset after filters applied
 
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (createTileEl) {
         createTile = createTileEl.parentElement; // Stores the column wrapper in memory
     }
+
+    createDeckTile = document.getElementById("create-deck").parentElement;
     
     cards = await loadFlashcardData();
     updateLibraryOverviewStats(cards);
@@ -37,6 +41,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderFlashcards(cards);
 
     populateTagFilters(cards);
+
+    renderDecks(decks); // decks array is populated in populateTagFilters(cards)
 
     // Attach Filter Toggles
     setupSectionToggle("ratings-toggle", "ratings-options");
@@ -173,6 +179,8 @@ function updateBreadCrumbs(){
         
 }
 
+// RENDER TAB CONTENT
+
 /**
  * Renders the grid of flashcard elements inside the cards container using HTML templates.
  * Attaches audio playback and card selection event listeners to each rendered card.
@@ -289,6 +297,39 @@ function renderFlashcards(cardsArray) {
         container.appendChild(clone);
     });
 
+}
+
+
+/**
+ * Renders deck items directly into #decks-container as grid columns.
+ * 
+ * @param {Array<string>} decksArray - Array of deck tag strings.
+ */
+function renderDecks(decksArray) {
+    const container = document.getElementById("decks-container");
+    const template = document.getElementById("deck-template");
+    
+    container.innerHTML = "";
+    container.appendChild(createDeckTile);
+
+    decksArray.forEach(deck => {
+        let deckCount = 0;
+        const clone = template.content.cloneNode(true);
+
+        clone.querySelector(".deck-title").textContent = deck;
+
+        cards.forEach(element => {
+            if (element.tags.includes(deck)){
+                deckCount ++;
+            }
+        });
+
+        clone.querySelector(".deck-card-count").textContent = `${deckCount} Cards`;
+        // clone.querySelector(".deck-card-count").textContent = `${deck.cardIds?.length || 0} Cards`;
+
+        // Append the column element directly to the row container
+        container.appendChild(clone);
+    });
 }
 
 // SELECTION 
@@ -467,6 +508,9 @@ function populateTagFilters(cards) {
     });
 
     tagsContainer.innerHTML = tagsHTML;
+
+    // Create deck array from tags
+    decks = Array.from(allTags);
 }
 
 /**
