@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 // DASHBOARD
+/**
+ * Resets the application data stored in LocalStorage back to defaults
+ * and reloads the current browser tab to re-trigger initial deck fetching.
+ */
 function resetAppData() {
     localStorage.removeItem(STORAGE_KEY);
     location.reload(); // Reloads page to re-trigger default-deck.json fetch
@@ -108,7 +112,9 @@ async function loadFlashcardData() {
 }
 
 /**
- * 2. Update Stats Panel: Calculates counts & updates DOM spans
+ * Update Stats Panel: Calculates counts & updates DOM spans
+ * 
+ *  @param {Array<Object>} cards - Array of flashcard objects used to retrieve rating counts.
  */
 function updateLibraryOverviewStats(cards) {
     if (!cards || cards.length === 0) return;
@@ -160,10 +166,19 @@ const breadCrumbsElement = document.getElementById("library-breadcrumbs");
 
 allCardsTabButton.addEventListener("click", updateBreadCrumbs)
 
+/**
+ * Updates breadcrumb navigation elements depending on the active tab view.
+ */
 function updateBreadCrumbs(){
         
 }
 
+/**
+ * Renders the grid of flashcard elements inside the cards container using HTML templates.
+ * Attaches audio playback and card selection event listeners to each rendered card.
+ * 
+ * @param {Array<Object>} cardsArray - Array of flashcard objects to display in the grid.
+ */
 function renderFlashcards(cardsArray) {
     const container = document.getElementById("cards-container");
     const template = document.getElementById("card-template");
@@ -278,6 +293,9 @@ function renderFlashcards(cardsArray) {
 
 // SELECTION 
 
+/**
+ * Updates the selection toolbar counters and toggle icons based on current "selectedCardIds" size.
+ */
 function updateSelectionToolBarUI(){
 
     //set selected count text to reflect number of cards in selectedCardIds
@@ -299,6 +317,12 @@ function updateSelectionToolBarUI(){
 
 }
 
+/**
+ * Handles batch card selection logic when the user selects an option from the card count dropdown.
+ * Supports "all", numerical limits (5, 10, 20), and randomized selection/removal.
+ * 
+ * @param {Event} e - The dropdown change event object.
+ */
 function handleCardSelectionDropdown(e){
     let selectedValue = e.target.value;
     // console.log(selectedValue);
@@ -353,6 +377,10 @@ function handleCardSelectionDropdown(e){
 
 }
 
+/**
+ * Handles master batch selection toggle button clicks.
+ * Clears selection if cards are currently selected; otherwise selects all visible filtered cards.
+ */
 function handleToolBarSelectionButton(){
     const hasSelections = selectedCardIds.size > 0;
     let cardSelectionDropDownEl = document.getElementById("select-card-count");
@@ -375,6 +403,11 @@ function handleToolBarSelectionButton(){
 
 // FILTERS
 
+/**
+ * Dynamically builds and inserts tag checkbox controls into the filter sidebar panel.
+ * 
+ * @param {Array<Object>} cards - Master list of cards used to extract unique tags.
+ */
 function populateTagFilters(cards) {
     const tagsContainer = document.getElementById("dynamic-tags-container");
     if (!tagsContainer) return;
@@ -402,6 +435,12 @@ function populateTagFilters(cards) {
     tagsContainer.innerHTML = tagsHTML;
 }
 
+/**
+ * Toggles visibility of filter's collapse container sections and swaps directional indicator icons.
+ * 
+ * @param {string} toggleBtnId - The DOM ID of the toggle trigger element.
+ * @param {string} contentContainerId - The DOM ID of the collapsible content wrapper.
+ */
 function setupSectionToggle(toggleBtnId, contentContainerId) {
     const toggleBtn = document.getElementById(toggleBtnId);
     const contentContainer = document.getElementById(contentContainerId);
@@ -423,6 +462,14 @@ function setupSectionToggle(toggleBtnId, contentContainerId) {
     });
 }
 
+/**
+ * Synchronizes 'All' checkbox mutual exclusion behavior across filter checkbox groups.
+ * Checking 'All' clears individual options, while checking an individual option unchecks 'All'.
+ * 
+ * @param {string} groupSelector - CSS query selector for the group of checkboxes.
+ * @param {string} allCheckboxId - DOM ID of the group's "All" checkbox.
+ * @param {HTMLElement} changedElement - The specific checkbox target that triggered the change event.
+ */
 function handleAllCheckboxSync(groupSelector, allCheckboxId, changedElement) {
     const allCheckbox = document.getElementById(allCheckboxId);
     if (!allCheckbox) return;
@@ -453,6 +500,12 @@ function handleAllCheckboxSync(groupSelector, allCheckboxId, changedElement) {
     }
 }
 
+/**
+ * Evaluates active rating and tag filter checkboxes, filters the master cards dataset,
+ * applies active sorting rules, updates the results counter, and re-renders the grid.
+ * 
+ * @param {Event} [e] - trigger event from a filter checkbox input.
+ */
 function applyFilters(e) {
 
     // Run mutual exclusion sync if triggered by a checkbox change
@@ -503,6 +556,13 @@ function applyFilters(e) {
 
 // SORTING
 
+/**
+ * Sorts an array of flashcard objects based on a specified criterion without mutating the input array.
+ * 
+ * @param {Array<Object>} cardsArray - Array of flashcards to be sorted.
+ * @param {string} sortCriterion - Sort rule ('korean-asc', 'english-asc', 'rating-asc', 'rating-desc').
+ * @returns {Array<Object>} A new sorted array of flashcard objects.
+ */
 function sortCards(cardsArray, sortCriterion) {
     // Create a shallow copy to prevent mutating the input array directly
     const sorted = [...cardsArray];
@@ -531,6 +591,8 @@ function sortCards(cardsArray, sortCriterion) {
 
 /**
  * Event handler triggered when the user changes the sort dropdown.
+ * 
+ * @param {Event} e - The dropdown change event object.
  */
 function handleSortChange(e) {
     const sortCriterion = e.target.value;
