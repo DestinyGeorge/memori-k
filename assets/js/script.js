@@ -5,10 +5,9 @@ const selectedCardIds = new Set(); // Set prevents duplicates automatically
 // Master cards array
 let cards = [];
 
-
 let createTile = null;
 
-
+let filteredCards = []; // Active dataset after filters applied
 
 /**
  Page Initialization
@@ -53,6 +52,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Run initial filter check (sets results count correctly)
     applyFilters();
+
+    // Selection Dropdown
+
+    let cardSelectionDropDownEl = document.getElementById("select-card-count");
+    cardSelectionDropDownEl.addEventListener("change", handleCardSelectionDropdown);
+
+    let toolbarSelectionBtn = document.getElementById("toolbar-select-toggle-btn");
+    toolbarSelectionBtn.addEventListener("click", handleToolBarSelectionButton);
+    
 
     
 });
@@ -229,6 +237,7 @@ function renderFlashcards(cardsArray) {
             iconOff.classList.remove("d-none");
             iconOn.classList.add("d-none");
         }
+        updateSelectionToolBarUI();
 
         // Click event toggles the state & updates selectedCardIds
         selectBtn.addEventListener("click", () => {
@@ -244,6 +253,11 @@ function renderFlashcards(cardsArray) {
                 iconOn.classList.remove("d-none");
             }
             console.log("Selected Card IDs:", Array.from(selectedCardIds));
+            updateSelectionToolBarUI();
+
+            // set selection dropdown value to manual selection when a card is selected manually
+            let cardSelectionDropdownEl = document.getElementById("select-card-count");
+            cardSelectionDropdownEl.value = "manual";
         });
 
 
@@ -253,6 +267,102 @@ function renderFlashcards(cardsArray) {
         container.appendChild(clone);
     });
 
+}
+
+// SELECTION 
+
+function updateSelectionToolBarUI(){
+
+    //set selected count text to reflect number of cards in selectedCardIds
+    selectionCountTextEl = document.getElementById("selected-count-text");
+    selectionCountTextEl.textContent = selectedCardIds.size;
+
+    // Toggle toolbar icon on or boff based on selected card count
+    let iconOff = document.getElementById("toolbar-icon-off");
+    let iconOn = document.getElementById("toolbar-icon-on");
+
+    if(selectedCardIds.size === 0){
+        iconOff.classList.remove("d-none");
+        iconOn.classList.add("d-none");
+    } else {
+        iconOff.classList.add("d-none");
+        iconOn.classList.remove("d-none");
+    }
+
+
+}
+
+function handleCardSelectionDropdown(e){
+    let selectedValue = e.target.value;
+    // console.log(selectedValue);
+    let filteredCardIds = filteredCards.map(card => card.id);
+    let filteredCardCount = filteredCardIds.length;
+
+    console.log(filteredCardIds);
+
+    if (selectedValue === "all") {
+        filteredCardIds.forEach(id => {
+            selectedCardIds.add(id); // Sets automatically ignore duplicates
+        });
+    } else if (selectedValue !== "manual"){ // not all or manual = unparsed number (5,10,20)
+        const targetCount = parseInt(selectedValue, 10);
+
+        // If total available filtered cards is less than or equal to target, select them all
+        if (filteredCardCount <= targetCount) {
+            filteredCardIds.forEach(id => selectedCardIds.add(id));
+        } else {
+    
+            // add random cards from filteredCardIds until target limit is reached
+            while (selectedCardIds.size < targetCount) {
+                let randIndex = Math.floor(Math.random() * filteredCardCount);
+                let randFilteredCardId = filteredCardIds[randIndex];
+                
+                if (!selectedCardIds.has(randFilteredCardId)) {
+                    selectedCardIds.add(randFilteredCardId);
+                }
+            }
+        }
+
+        if (selectedCardIds.size > targetCount) {
+            while (selectedCardIds.size > targetCount) {
+                // Convert Set to a temporary Array to allow index lookup
+                const currentSelectedArray = Array.from(selectedCardIds);
+                
+                // Pick a random index based on current array length
+                const randIndex = Math.floor(Math.random() * currentSelectedArray.length);
+                const cardIdToRemove = currentSelectedArray[randIndex];
+
+                // Delete from Set using the actual ID
+                selectedCardIds.delete(cardIdToRemove);
+            }
+        }
+    }
+    // Update UI & Re-render cards to show updated checkmarks
+    updateSelectionToolBarUI();
+    renderFlashcards(filteredCards);
+
+
+    console.log(selectedCardIds);
+
+}
+
+function handleToolBarSelectionButton(){
+    const hasSelections = selectedCardIds.size > 0;
+    let cardSelectionDropDownEl = document.getElementById("select-card-count");
+    let filteredCardIds = filteredCards.map(card => card.id);
+    
+    if (hasSelections){
+        selectedCardIds.clear()
+        cardSelectionDropDownEl.value = "all";
+    } else{ // if there are no selected cards
+        filteredCards.forEach(element => {
+            selectedCardIds.add(element.id)
+        });
+        cardSelectionDropDownEl.value = "all";
+    }
+
+    updateSelectionToolBarUI();
+    renderFlashcards(filteredCards);
 }
 
 
@@ -358,7 +468,7 @@ function applyFilters(e) {
                              .filter(val => val !== "all"); //exclude all
 
     // Filter global 'cards' array
-    const filteredCards = cards.filter(card => {
+    filteredCards = cards.filter(card => {
         //If "All Ratings" is active (or no other filter options are checked), checkedRatings is [] so Length is 0 -> remember all is excluded from options
         // Rating check: matches if "All" selected OR card rating matches any checked integer
         const ratingMatch = checkedRatings.length === 0 || checkedRatings.includes(Number(card.rating));
