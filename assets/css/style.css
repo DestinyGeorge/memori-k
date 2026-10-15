@@ -291,6 +291,17 @@ h1{
     border-color: var(--primary-color-base);
 }
 
+/* Compact dropdown styling for sort toolbar control */
+.sort-dropdown {
+    width: auto !important;
+    max-width: 130px; /* Constrains total width */
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-left: 0.4rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
 .tab-grid-header{
     display: flex;
     justify-content: space-between;

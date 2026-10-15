@@ -53,6 +53,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Run initial filter check (sets results count correctly)
     applyFilters();
 
+
+    // Sort dropdown changes trigger handleSortChange
+    const sortSelectEl = document.getElementById("sort-select");
+    if (sortSelectEl) {
+        sortSelectEl.addEventListener("change", handleSortChange);
+    }
+
     // Selection Dropdown
 
     let cardSelectionDropDownEl = document.getElementById("select-card-count");
@@ -480,11 +487,57 @@ function applyFilters(e) {
         return ratingMatch && tagMatch;
     });
 
+    // Apply current sort option to filtered set
+    const sortSelectEl = document.getElementById("sort-select");
+    const activeSort = sortSelectEl ? sortSelectEl.value : "default";
+    filteredCards = sortCards(filteredCards, activeSort);
+
     // Update DOM counter and re-render card grid
     const resultsCountEl = document.getElementById("results-count");
     if (resultsCountEl) {
         resultsCountEl.textContent = filteredCards.length;
     }
 
+    renderFlashcards(filteredCards);
+}
+
+// SORTING
+
+function sortCards(cardsArray, sortCriterion) {
+    // Create a shallow copy to prevent mutating the input array directly
+    const sorted = [...cardsArray];
+
+    switch (sortCriterion) {
+        case "korean-asc":
+            // Korean alphabetical order (가 - 하) using localeCompare
+            return sorted.sort((a, b) => a.korean.localeCompare(b.korean, "ko"));
+
+        case "english-asc":
+            // English alphabetical order (A - Z)
+            return sorted.sort((a, b) => a.english.localeCompare(b.english, "en"));
+
+        case "rating-asc":
+            // Weakest first (0, 1, 2, 3)
+            return sorted.sort((a, b) => a.rating - b.rating);
+
+        case "rating-desc":
+            // Strongest first (3, 2, 1, 0)
+            return sorted.sort((a, b) => b.rating - a.rating);
+
+        default:
+            return sorted;
+    }
+}
+
+/**
+ * Event handler triggered when the user changes the sort dropdown.
+ */
+function handleSortChange(e) {
+    const sortCriterion = e.target.value;
+
+    // Sort active filtered cards in place
+    filteredCards = sortCards(filteredCards, sortCriterion);
+
+    // Re-render grid with new order
     renderFlashcards(filteredCards);
 }

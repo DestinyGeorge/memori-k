@@ -220,10 +220,19 @@
                         </div>
                     </div>
 
-                    <div class="col-4 text-end">
-                        <div id="sort">
+                    <div class="col-4 text-end d-flex justify-content-end align-items-center gap-2">
+                        <!-- <div id="sort">
                             Sort
-                        </div>
+                        </div> -->
+                        <label for="sort-select" class="fw-semibold mb-0 d-none d-sm-inline">
+                            <i class="fa-solid fa-arrow-down-short-wide text-muted me-1"></i>Sort:
+                        </label>
+                        <select id="sort-select" class="form-select form-select-sm w-auto sort-dropdown">
+                            <option value="korean-asc" selected>Korean (가 – 하)</option>
+                            <option value="english-asc">English (A – Z)</option>
+                            <option value="rating-asc">Rating (Low - High)</option>
+                            <option value="rating-desc">Rating (High - Low)</option>
+                        </select>
                     </div>
                 </div>
             </div>
