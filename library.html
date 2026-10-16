@@ -73,23 +73,8 @@
 
         <!-- LIBRARY PAGE HEADER -->
         <header id="library-header" class="mb-4">
-            <!-- 1. Breadcrumbs -->
-            <nav id="library-breadcrumbs" aria-label="breadcrumb" class="">
-                <div class="container">
-                    <!-- Library > Study Tracks > Track Name > Group Name -->
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">Library</li>
-                        <!-- Tabs -->
-                        <li class="breadcrumb-item active" aria-current="page"><a href="#">All Cards</a></li>
-                        <li class="breadcrumb-item d-none"><a href="#">Decks</a></li>
-                        <li class="breadcrumb-item d-none"><a href="#">Study Tracks</a></li>
-                    </ol>
-                </div>
-            </nav>
-
-            
-
-            <!-- 2. Section Title & Summary Stats -->
+        
+            <!-- Section Title & Summary Stats -->
             <div id="library-overview-panel" class="p-3 container">
 
                 <div id="more-options" class="d-flex justify-content-end mb-3">
@@ -131,14 +116,6 @@
             </div>
         </header>
 
-        <!-- <section class="container section">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h1 class="display-6">View Title</h1>
-                </div>
-            </div>
-        </section> -->
-
         <!-- MAIN LIBRARY CONTENT AREA -->
         <section id="library-content" class="container section">
             <!-- 3. View Mode Tab Bar -->
@@ -156,7 +133,7 @@
                 </ul>
             </div>
 
-            <!-- 4. Card Selection Toolbar -->
+            <!-- Card Selection Toolbar -->
             <div id="selection-toolbar" class=" toolbar border d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <!-- Left: Batch Selection Control -->
                 <div class="d-flex align-items-center gap-2">
@@ -185,7 +162,7 @@
 
             </div>
 
-            <!-- 5. Filter & Sort Control Bar -->
+            <!-- Filter & Sort Control Bar -->
             <div id="filter-sort-bar" class=" toolbar mb-4">
                 <!-- Filter, Results Count ("20 Results"), Sort -->
                 <div class="row">
@@ -269,7 +246,7 @@
 
             </div>
 
-            <!-- 6. Card / Deck Grid -->
+            <!-- Card / Deck Grid -->
             <div id="library-tab-content" class="tab-content mx-3 mb-5">
 
                 <!-- TAB 1: ALL CARDS VIEW (Active by Default) -->
@@ -299,9 +276,10 @@
 
                 <!-- TAB 2: DECKS VIEW (Hidden initially) -->
                 <div id="decks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="decks-tab" tabindex="0">
+                    <!-- Dynamic Breadcrumb Header -->
                     <div class="tab-grid-header">
                         <!-- Current Group Name & Cancel Selection -->
-                        <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
+                        <h2 id="decks-header-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
                     </div>
 
                     <!-- Dynamic Card Grid (populated via JS) -->
@@ -317,12 +295,7 @@
                                 </div>
                             </div>
 
-                            
-
-
                         </div>
-
-                        
 
                     </div>
                 </div>
@@ -443,7 +416,7 @@
                 <!-- Card Footer Actions -->
                 <div class="deck-card-footer bg-transparent  pb-3 px-3">
                     <!-- Primary View Action with Text -->
-                    <button type="button" class="btn btn-sm btn-outline-primary btn-view-details">
+                    <button type="button" class="btn btn-sm btn-outline-primary btn-view-deck">
                         <i class="fa-solid fa-eye me-1"></i> View Deck
                     </button>
 

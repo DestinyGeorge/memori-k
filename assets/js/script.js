@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Library
 
-    renderFlashcards(cards);
+    renderFlashcards(cards, "cards-container");
 
     populateTagFilters(cards);
 
@@ -187,8 +187,8 @@ function updateBreadCrumbs(){
  * 
  * @param {Array<Object>} cardsArray - Array of flashcard objects to display in the grid.
  */
-function renderFlashcards(cardsArray) {
-    const container = document.getElementById("cards-container");
+function renderFlashcards(cardsArray, containerId) {
+    const container = document.getElementById(containerId);
     const template = document.getElementById("card-template");
     
     container.innerHTML = "";
@@ -342,9 +342,57 @@ function renderDecks(decksArray) {
         clone.querySelector(".deck-card-count").textContent = `${deckCount} Cards`;
         // clone.querySelector(".deck-card-count").textContent = `${deck.cardIds?.length || 0} Cards`;
 
+        clone.querySelector(".btn-view-deck").addEventListener("click",() => openDeckView(deck));
+
         // Append the column element directly to the row container
         container.appendChild(clone);
     });
+}
+
+/**
+ * Opens a specific deck view inside the Decks tab.
+ * Updates the header title into interactive breadcrumbs: "ALL DECKS / #TAG".
+ * 
+ * @param {string} tag - The deck tag string (e.g. "noun").
+ */
+function openDeckView(tag) {
+    const headerTitleEl = document.getElementById("decks-header-title");
+    
+    // 1. Update Header to Breadcrumb Link: "ALL DECKS / #TAG"
+    if (headerTitleEl) {
+        headerTitleEl.innerHTML = `
+            <a href="#" id="back-to-all-decks" class="text-decoration-none text-muted me-1 hover-underline">Decks</a>
+            <span class="text-muted fs-6 me-1">/</span>
+            <span class="text-primary">#${tag}</span>
+        `;
+
+        // Attach click listener to "All Decks" link
+        document.getElementById("back-to-all-decks")?.addEventListener("click", (e) => {
+            e.preventDefault();
+            resetDecksView();
+        });
+    }
+
+    // 2. Filter global cards for this deck tag
+    const deckCards = cards.filter(card => card.tags && card.tags.includes(tag));
+
+    // 3. Render cards into #decks-container (reusing renderFlashcards logic)
+    renderFlashcards(deckCards, "decks-container");
+}
+
+/**
+ * Resets the Decks tab back to displaying the main deck tiles grid.
+ */
+function resetDecksView() {
+    const headerTitleEl = document.getElementById("decks-header-title");
+    
+    // Restore main title
+    if (headerTitleEl) {
+        headerTitleEl.innerHTML = "All Decks";
+    }
+
+    // Re-render main deck tiles
+    renderDecks(decks);
 }
 
 // SELECTION 
@@ -460,7 +508,7 @@ function handleCardSelectionDropdown(e){
     }
     // Update UI & Re-render cards to show updated checkmarks
     updateSelectionToolBarUI();
-    renderFlashcards(filteredCards);
+    renderFlashcards(filteredCards, "cards-container");
 
 
     console.log(selectedCardIds);
@@ -487,7 +535,7 @@ function handleToolBarSelectionButton(){
     }
 
     updateSelectionToolBarUI();
-    renderFlashcards(filteredCards);
+    renderFlashcards(filteredCards, "cards-container");
 }
 
 
@@ -644,7 +692,7 @@ function applyFilters(e) {
         resultsCountEl.textContent = filteredCards.length;
     }
 
-    renderFlashcards(filteredCards);
+    renderFlashcards(filteredCards, "cards-container");
 }
 
 // SORTING
@@ -694,5 +742,5 @@ function handleSortChange(e) {
     filteredCards = sortCards(filteredCards, sortCriterion);
 
     // Re-render grid with new order
-    renderFlashcards(filteredCards);
+    renderFlashcards(filteredCards, "cards-container");
 }
