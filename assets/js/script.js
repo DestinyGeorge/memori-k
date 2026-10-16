@@ -186,17 +186,6 @@ const allCardsTabButton = document.getElementById("all-cards-tab");
 const decksTabButton = document.getElementById("decks-tab");
 const studyTracksTabButton = document.getElementById("study-tracks-tab");
 
-const breadCrumbsElement = document.getElementById("library-breadcrumbs");
-
-allCardsTabButton.addEventListener("click", updateBreadCrumbs)
-
-/**
- * Updates breadcrumb navigation elements depending on the active tab view.
- */
-function updateBreadCrumbs(){
-        
-}
-
 // RENDER TAB CONTENT
 
 /**
@@ -204,6 +193,8 @@ function updateBreadCrumbs(){
  * Renders the active cards set into whichever container is currently active.
  */
 function renderActiveView() {
+    updateDeckGridToolBarState(); // disable selection and filtering for decks
+
     if (currentView === 'all-cards') {
         renderFlashcards(filteredCards, "cards-container");
     } else if (currentView === 'deck-detail') {
@@ -359,7 +350,16 @@ function renderDecks(decksArray) {
     container.innerHTML = "";
     container.appendChild(createDeckTile);
 
-    decksArray.forEach(deck => {
+    // Sort decks alphabetically A-Z
+    const sortedDecks = [...decksArray].sort((a, b) => a.localeCompare(b, "en"));
+
+    // Update results counter with total deck count
+    // const resultsCountEl = document.getElementById("results-count");
+    // if (resultsCountEl) {
+    //     resultsCountEl.textContent = sortedDecks.length;
+    // }
+
+    sortedDecks.forEach(deck => {
         let deckCount = 0;
         const clone = template.content.cloneNode(true);
 
@@ -442,11 +442,50 @@ function resetDecksView() {
         headerTitleEl.innerHTML = "All Decks";
     }
 
-    // Re-render main deck tiles
-    renderDecks(decks);
+    // // Re-render main deck tiles
+    // renderDecks(decks);
+
+    renderActiveView(); // Will call renderDecks(decks) and lock toolbar
 }
 
 // SELECTION 
+
+/**
+ * Enables or disables search/filter/selection controls based on active view state.
+ */
+function updateDeckGridToolBarState() {
+    const isDeckGrid = (currentView === 'deck-grid');
+
+    // Update results counter with total deck count
+    const resultsCountEl = document.getElementById("results-count");
+    if (resultsCountEl) {
+       resultsCountEl.textContent = isDeckGrid ? decks.length : filteredCards.length;
+    }
+
+    // Disable / Enable Batch Selection Controls
+    const selectionDropdown = document.getElementById("select-card-count");
+    const toolbarSelectBtn = document.getElementById("toolbar-select-toggle-btn");
+    
+    if (selectionDropdown) selectionDropdown.disabled = isDeckGrid;
+    if (toolbarSelectBtn) toolbarSelectBtn.disabled = isDeckGrid;
+
+    // Disable / Enable Sort Dropdown
+    const sortSelectEl = document.getElementById("sort-select");
+    if (sortSelectEl) {
+        sortSelectEl.disabled = isDeckGrid;
+        if (isDeckGrid) {
+            sortSelectEl.value = "english-asc"; // Visual indication of A-Z deck sorting
+        }
+    }
+
+    // Disable / Enable Rating Checkboxes
+    const ratingCheckboxes = document.querySelectorAll(".rating-checkbox");
+    ratingCheckboxes.forEach(cb => cb.disabled = isDeckGrid);
+
+    //  Disable / Enable Tag Checkboxes
+    const tagCheckboxes = document.querySelectorAll(".tag-checkbox");
+    tagCheckboxes.forEach(cb => cb.disabled = isDeckGrid);
+}
 
 /**
  * Updates the selection toolbar counters and toggle icons based on current "selectedCardIds" size.
