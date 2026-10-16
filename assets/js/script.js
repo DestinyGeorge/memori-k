@@ -243,6 +243,8 @@ function renderFlashcards(cardsArray) {
             }
         }
 
+        starsContainer.innerHTML = starsHTML;
+
         // Audio Playback Event Listener
         const audioBtn = clone.querySelector(".audio-play-btn");
         audioBtn.addEventListener("click", () => {
@@ -291,7 +293,20 @@ function renderFlashcards(cardsArray) {
         });
 
 
-        starsContainer.innerHTML = starsHTML;
+        // Populate Tags Row
+        const tagsContainer = clone.querySelector(".card-tags");
+        if (tagsContainer) {
+            tagsContainer.innerHTML = ""; // Clear hardcoded placeholder badges from template
+
+            if (card.tags && card.tags.length > 0) {
+                card.tags.forEach(tag => {
+                    const tagBadge = document.createElement("span");
+                    tagBadge.className = "badge border me-1";
+                    tagBadge.textContent = `#${tag}`;
+                    tagsContainer.appendChild(tagBadge);
+                });
+            }
+        }
 
         // Append cloned card to grid
         container.appendChild(clone);
