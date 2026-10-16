@@ -11,6 +11,10 @@ let createDeckTile = null;
 
 let filteredCards = []; // Active dataset after filters applied
 
+// Active view state: 'all-cards', 'deck-grid', 'deck-detail'
+let currentView = 'all-cards'; 
+let activeDeckTag = null; // Stores tag when viewing a specific deck (e.g. "noun")
+
 /**
  Page Initialization
  */
@@ -43,6 +47,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     populateTagFilters(cards);
 
     renderDecks(decks); // decks array is populated in populateTagFilters(cards)
+
+
+    // Tab Switch Event Listeners
+    document.getElementById("all-cards-tab").addEventListener("click", () => {
+        // Update active view state
+        currentView = 'all-cards';
+        activeDeckTag = null;
+        applyFilters();
+    });
+
+    document.getElementById("decks-tab").addEventListener("click", () => {
+        // Reset to deck grid tiles when opening Decks tab
+        resetDecksView(); // Updates active view state inside function
+    });
 
     // Attach Filter Toggles
     setupSectionToggle("ratings-toggle", "ratings-options");
@@ -180,6 +198,20 @@ function updateBreadCrumbs(){
 }
 
 // RENDER TAB CONTENT
+
+/**
+ * Central re-rendering.
+ * Renders the active cards set into whichever container is currently active.
+ */
+function renderActiveView() {
+    if (currentView === 'all-cards') {
+        renderFlashcards(filteredCards, "cards-container");
+    } else if (currentView === 'deck-detail') {
+        renderFlashcards(filteredCards, "decks-container");
+    } else if (currentView === 'deck-grid') {
+        renderDecks(decks);
+    }
+}
 
 /**
  * Renders the grid of flashcard elements inside the cards container using HTML templates.
@@ -356,9 +388,21 @@ function renderDecks(decksArray) {
  * @param {string} tag - The deck tag string (e.g. "noun").
  */
 function openDeckView(tag) {
+    // Update active view state
+    currentView = 'deck-detail';
+    activeDeckTag = tag;
+
+    // Reset tag filter checkboxes to "All Tags" to prevent filter collisions
+    const allTagCheckbox = document.getElementById("checkTagAll");
+    if (allTagCheckbox) allTagCheckbox.checked = true;
+
+    const tagCheckboxes = document.querySelectorAll(".tag-checkbox");
+    tagCheckboxes.forEach(cb => {
+        if (cb.value !== "all") cb.checked = false;
+    });
+
     const headerTitleEl = document.getElementById("decks-header-title");
-    
-    // 1. Update Header to Breadcrumb Link: "ALL DECKS / #TAG"
+    // Update Header to Breadcrumb Link: "ALL DECKS / #TAG"
     if (headerTitleEl) {
         headerTitleEl.innerHTML = `
             <a href="#" id="back-to-all-decks" class="text-decoration-none text-muted me-1 hover-underline">Decks</a>
@@ -373,17 +417,24 @@ function openDeckView(tag) {
         });
     }
 
-    // 2. Filter global cards for this deck tag
-    const deckCards = cards.filter(card => card.tags && card.tags.includes(tag));
+    // Filter global cards for this deck tag
+    // const deckCards = cards.filter(card => card.tags && card.tags.includes(tag));
 
-    // 3. Render cards into #decks-container (reusing renderFlashcards logic)
-    renderFlashcards(deckCards, "decks-container");
+    // // Render cards into #decks-container (reusing renderFlashcards logic)
+    // renderFlashcards(deckCards, "decks-container");
+
+    applyFilters(); // Filters for cards in selected deck before rerendering cards
+
 }
 
 /**
  * Resets the Decks tab back to displaying the main deck tiles grid.
  */
 function resetDecksView() {
+    // Update active view state
+    currentView = 'deck-grid';
+    activeDeckTag = null;
+
     const headerTitleEl = document.getElementById("decks-header-title");
     
     // Restore main title
@@ -508,7 +559,11 @@ function handleCardSelectionDropdown(e){
     }
     // Update UI & Re-render cards to show updated checkmarks
     updateSelectionToolBarUI();
-    renderFlashcards(filteredCards, "cards-container");
+    // renderFlashcards(filteredCards, "cards-container");
+
+    // Re-render active container
+    renderActiveView();
+    
 
 
     console.log(selectedCardIds);
@@ -535,7 +590,9 @@ function handleToolBarSelectionButton(){
     }
 
     updateSelectionToolBarUI();
-    renderFlashcards(filteredCards, "cards-container");
+    // renderFlashcards(filteredCards, "cards-container");
+    // Re-render active container
+    renderActiveView();
 }
 
 
@@ -677,8 +734,13 @@ function applyFilters(e) {
         // Tag check: matches if "All" selected OR card contains at least one checked tag (.some)
         const tagMatch = checkedTags.length === 0 || checkedTags.some(tag => card.tags?.includes(tag));
 
-        // A card must satisfy both active rating rules AND active tag rules to be included in filteredCards
-        return ratingMatch && tagMatch;
+        // IF inside a deck view, card MUST also belong to that deck!
+        const deckMatch = (currentView === 'deck-detail') 
+            ? card.tags?.includes(activeDeckTag)  // if in deck view, checks if the current card's tags array contains the active deck tag
+            : true; // the user is in 'all cards' or 'decks.' All cards has no active deck constraints so it 'matches'
+
+        // A card must satisfy active rating rules AND active tag rules AND deck rules to be included in filteredCards
+        return ratingMatch && tagMatch && deckMatch;
     });
 
     // Apply current sort option to filtered set
@@ -692,7 +754,9 @@ function applyFilters(e) {
         resultsCountEl.textContent = filteredCards.length;
     }
 
-    renderFlashcards(filteredCards, "cards-container");
+    // renderFlashcards(filteredCards, "cards-container");
+    // Re-render active container
+    renderActiveView();
 }
 
 // SORTING
@@ -742,5 +806,8 @@ function handleSortChange(e) {
     filteredCards = sortCards(filteredCards, sortCriterion);
 
     // Re-render grid with new order
-    renderFlashcards(filteredCards, "cards-container");
+    // renderFlashcards(filteredCards, "cards-container");
+
+    // Re-render active container
+    renderActiveView();
 }
