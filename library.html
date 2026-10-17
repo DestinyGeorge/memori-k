@@ -116,6 +116,11 @@
             </div>
         </header>
 
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCardModal">
+        Launch static backdrop modal
+        </button>
+
         <!-- MAIN LIBRARY CONTENT AREA -->
         <section id="library-content" class="container section">
             <!-- 3. View Mode Tab Bar -->
@@ -330,6 +335,137 @@
         </section>
 
     </main>
+
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="editCardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content text-dark-blue">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bold" id="editCardModalLabel">
+                <i class="fa-solid fa-pen-to-square me-2 text-brand-k"></i>Edit Flashcard
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-dark-blue">
+            <form id="edit-card-form">
+                <!-- Field Group 1: Core Vocabulary -->
+                    <div class="modal-section">
+                        <h2 class="text-uppercase text-muted fw-bold small mb-3 border-bottom pb-1">Core Vocabulary</h2>
+                        
+                        <div class="mb-3">
+                            <label for="edit-korean" class="form-label fw-semibold">Korean Term <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edit-korean" required placeholder="e.g. 한국말">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit-phonetic" class="form-label fw-semibold">Phonetic Pronunciation <span class="text-muted fw-normal">(Optional)</span></label>
+                            <input type="text" class="form-control" id="edit-phonetic" placeholder="e.g. [한궁말]">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit-english" class="form-label fw-semibold">English Meaning <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edit-english" required placeholder="e.g. Korean language">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Audio Pronunciation</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" id="preview-modal-audio-btn" class="btn btn-custom-primary-outline btn-sm">
+                                    <i class="fa-solid fa-volume-high me-1"></i> Play Audio
+                                </button>
+                                <span id="modal-audio-status" class="badge bg-light text-dark-blue border">Default Audio Loaded</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Field Group 2: Organization -->
+                    <div class="modal-section">
+                        <h2 class="text-uppercase text-muted fw-bold small mb-3 border-bottom pb-1">Organization</h2>
+                        
+                        <div class="mb-3">
+                            <label for="tagDataList" class="form-label fw-semibold">Tags <span class="text-muted fw-normal">(Add new or existing tags)</span></label>
+                            <div class="input-group">
+                                <input class="form-control" list="tagDatalistOptions" id="tagDataList" placeholder="Type to search...">
+                                <!-- generate options from existing tags -->
+                                <datalist id="tagDatalistOptions">
+                                    <!-- <option value="San Francisco">
+                                    <option value="New York">
+                                    <option value="Seattle">
+                                    <option value="Los Angeles">
+                                    <option value="Chicago"> -->
+                                </datalist>
+                                <button type="button" id="add-tag-btn" class="btn btn-custom-primary-outline">
+                                    <i class="fa-solid fa-plus"></i> Add Tag
+                                </button>
+                            </div>
+                            <div id="modal-tags-preview" class="mt-2 d-flex flex-wrap gap-1">
+                                <!-- Dynamic badge chips rendered via JS -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Field Group 3: Study Progress (System Tracked & Rating Override) -->
+                    <div id="modal-stats-section" class="modal-section">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-1 mb-3">
+                        <h2 class="text-uppercase text-muted fw-bold small mb-0">Study Progress & Metrics</h2>
+                        <i class="fa-solid fa-circle-info text-muted cursor-pointer" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Streak history tracks your last 3 quiz attempts (scores 0 to 3). A total score of 7+ across 3 attempts marks the word as Memorised!">
+                         </i>
+                        </div>
+                        
+                        <div class="row align-items-center mb-3">
+                            <div class="col-sm-4 fw-semibold">Manual Rating Override:</div>
+                            <div class="col-sm-8 d-flex align-items-center gap-2">
+                                <div id="modal-rating-picker" class="fs-4 cursor-pointer">
+                                    <i class="fa-regular fa-star rating-star-btn text-empty" data-rating="1"></i>
+                                    <i class="fa-regular fa-star rating-star-btn text-empty" data-rating="2"></i>
+                                    <i class="fa-regular fa-star rating-star-btn text-empty" data-rating="3"></i>
+                                </div>
+                                <span id="modal-rating-text" class="badge bg-secondary">Unknown</span>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mb-2">
+                            <div class="col-sm-4 fw-semibold text-muted small">Best Quiz Speed:</div>
+                            <div class="col-sm-8">
+                                <span id="modal-best-time" class="badge bg-light text-dark-blue border">N/A</span>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mb-3">
+                            <div class="col-sm-4 fw-semibold text-muted small">Recent Streak History:</div>
+                            <div class="col-sm-8 d-flex align-items-center gap-2">
+                                <div id="modal-streak-history" class="d-flex gap-1">
+                                    <!-- Dynamic streak icons coloured  to reflect perfromance in last 3 rounds -->
+                                     <i class="fa-solid fa-circle fs-4 text-empty" data-streak-index="1"></i>
+                                     <i class="fa-solid fa-circle fs-4 text-empty" data-streak-index="2"></i>
+                                     <i class="fa-solid fa-circle fs-4 text-empty" data-streak-index="3"></i>
+                                </div>
+                                <button type="button" id="reset-card-stats-btn" class="btn btn-sm btn-link text-danger p-0 ms-auto text-decoration-none">
+                                    <i class="fa-solid fa-rotate-left me-1"></i>Reset Progress Stats
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+            <button type="button" id="delete-card-btn" class="btn btn-outline-danger">
+                <i class="fa-solid fa-trash me-1"></i> Delete
+            </button>
+            <button type="submit" form="edit-card-form" class="btn btn-primary">
+                <i class="fa-solid fa-check me-1"></i> Save Changes
+            </button>
+        </div>
+    </div>
+    </div>
 
 
     <template id="card-template">

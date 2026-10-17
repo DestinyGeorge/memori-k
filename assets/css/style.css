@@ -76,6 +76,14 @@ h1{
     color: var(--secondary-color-light);
 }
 
+.text-empty{
+    color: var(--empty);
+}
+
+.text-purple{
+    color: var(--accent-purple-base);
+}
+
 .bg-secondary-color-light{
     background-color: var(--secondary-color-light);
 }
@@ -180,6 +188,16 @@ h1{
 
 /* Gradient effect specifically for the 'K' */
 .brand-k {
+    /* font-weight: 1000; */
+    background: linear-gradient(135deg, var(--accent-purple-base) 0%, var(--selection-color-base) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+
+}
+
+.text-brand-k {
     /* font-weight: 1000; */
     background: linear-gradient(135deg, var(--accent-purple-base) 0%, var(--selection-color-base) 100%);
     -webkit-background-clip: text;
@@ -361,6 +379,11 @@ h1{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+#editCardModal .modal-section{
+    padding-top: 2rem;
+    /* padding-bottom: 1rem; */
 }
 
 /* Lbrary Decks */
