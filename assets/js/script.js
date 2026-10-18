@@ -508,6 +508,41 @@ function setupCardModalEventListeners(){
             updateModalRatingStars(newRating);
         }
     });
+
+    // Reset Progress Stats Button
+    document.getElementById("reset-card-stats-btn")?.addEventListener("click", () => {
+        // reset streak history
+        const card = cards.find(c => c.id === currentEditingCardId);
+        if (card && confirm("Reset streak history for this card?")) {
+            card.streakHistory = [0, 0, 0];
+            renderModalStreakHistory([0, 0, 0]);
+        }
+    });
+
+    // Delete Card Button
+    document.getElementById("delete-card-btn")?.addEventListener("click", () => {
+
+        if (confirm("Are you sure you want to delete this flashcard?")) {
+            cards = cards.filter(c => c.id !== currentEditingCardId);
+            selectedCardIds.delete(currentEditingCardId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+
+            updateLibraryOverviewStats(cards);
+            populateTagFilters(cards);
+            applyFilters();
+
+            const editCardModalEl = document.getElementById("editCardModal");
+            const modalInstance = bootstrap.Modal.getInstance(editCardModalEl);
+            modalInstance.hide();
+        }
+    });
+
+    // Form Submission Handler
+    document.getElementById("edit-card-form")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        saveCardForm();
+    });
+
 }
 
 /**
@@ -672,6 +707,52 @@ function renderModalStreakHistory(streakArray = [0, 0, 0]) {
         return `<i class="fa-solid fa-circle fs-4 ${colorClass}" title="${labelText}"></i>`;
     }).join("");
 }
+
+/**
+ * Handles saving changes for creating a new flashcard or updating an existing one
+ */
+function saveCardForm() {
+    const korean = document.getElementById("edit-korean").value.trim();
+    const phoneticHangul = document.getElementById("edit-phonetic").value.trim();
+    const english = document.getElementById("edit-english").value.trim();
+
+    if (currentEditingCardId) {
+        // EDIT EXISTING CARD
+        const cardIndex = cards.findIndex(c => c.id === currentEditingCardId);
+        if (cardIndex !== -1) {
+            cards[cardIndex].korean = korean;
+            cards[cardIndex].phoneticHangul = phoneticHangul;
+            cards[cardIndex].english = english;
+            cards[cardIndex].tags = [...currentCardTags];
+            cards[cardIndex].rating = currentEditingRating;
+        }
+    } else {
+        // --- CREATE NEW CARD ---
+        const newCard = {
+            id: `card_${Date.now()}`,
+            korean: korean,
+            phoneticHangul: phoneticHangul,
+            english: english,
+            tags: [...currentCardTags],
+            rating: 0,
+            bestTimeSeconds: null,
+            streakHistory: [0, 0, 0]
+        };
+        cards.push(newCard);
+    }
+
+    // Persist to LocalStorage & Refresh UI
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    updateLibraryOverviewStats(cards);
+    populateTagFilters(cards); // Syncs global decks array with new/updated tags
+    applyFilters();
+
+    // Close Modal
+    const modalEl = document.getElementById("editCardModal");
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance.hide();
+}
+
 
 // SELECTION 
 
