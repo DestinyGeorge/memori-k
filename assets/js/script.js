@@ -15,6 +15,11 @@ let filteredCards = []; // Active dataset after filters applied
 let currentView = 'all-cards'; 
 let activeDeckTag = null; // Stores tag when viewing a specific deck (e.g. "noun")
 
+// modal state variables
+let currentEditingCardId = null; // Holds active card.id (e.g., 'card_123') or null for new cards
+let currentCardTags = [];
+let currentEditingRating = 0;
+
 /**
  Page Initialization
  */
@@ -91,7 +96,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let toolbarSelectionBtn = document.getElementById("toolbar-select-toggle-btn");
     toolbarSelectionBtn.addEventListener("click", handleToolBarSelectionButton);
-    
+
+
+    //Modal Event Listeners
+
+    setupCardModalEventListeners();
+        
 
     
 });
@@ -331,6 +341,17 @@ function renderFlashcards(cardsArray, containerId) {
             }
         }
 
+        // Create card trigger
+        createTile.addEventListener("click", () => {
+            openCardModal(null);
+        });
+
+        // Edit card trigger
+        editBtn = clone.querySelector(".btn-edit-card");
+        editBtn.addEventListener("click", () => {
+            openCardModal(card);
+        });
+
         // Append cloned card to grid
         container.appendChild(clone);
     });
@@ -446,6 +467,210 @@ function resetDecksView() {
     // renderDecks(decks);
 
     renderActiveView(); // Will call renderDecks(decks) and lock toolbar
+}
+
+
+// CARD MODAL
+
+/**
+ * Sets up Event Listeners for Flashcard Edit/Create Modal 
+ */
+function setupCardModalEventListeners(){
+    
+    // Add Tag button click
+    document.getElementById("add-tag-btn")?.addEventListener("click", () => {
+        const input = document.getElementById("tagDataList");
+        const newTag = input.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+
+        if (newTag && !currentCardTags.includes(newTag)) {
+            currentCardTags.push(newTag);
+            renderModalTagChips();
+            input.value = "";
+        }
+    });
+
+    // Click to remove Tag badge chip
+    document.getElementById("modal-tags-preview")?.addEventListener("click", (e) => {
+        if (e.target.classList.contains("remove-tag-btn")) {
+            const index = parseInt(e.target.dataset.index, 10);
+            currentCardTags.splice(index, 1); // remove tag without leaving hole in array with .remove()
+            renderModalTagChips();
+        }
+    });
+
+    // Interactive Manual Rating Star Override
+    document.getElementById("modal-rating-picker")?.addEventListener("click", (e) => {
+        const starBtn = e.target.closest(".rating-star-btn");
+        if (starBtn) {
+            const clickedRating = parseInt(starBtn.dataset.rating, 10);
+            // Toggle rating off if clicking the same active star level
+            const newRating = (clickedRating === currentEditingRating) ? clickedRating - 1 : clickedRating;
+            updateModalRatingStars(newRating);
+        }
+    });
+}
+
+/**
+ * Opens the unified modal for editing an existing card or creating a new card.
+ * @param {Object|null} cardToEdit - The card object to edit, or null to create a new card.
+ */
+function openCardModal(cardToEdit){
+
+    const form = document.getElementById("edit-card-form");
+    if (form) form.reset();
+
+    const modalTitle = document.getElementById("editCardModalLabel");
+    const statsSection = document.getElementById("modal-stats-section");
+    const deleteBtn = document.getElementById("delete-card-btn");
+
+    // Populate the tag autocomplete options from all unique tags in the library
+    populateModalTagDatalist();
+
+    if (cardToEdit) {
+        // --- EDIT MODE ---
+        currentEditingCardId = cardToEdit.id; // Track ID in JS variable
+
+        if (modalTitle) {
+            modalTitle.innerHTML = `<i class="fa-solid fa-pen-to-square me-2 text-brand-k"></i>Edit Flashcard`;
+        }
+
+        // Fill inputs
+        document.getElementById("edit-korean").value = cardToEdit.korean || "";
+        document.getElementById("edit-phonetic").value = cardToEdit.phoneticHangul || "";
+        document.getElementById("edit-english").value = cardToEdit.english || "";
+
+        // Copy state
+        currentCardTags = cardToEdit.tags ? [...cardToEdit.tags] : [];
+        currentEditingRating = cardToEdit.rating || 0;
+
+        // Show Stats section & Delete button
+        if (statsSection) statsSection.classList.remove("d-none");
+        if (deleteBtn) deleteBtn.classList.remove("d-none");
+
+        // Set Best Speed & Streak history
+        const bestTimeEl = document.getElementById("modal-best-time");
+        if (bestTimeEl) {
+            bestTimeEl.textContent = cardToEdit.bestTimeSeconds ? `${cardToEdit.bestTimeSeconds}s` : "N/A";
+        }
+        renderModalStreakHistory(cardToEdit.streakHistory || [0, 0, 0]);
+
+    } else {
+        // --- CREATE MODE ---
+        currentEditingCardId = null; // Clear ID to signal brand-new card
+
+        if (modalTitle) {
+            modalTitle.innerHTML = `<i class="fa-solid fa-plus me-2 text-brand-k"></i>Create Flashcard`;
+        }
+
+        // Reset state
+        currentCardTags = [];
+        currentEditingRating = 0;
+
+        // Hide Stats section & Delete button for new cards
+        if (statsSection) statsSection.classList.add("d-none");
+        if (deleteBtn) deleteBtn.classList.add("d-none");
+    }
+
+    // Render tag chips and star rating display
+    renderModalTagChips();
+    updateModalRatingStars(currentEditingRating);
+
+    // Show Bootstrap Modal
+    const modalEl = document.getElementById("editCardModal");
+    if (modalEl) {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    }
+}
+
+/**
+ * Populates <datalist id="tagDatalistOptions"> using the global decks array
+ */
+function populateModalTagDatalist() {
+    const datalist = document.getElementById("tagDatalistOptions");
+
+    datalist.innerHTML = decks.map(tag => `<option value="${tag}">`).join("");
+}
+
+
+/**
+ * Renders tag badge chips with clickable X remove buttons inside #modal-tags-preview
+ */
+function renderModalTagChips() {
+    const container = document.getElementById("modal-tags-preview");
+    if (!container) return;
+
+    if (currentCardTags.length === 0) {
+        container.innerHTML = `<span class="text-muted small">No tags added</span>`;
+        return;
+    }
+
+    container.innerHTML = currentCardTags.map((tag, index) => `
+        <span class="badge bg-secondary-color-light text-dark-blue border d-inline-flex align-items-center gap-1">
+            #${tag}
+            <i class="fa-solid fa-xmark cursor-pointer remove-tag-btn" data-index="${index}"></i>
+        </span>
+    `).join(" ");
+}
+
+
+/**
+ * Updates the star icons and text badge inside #modal-rating-picker based on rating (0-3)
+ * @param {number} rating - Selected card rating (0: Unknown, 1: Weak, 2: Familiar, 3: Memorised)
+ */
+function updateModalRatingStars(rating) {
+    currentEditingRating = rating;
+    const starsContainer = document.getElementById("modal-rating-picker");
+    const ratingText = document.getElementById("modal-rating-text");
+
+    const stars = starsContainer.querySelectorAll(".rating-star-btn");
+    stars.forEach((star, index) => {
+        const starLevel = index + 1;
+        if (starLevel <= rating) {
+            star.className = "fa-solid fa-star rating-star-btn text-gold";
+        } else {
+            star.className = "fa-solid fa-star rating-star-btn text-empty";
+        }
+    });
+
+    const ratingLabels = { 0: "Unknown", 1: "Weak", 2: "Familiar", 3: "Memorised" };
+    ratingText.textContent = ratingLabels[rating] || "Unknown";
+}
+
+/**
+ * Renders 3 streak circles inside #modal-streak-history representing recall speeds
+ * @param {Array<number>} streakArray - Performance scores (0-3) for the last 3 quiz attempts
+ */
+function renderModalStreakHistory(streakArray = [0, 0, 0]) {
+    const container = document.getElementById("modal-streak-history");
+    if (!container) return;
+
+    // Class map for performance scores 0-3
+    const scoreColorMap = {
+        0: "text-empty",   // Unattempted / Failed
+        1: "text-red",     // Slow / Weak (1)
+        2: "text-yellow",  // Medium / Familiar (2)
+        3: "text-green"    // Fast / Memorised (3)
+    };
+
+    // Tooltip descriptive text for recall performance
+    const scoreLabelMap = {
+        0: "No attempt yet",
+        1: "Slow recall speed",
+        2: "Medium recall speed",
+        3: "Instant recall speed"
+    };
+
+    // container.innerHTML = streakArray.map((score, idx) => {
+    //     const colorClass = scoreColorMap[score];
+    //     return `<i class="fa-solid fa-circle fs-4 ${colorClass}" title="Score ${score}/3"></i>`;
+    // }).join(" ");
+
+    container.innerHTML = streakArray.map((score) => {
+        const colorClass = scoreColorMap[score] || scoreColorMap[0];
+        const labelText = scoreLabelMap[score] || scoreLabelMap[0];
+        return `<i class="fa-solid fa-circle fs-4 ${colorClass}" title="${labelText}"></i>`;
+    }).join("");
 }
 
 // SELECTION 

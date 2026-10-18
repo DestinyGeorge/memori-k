@@ -84,6 +84,22 @@ h1{
     color: var(--accent-purple-base);
 }
 
+.text-green{
+    color: var(--green);
+}
+
+.text-red{
+    color: var(--red);
+}
+
+.text-yellow{
+    color: var(--yellow);
+}
+
+.text-gold{
+    color: var(--accent-gold-base);
+}
+
 .bg-secondary-color-light{
     background-color: var(--secondary-color-light);
 }

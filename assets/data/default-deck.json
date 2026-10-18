@@ -8,7 +8,7 @@
     "tags": ["noun", "topik1", "language"],
     "rating": 3,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -25,7 +25,7 @@
     "tags": ["noun", "topik1", "food"],
     "rating": 1,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -42,7 +42,7 @@
     "tags": ["adverb", "topik1", "basics"],
     "rating": 2,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -59,7 +59,7 @@
     "tags": ["noun", "topik1", "places"],
     "rating": 3,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -76,7 +76,7 @@
     "tags": ["verb", "topik1", "grammar"],
     "rating": 0,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -93,7 +93,7 @@
     "tags": ["noun", "topik1", "basics"],
     "rating": 3,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -110,7 +110,7 @@
     "tags": ["phrase", "topik1", "greetings"],
     "rating": 2,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -127,7 +127,7 @@
     "tags": ["noun", "topik1", "time"],
     "rating": 0,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -144,7 +144,7 @@
     "tags": ["noun", "topik1", "concepts"],
     "rating": 0,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
@@ -161,7 +161,7 @@
     "tags": ["adjective", "topik1", "basics"],
     "rating": 0,
     "bestTimeSeconds": null,
-    "streakHistory": [],
+    "streakHistory": [0,0,0],
     "tracks": [
       {
         "trackName": "Essentials",
