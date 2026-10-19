@@ -214,6 +214,10 @@ function renderActiveView() {
     }
 }
 
+function playKoreanSpeech(koreanText){
+    //Korean Text-to-Speech
+}
+
 /**
  * Renders the grid of flashcard elements inside the cards container using HTML templates.
  * Attaches audio playback and card selection event listeners to each rendered card.
@@ -349,11 +353,17 @@ function renderFlashcards(cardsArray, containerId) {
         // Edit card trigger
         editBtn = clone.querySelector(".btn-edit-card");
         editBtn.addEventListener("click", () => {
-            openCardModal(card);
+            openCardModal(card); 
+        });
+
+        // View card details trigger
+        let viewBtn = clone.querySelector(".btn-view-details")
+        viewBtn.addEventListener("click", () => {
+            openViewCardModal(card);
         });
 
         // Append cloned card to grid
-        container.appendChild(clone);
+        container.appendChild(clone); 
     });
 
 }
@@ -543,6 +553,82 @@ function setupCardModalEventListeners(){
         saveCardForm();
     });
 
+}
+
+/**
+ * Opens the read-only card details modal
+ * @param {Object} card 
+ */
+function openViewCardModal(card) {
+    if (!card) return;
+
+    // Flashcard Text
+    document.getElementById("view-modal-korean").textContent = card.korean || "";
+    document.getElementById("view-modal-phonetic").textContent = card.phoneticHangul ? `[${card.phoneticHangul}]` : `[${card.korean}]`;
+    document.getElementById("view-modal-english").textContent = card.english || "";
+
+    // Audio Button
+    const audioBtn = document.getElementById("view-modal-audio-btn");
+    if (audioBtn) {
+        audioBtn.onclick = () => playKoreanSpeech(card.korean);
+    }
+
+    // Tags
+    const tagsContainer = document.getElementById("view-modal-tags");
+    if (tagsContainer) {
+        tagsContainer.innerHTML = card.tags && card.tags.length > 0
+            ? card.tags.map(tag => `<span class="badge bg-secondary-color-light text-dark-blue border">#${tag}</span>`).join(" ")
+            : `<span class="text-muted small">No tags</span>`;
+    }
+
+    // Stars & Rating Label
+    const ratingLabels = { 0: "Unknown", 1: "Weak", 2: "Familiar", 3: "Memorised" };
+    const currentRating = card.rating || 0;
+    
+    document.getElementById("view-modal-rating-text").textContent = ratingLabels[currentRating] || "Unknown";
+
+    let starsHTML = "";
+    for (let i = 1; i <= 3; i++) {
+        const starClass = i <= currentRating ? "fa-solid fa-star text-gold" : "fa-solid fa-star text-empty";
+        starsHTML += `<i class="${starClass}"></i> `;
+    }
+    document.getElementById("view-modal-stars").innerHTML = starsHTML;
+
+    // Best Speed
+    document.getElementById("view-modal-best-time").textContent = card.bestTimeSeconds ? `${card.bestTimeSeconds}s` : "N/A";
+
+    // Streak History 
+    const streakContainer = document.getElementById("view-modal-streak-history");
+    if (streakContainer) {
+        const scoreColorMap = { 0: "text-empty", 1: "text-red", 2: "text-yellow", 3: "text-green" };
+        const scoreLabelMap = { 0: "No attempt yet", 1: "Slow recall speed", 2: "Medium recall speed", 3: "Instant recall speed" };
+        const streakArray = card.streakHistory || [0, 0, 0];
+
+        streakContainer.innerHTML = streakArray.map((score) => {
+            const colorClass = scoreColorMap[score] || scoreColorMap[0];
+            const labelText = scoreLabelMap[score] || scoreLabelMap[0];
+            return `<i class="fa-solid fa-circle fs-4 ${colorClass}" title="${labelText}"></i>`;
+        }).join("");
+    }
+
+    // "Edit" button in footer to hide view modal and open edit modal
+    const editBtn = document.getElementById("view-modal-edit-btn");
+    if (editBtn) {
+        editBtn.onclick = () => {
+            const viewModalEl = document.getElementById("viewCardModal");
+            const viewModalInstance = bootstrap.Modal.getInstance(viewModalEl);
+            viewModalInstance?.hide();
+
+            // Open the edit modal
+            openCardModal(card);
+        };
+    }
+
+    // Show View Modal
+    const viewModalEl = document.getElementById("viewCardModal");
+    if (viewModalEl) {
+        bootstrap.Modal.getOrCreateInstance(viewModalEl).show();
+    }
 }
 
 /**

@@ -102,12 +102,12 @@
                     <!-- Action Buttons: "Study" and "Quizzes" -->
                     <!-- <div class="row text-center"> -->
                         <!-- <div class="col-12 col-md-6"> -->
-                            <a href="study.html" id="study-btn" class="btn library-action-button btn-custom-secondary-dark disabled " aria-disabled="true" title="Select at least 1 card to start">
+                            <a href="study.html" id="study-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
                             Study </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
                             </a>
                         <!-- </div> -->
                         <!-- <div class="col-12 col-md-6"> -->
-                            <a href="quiz.html" id="quiz-btn" class="btn library-action-button btn-custom-secondary-dark disabled " aria-disabled="true" title="Select at least 1 card to start">
+                            <a href="quiz.html" id="quiz-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
                             Quiz </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
                             </a>
                         <!-- </div> -->
@@ -331,9 +331,64 @@
 
     </main>
 
-    
+    <!-- Flashcard Details Modal (READ-ONLY) -->
+    <div class="modal fade" id="viewCardModal" tabindex="-1" aria-labelledby="viewCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-dark-blue" id="viewCardModalLabel">
+                        <i class="fa-solid fa-eye me-2 text-brand-k"></i>Flashcard Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-    <!-- Modal -->
+                <div class="modal-body">
+                    <!-- Core Vocabulary Hero Box -->
+                    <div class=" flashcard text-center py-3 bg-secondary-color-light rounded-5 border mb-4">
+                        <div>
+                            <button type="button" id="view-modal-audio-btn" class="btn btn-custom-primary-outline btn-sm my-3 rounded-pill">
+                                <i class="fa-solid fa-volume-high me-1"></i> Audio
+                            </button>
+                        </div>
+                        <div id="view-modal-korean" class="display-5 fw-bold text-dark-blue mb-1"></div>
+                        <div id="view-modal-phonetic" class="fs-5 text-muted fst-italic mb-2"></div>
+                        <div id="view-modal-english" class="fs-4 text-secondary fw-semibold mb-4"></div>
+                    </div>
+
+                    <div class="row g-3 mx-auto">
+                        <div class="col-12">
+                            <div class="text-uppercase text-muted small fw-bold">Tags</div>
+                            <div id="view-modal-tags" class="mt-1"></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase text-muted small fw-bold">Mastery Level</div>
+                            <div class="fs-5 mt-1 d-flex align-items-center gap-2">
+                                <span id="view-modal-stars"></span>
+                                <span id="view-modal-rating-text" class="badge bg-secondary text-white fs-6 fw-normal"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase text-muted small fw-bold">Best Quiz Speed</div>
+                            <div id="view-modal-best-time" class="fw-bold text-dark-blue mt-1">N/A</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase text-muted small fw-bold">Streak History</div>
+                            <div id="view-modal-streak-history" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="view-modal-edit-btn" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flashcard Edit & Create Modal -->
     <div class="modal fade" id="editCardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content text-dark-blue">
