@@ -127,9 +127,6 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="decks-tab" data-bs-toggle="tab" data-bs-target="#decks-tab-pane" type="button" role="tab" aria-controls="decks-tab-pane" aria-selected="false">Decks</button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="study-tracks-tab" data-bs-toggle="tab" data-bs-target="#study-tracks-tab-pane" type="button" role="tab" aria-controls="study-tracks-tab-pane" aria-selected="false">Study Tracks</button>
-                    </li>
                 </ul>
             </div>
 
@@ -299,32 +296,6 @@
 
                     </div>
                 </div>
-
-                <!-- TAB 3: STUDY TRACKS VIEW (Hidden initially) -->
-                <div id="study-tracks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="study-tracks-tab" tabindex="0">
-                    <div class="tab-grid-header">
-                        <!-- Current Group Name & Cancel Selection -->
-                        <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Tracks</h2>
-                    </div>
-
-                    <!-- Dynamic Card Grid (populated via JS) -->
-                    <div id="cards-container" class="row g-3">
-                        <!-- (+) Create New Card track -->
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="card flashcard" style="width: 18rem;">
-                                    <div class="card-body">
-                                        <!-- <h5 class="card-title">Card title</h5> -->
-                                        <p class="card-text"> <i class="fa-solid fa-plus"></i> Create New Track</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- STUDY TRACK CONTAINER TEMPLATE (Matches Track Wireframe) -->
-                        </div>
-                    </div>
-                </div>
-
 
             </div>
         </section>

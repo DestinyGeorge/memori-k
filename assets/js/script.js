@@ -194,7 +194,6 @@ function updateLibraryOverviewStats(cards) {
 
 const allCardsTabButton = document.getElementById("all-cards-tab");
 const decksTabButton = document.getElementById("decks-tab");
-const studyTracksTabButton = document.getElementById("study-tracks-tab");
 
 // RENDER TAB CONTENT
 
