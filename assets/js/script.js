@@ -1,5 +1,6 @@
 // LocalStorage Key Constant
 const STORAGE_KEY = 'memorik_cards_data';
+const TAGS_STORAGE_KEY = 'memorik_tags_data';
 const selectedCardIds = new Set(); // Set prevents duplicates automatically
 
 // Master cards array
@@ -19,6 +20,8 @@ let activeDeckTag = null; // Stores tag when viewing a specific deck (e.g. "noun
 let currentEditingCardId = null; // Holds active card.id (e.g., 'card_123') or null for new cards
 let currentCardTags = [];
 let currentEditingRating = 0;
+
+let currentEditingDeck = null; // Tracks deck being edited (null = create mode)
 
 /**
  Page Initialization
@@ -101,6 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     //Modal Event Listeners
 
     setupCardModalEventListeners();
+    setupDeckModalEventListeners();
         
 
     
@@ -114,6 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 function resetAppData() {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(TAGS_STORAGE_KEY);
     location.reload(); // Reloads page to re-trigger default-deck.json fetch
     console.log("App Data Reset")
 }
@@ -126,23 +131,41 @@ function resetAppData() {
  * 1. Load Data: Checks LocalStorage first; if empty, fetches default-data.json
  */
 async function loadFlashcardData() {
-    const localData = localStorage.getItem(STORAGE_KEY);
+    const localCards = localStorage.getItem(STORAGE_KEY);
+    const localTags = localStorage.getItem(TAGS_STORAGE_KEY);
 
-    if (localData) {
-        return JSON.parse(localData);
+    if (localCards && localTags) {
+        decks = JSON.parse(localTags);
+        return JSON.parse(localCards);
     } else {
         try {
             const response = await fetch('assets/data/default-deck.json');
             const defaultData = await response.json();
-            
-            // Seed LocalStorage for future modifications
+
+            // Extract unique tags from default JSON cards
+            const initialTagsSet = new Set();
+            defaultData.forEach(card => card.tags?.forEach(tag => initialTagsSet.add(tag)));
+            decks = Array.from(initialTagsSet);
+
+            // Seed LocalStorage for both cards and decks
             localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+            localStorage.setItem(TAGS_STORAGE_KEY, JSON.stringify(decks));
+
             return defaultData;
         } catch (error) {
             console.error('Error fetching default card data:', error);
+            decks = [];
             return [];
         }
     }
+}
+
+/**
+ * Helper to save both cards and decks state to LocalStorage
+ */
+function saveStateToLocalStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    localStorage.setItem(TAGS_STORAGE_KEY, JSON.stringify(decks));
 }
 
 /**
@@ -380,33 +403,33 @@ function renderDecks(decksArray) {
     container.innerHTML = "";
     container.appendChild(createDeckTile);
 
+    createDeckTile.addEventListener("click", () => openDeckModal(null));
+
     // Sort decks alphabetically A-Z
     const sortedDecks = [...decksArray].sort((a, b) => a.localeCompare(b, "en"));
 
-    // Update results counter with total deck count
-    // const resultsCountEl = document.getElementById("results-count");
-    // if (resultsCountEl) {
-    //     resultsCountEl.textContent = sortedDecks.length;
-    // }
-
     sortedDecks.forEach(deck => {
-        let deckCount = 0;
+        let deckCount = cards.filter(card => card.tags?.includes(deck)).length;
+        
         const clone = template.content.cloneNode(true);
 
-        clone.querySelector(".deck-title").textContent = deck;
+        clone.querySelector(".deck-title").textContent = `#${deck}`;
+        clone.querySelector(".deck-card-count").textContent = `${deckCount} Cards`;
 
-        cards.forEach(element => {
-            if (element.tags.includes(deck)){
-                deckCount ++;
-            }
+        // View Deck Details
+        clone.querySelector(".btn-view-deck")?.addEventListener("click", () => openDeckView(deck));
+
+        // Rename Deck Button
+        clone.querySelector(".btn-edit-deck")?.addEventListener("click", (e) => {
+            openDeckModal(deck); // Passing existing tag = Edit/Rename Mode
         });
 
-        clone.querySelector(".deck-card-count").textContent = `${deckCount} Cards`;
-        // clone.querySelector(".deck-card-count").textContent = `${deck.cardIds?.length || 0} Cards`;
+        // Delete Deck Button
+        clone.querySelector(".btn-delete-deck")?.addEventListener("click", (e) => {
+            deleteDeck(deck);
+        });
 
-        clone.querySelector(".btn-view-deck").addEventListener("click",() => openDeckView(deck));
-
-        // Append the column element directly to the row container
+        // Append column element directly to row container
         container.appendChild(clone);
     });
 }
@@ -801,6 +824,13 @@ function saveCardForm() {
     const phoneticHangul = document.getElementById("edit-phonetic").value.trim();
     const english = document.getElementById("edit-english").value.trim();
 
+    // Check if any tags in currentCardTags are new and missing from global `decks`
+    currentCardTags.forEach(tag => {
+        if (!decks.includes(tag)) {
+            decks.push(tag);
+        }
+    });
+
     if (currentEditingCardId) {
         // EDIT EXISTING CARD
         const cardIndex = cards.findIndex(c => c.id === currentEditingCardId);
@@ -827,15 +857,139 @@ function saveCardForm() {
     }
 
     // Persist to LocalStorage & Refresh UI
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    // localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    saveStateToLocalStorage();
     updateLibraryOverviewStats(cards);
-    populateTagFilters(cards); // Syncs global decks array with new/updated tags
+    populateTagFilters(cards); // Re-builds sidebar checkboxes using updated decks array
     applyFilters();
 
     // Close Modal
     const modalEl = document.getElementById("editCardModal");
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
     modalInstance.hide();
+}
+
+
+// DECK MODAL
+
+/**
+ * Sets up Event Listeners for Deck Edit/Create Modal 
+ */
+function setupDeckModalEventListeners() {
+    
+    // Form Submission Handler
+    document.getElementById("deckForm")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        saveDeckForm();
+    });
+
+}
+
+/**
+ * Opens modal for creating a new deck or renaming an existing one.
+ * Dynamically adjusts modal heading and input value.
+ * 
+ * @param {string|null} deckToEdit - The tag string to rename, or null for creating a new deck.
+ */
+function openDeckModal(deckToEdit = null){
+    currentEditingDeck = deckToEdit;
+
+    const modalTitleEl = document.getElementById("deckModalLabel");
+    const inputEl = document.getElementById("deck-name-input");
+    
+    if (deckToEdit) {
+        // EDIT / RENAME MODE
+        if (modalTitleEl) {
+            modalTitleEl.innerHTML = `<i class="fa-solid fa-pen-to-square me-2 text-brand-k"></i>Rename Deck`;
+        }
+        if (inputEl) inputEl.value = deckToEdit;
+    } else {
+        // CREATE MODE 
+        if (modalTitleEl) {
+            modalTitleEl.innerHTML = `<i class="fa-solid fa-plus me-2 text-brand-k"></i>Create Deck`;
+        }
+        if (inputEl) inputEl.value = "";
+    }
+
+    // Show Bootstrap Modal
+    const modalEl = document.getElementById("deckModal");
+    if (modalEl) {
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
+}
+
+/**
+ * Deletes a deck tag from 'decks' and removes it from all cards.
+ */
+function deleteDeck(deckName) {
+    if (!confirm(`Are you sure you want to delete the "#${deckName}" deck? 
+
+This will remove the tag from associated flashcards, but won't delete the cards themselves.`)) return;
+
+    // Remove deck from global decks array
+    decks = decks.filter(d => d !== deckName);
+
+    // Strip deck tag from all cards that contain it
+    cards.forEach(card => {
+        if (card.tags) {
+            card.tags = card.tags.filter(t => t !== deckName);
+        }
+    });
+
+    // Persist and update views
+    saveStateToLocalStorage();
+    // Update UI filters
+    populateTagFilters();
+    // Re-render the deck grid to clear the deleted deck tile
+    resetDecksView();
+}
+
+/**
+ * Saves deck form changes: creating a new deck tag OR renaming an existing deck tag across all cards.
+ */
+function saveDeckForm() {
+    const inputEl = document.getElementById("deck-name-input");
+    const newDeckName = inputEl.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+
+    if (!newDeckName) return;
+
+    if (currentEditingDeck) {
+        // RENAME EXISTING DECK
+        if (currentEditingDeck === newDeckName) return; // No change made
+
+        // Rename tag in global decks array
+        const deckIndex = decks.indexOf(currentEditingDeck);
+        if (deckIndex !== -1) {
+            decks[deckIndex] = newDeckName;
+        }
+
+        // Replace old tag with new tag across all cards
+        cards.forEach(card => {
+            if (card.tags?.includes(currentEditingDeck)) {
+                card.tags = card.tags.map(t => t === currentEditingDeck ? newDeckName : t);
+            }
+        });
+
+    } else {
+        // CREATE NEW DECK
+        if (!decks.includes(newDeckName)) {
+            decks.push(newDeckName);
+        }
+    }
+
+    // Tests
+    console.log(cards); 
+    console.log(decks);
+
+    // Persist to LocalStorage and refresh UI
+    saveStateToLocalStorage();
+    populateTagFilters();
+    resetDecksView(); // Re-renders deck grid tiles and resets state
+
+    // Close Modal
+    const modalEl = document.getElementById("deckModal");
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance?.hide();
 }
 
 
@@ -1037,10 +1191,6 @@ function populateTagFilters(cards) {
     const tagsContainer = document.getElementById("dynamic-tags-container");
     if (!tagsContainer) return;
 
-    // Collect unique tags
-    const allTags = new Set();
-    cards.forEach(card => card.tags?.forEach(tag => allTags.add(tag))); // Optional chaining (?.) safely reads nested properties without throwing a TypeError if 'e' or 'target' is null/undefined
-
     let tagsHTML = `
         <div class="form-check">
             <input class="form-check-input tag-checkbox" type="checkbox" value="all" id="checkTagAll" checked>
@@ -1048,7 +1198,10 @@ function populateTagFilters(cards) {
         </div>
     `;
 
-    allTags.forEach(tag => {
+    // Sort decks alphabetically
+    const sortedDecks = [...decks].sort((a, b) => a.localeCompare(b, "en"));
+
+   sortedDecks.forEach(tag => {
         tagsHTML += `
             <div class="form-check">
                 <input class="form-check-input tag-checkbox" type="checkbox" value="${tag}" id="tag-${tag}">
@@ -1058,9 +1211,7 @@ function populateTagFilters(cards) {
     });
 
     tagsContainer.innerHTML = tagsHTML;
-
-    // Create deck array from tags
-    decks = Array.from(allTags);
+    
 }
 
 /**
