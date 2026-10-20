@@ -302,6 +302,41 @@
 
     </main>
 
+
+        <!-- Deck Create & Rename Modal -->
+        <div class="modal fade" id="deckModal" tabindex="-1" aria-labelledby="deckModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-dark-blue">
+                <div class="modal-header">
+                            <h1 class="modal-title fs-5 fw-bold" id="deckModalLabel">
+                                <i class="fa-solid fa-folder-plus me-2 text-brand-k"></i>Create Deck
+                            </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            
+            <div class="modal-body">
+                <form id="deckForm">
+                    <div class="mb-2">
+                        <label for="deck-name-input" class="form-label text-uppercase text-muted small fw-bold">
+                            Tag / Deck Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">#</span>
+                            <input type="text" id="deck-name-input" class="form-control" placeholder="e.g. food, verbs" required maxlength="30">
+                        </div>
+                        <div class="form-text text-muted small">This creates or renames a card tag and its corresponding deck.</div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
     <!-- Flashcard Details Modal (READ-ONLY) -->
     <div class="modal fade" id="viewCardModal" tabindex="-1" aria-labelledby="viewCardModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
