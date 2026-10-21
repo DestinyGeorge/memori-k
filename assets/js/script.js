@@ -379,9 +379,15 @@ function renderFlashcards(cardsArray, containerId) {
         });
 
         // View card details trigger
-        let viewBtn = clone.querySelector(".btn-view-details")
+        let viewBtn = clone.querySelector(".btn-view-details");
         viewBtn.addEventListener("click", () => {
             openViewCardModal(card);
+        });
+
+        // Delete card trigger
+        let deleteBtn = clone.querySelector(".btn-delete-card");
+        deleteBtn.addEventListener("click", () => {
+            deleteCard(card);
         });
 
         // Append cloned card to grid
@@ -553,19 +559,9 @@ function setupCardModalEventListeners(){
 
     // Delete Card Button
     document.getElementById("delete-card-btn")?.addEventListener("click", () => {
-
-        if (confirm("Are you sure you want to delete this flashcard?")) {
-            cards = cards.filter(c => c.id !== currentEditingCardId);
-            selectedCardIds.delete(currentEditingCardId);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
-
-            updateLibraryOverviewStats(cards);
-            populateTagFilters(cards);
-            applyFilters();
-
-            const editCardModalEl = document.getElementById("editCardModal");
-            const modalInstance = bootstrap.Modal.getInstance(editCardModalEl);
-            modalInstance.hide();
+        const card = cards.find(c => c.id === currentEditingCardId);
+        if (card) {
+            deleteCard(card);
         }
     });
 
@@ -814,6 +810,37 @@ function renderModalStreakHistory(streakArray = [0, 0, 0]) {
         const labelText = scoreLabelMap[score] || scoreLabelMap[0];
         return `<i class="fa-solid fa-circle fs-4 ${colorClass}" title="${labelText}"></i>`;
     }).join("");
+}
+
+/**
+ * Deletes a flashcard by ID with confirmation and updates UI state
+ * @param {Object} card - Card object to delete
+ */
+function deleteCard(card) {
+    if (!card) return;
+
+    let cardId = card.id;
+
+    if (confirm(`Are you sure you want to delete this "${card.korean}" flashcard?`)) {
+        
+        cards = cards.filter(c => c.id !== cardId); // Filter out card from primary array
+
+        selectedCardIds.delete(cardId); // Remove from active batch selections if checked
+
+        saveStateToLocalStorage(); // Persist changes to LocalStorage
+
+        // Refresh global UI stats and views
+        updateLibraryOverviewStats(cards);
+        populateTagFilters(cards);
+        applyFilters();
+
+        // Hide Edit Modal if currently open
+        const editModalEl = document.getElementById("editCardModal");
+        if (editModalEl) {
+            const modalInstance = bootstrap.Modal.getInstance(editModalEl);
+            modalInstance?.hide();
+        }
+    }
 }
 
 /**
@@ -1211,7 +1238,7 @@ function populateTagFilters(cards) {
     });
 
     tagsContainer.innerHTML = tagsHTML;
-    
+
 }
 
 /**
