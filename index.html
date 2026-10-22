@@ -44,10 +44,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto ">
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="library.html">Library</a>
+                    <a class="nav-link active" aria-current="page" href="index.html">Library</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link disabled" href="study.html" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
@@ -63,19 +60,569 @@
     </nav>
     
     <!-- Header -->
-    <header>
+    <!-- <header>
 
         <h1>MemoriK</h1>
 
-    </header>
+    </header> -->
     <!-- Main -->
-    <main>
+    <main id="library-page">
 
-        <p class="korean-text"> 감사하다 </p>
+        <!-- LIBRARY PAGE HEADER -->
+        <header id="library-header" class="mb-4">
+        
+            <!-- Section Title & Summary Stats -->
+            <div id="library-overview-panel" class="p-3 container">
 
-        <button type="button" id="reset-app-data" class="btn memory-blue-button">Reset App Data</button>
+                <div id="more-options" class="d-flex justify-content-end mb-3">
+                    <i class="fa-solid fa-ellipsis-vertical fa-2x"></i>
+                </div>
+
+                <!-- Title, Mastery Doughnut/Percentage, Word Count Stats -->
+                 <div class="row text-center">
+                    <div class="col-4">
+                        <p>Memorised Words: <span id="memorised-words">0</span></p>
+                        <p>Familiar Words: <span id="familiar-words">0</span></p>
+                    </div>
+                    <div class="col-4 d-flex flex-column align-items-center">
+                        <div id="mastery-circle-container" class="mastery-progress-bar">
+                            <!-- Circular Progrss Bar -->
+                        </div>
+                        <p class="my-3">Mastery: <span id="mastery-percentage" class="">0</span>%</p>
+                    </div>
+                    <div class="col-4">
+                        <p>Weak Words: <span id="weak-words">0</span></p>
+                        <p>Unkown Words: <span id="unkown-words">0</span></p>
+                    </div>
+                 </div>
+                <div id="overview-actions" class="mt-3 d-flex justify-content-center align-items-center gap-4 gap-md-5 gap-lg-6 flex-wrap">
+                    <!-- Action Buttons: "Study" and "Quizzes" -->
+                    <!-- <div class="row text-center"> -->
+                        <!-- <div class="col-12 col-md-6"> -->
+                            <a href="study.html" id="study-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
+                            Study </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
+                            </a>
+                        <!-- </div> -->
+                        <!-- <div class="col-12 col-md-6"> -->
+                            <a href="quiz.html" id="quiz-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
+                            Quiz </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
+                            </a>
+                        <!-- </div> -->
+                    <!-- </div> -->
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LIBRARY CONTENT AREA -->
+        <section id="library-content" class="container section">
+            <!-- 3. View Mode Tab Bar -->
+            <div id="library-tabs" class="mb-3"></div>
+                <ul class="nav nav-tabs nav-fill fw-bold" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-cards-tab" data-bs-toggle="tab" data-bs-target="#all-cards-tab-pane" type="button" role="tab" aria-controls="all-cards-tab-pane" aria-selected="true">All Cards</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="decks-tab" data-bs-toggle="tab" data-bs-target="#decks-tab-pane" type="button" role="tab" aria-controls="decks-tab-pane" aria-selected="false">Decks</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Card Selection Toolbar -->
+            <div id="selection-toolbar" class=" toolbar border d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <!-- Left: Batch Selection Control -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Icon Toggle Button (Matches card structure) -->
+                    <button type="button" id="toolbar-select-toggle-btn" class="btn p-0 border-0" aria-label="Toggle batch selection">
+                        <i id="toolbar-icon-off" class="fa-regular fa-circle text-muted fs-4"></i>
+                        <i id="toolbar-icon-on" class="fa-solid fa-circle-check text-cyan fs-4 d-none"></i>
+                    </button>
+
+                    <label for="select-card-count" class="fw-semibold mb-0">Select Batch:</label>
+                    
+                    <select id="select-card-count" class="form-select form-select-sm w-auto">
+                        <option value="manual" selected>Manual Selection</option>
+                        <option value="5">5 Cards</option>
+                        <option value="10">10 Cards</option>
+                        <option value="20">20 Cards</option>
+                        <option value="all">All Visible Cards</option>
+                    </select>
+                </div>
+
+                <!-- Right: Live Selected Counter -->
+                <div class="selected-count-display">
+                    <span class="text-muted">Selected: </span>
+                    <strong id="selected-count-text" class="text-primary">0</strong> cards
+                </div>
+
+            </div>
+
+            <!-- Filter & Sort Control Bar -->
+            <div id="filter-sort-bar" class=" toolbar mb-4">
+                <!-- Filter, Results Count ("20 Results"), Sort -->
+                <div class="row">
+                    <div class="col-4">
+                        <button type="button" id="filter" class="btn p-0 border-0" data-bs-toggle="collapse" data-bs-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                            <i class="fa-solid fa-sliders "></i> Filter
+                        </button>
+                    </div>
+                    
+
+                    <div class="col-4 text-center">
+                        <div id="results">
+                            <span id="results-count"></span> Results
+                        </div>
+                    </div>
+
+                    <div class="col-4 text-end d-flex justify-content-end align-items-center gap-2">
+                        <!-- <div id="sort">
+                            Sort
+                        </div> -->
+                        <label for="sort-select" class="fw-semibold mb-0 d-none d-sm-inline">
+                            <i class="fa-solid fa-arrow-down-short-wide text-muted me-1"></i>Sort:
+                        </label>
+                        <select id="sort-select" class="form-select form-select-sm w-auto sort-dropdown">
+                            <option value="korean-asc" selected>Korean (가 – 하)</option>
+                            <option value="english-asc">English (A – Z)</option>
+                            <option value="rating-asc">Rating (Low - High)</option>
+                            <option value="rating-desc">Rating (High - Low)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible Multi-Select Filter Panel -->
+            <div class="collapse mt-3 p-3 border rounded bg-secondary-color-light" id="collapseFilters">
+                <h3 class="h6 fw-bold mb-3">Filter By</h3>
+
+                <div id="ratings-filter" class="mb-3">
+                    <!-- <p>Ratings <i class="fa-solid fa-angle-down d-none"></i> <i class="fa-solid fa-angle-up"></i></p> -->
+                    <button type="button" class="btn p-0 border-0 fw-semibold filter-toggle-btn d-flex align-items-center gap-2 mb-2" id="ratings-toggle">
+                        <span>Ratings</span>
+                        <i class="fa-solid fa-angle-down angle-down d-none"></i>
+                        <i class="fa-solid fa-angle-up angle-up"></i>
+                    </button>
+
+                    <div id="ratings-options">
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="all" id="checkRatingAll" checked>
+                            <label class="form-check-label fw-semibold" for="checkRatingAll">All Ratings</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="0" id="checkUnkown">
+                            <label class="form-check-label" for="checkUnkown">Unkown</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="1" id="checkWeak">
+                            <label class="form-check-label" for="checkWeak">Weak</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="2" id="checkFamiliar">
+                            <label class="form-check-label" for="checkFamiliar">Familiar</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input rating-checkbox" type="checkbox" value="3" id="checkMemorised">
+                            <label class="form-check-label" for="checkMemorised">Memorised</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tag-filter"></div>
+
+                <!-- Tag filter template -->
+                <!-- <p>Tags <i class="fa-solid fa-angle-down d-none"></i><i class="fa-solid fa-angle-up"></i></p> -->
+                 <button type="button" class="btn p-0 border-0 fw-semibold filter-toggle-btn d-flex align-items-center gap-2 mb-2" id="tags-toggle">
+                    <span>Tags</span>
+                    <i class="fa-solid fa-angle-down angle-down d-none"></i>
+                    <i class="fa-solid fa-angle-up angle-up"></i>
+                </button>
+                <div id="dynamic-tags-container">
+                </div>
+
+            </div>
+
+            <!-- Card / Deck Grid -->
+            <div id="library-tab-content" class="tab-content mx-3 mb-5">
+
+                <!-- TAB 1: ALL CARDS VIEW (Active by Default) -->
+                <div id="all-cards-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="all-cards-tab" tabindex="0">
+                    <div class="tab-grid-header">
+                        <!-- Current Group Name & Cancel Selection -->
+                        <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Cards</h2>
+                    </div>
+
+                    <!-- Dynamic Card Grid (populated via JS) -->
+                    <div id="cards-container" class="row g-3">
+                        <!-- (+) Create New Card tile + Vocab cards -->
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div id="create-flashcard" class="card flashcard create-card text-center text-dark-blue cursor-pointer" >
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                        <!-- <h5 class="card-title">Card title</h5> -->
+                                        <p class="card-text"><i class="fa-solid fa-plus fs-3"></i>
+                                        <span class="fw-bold ">Create New Flashcard</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+
+                <!-- TAB 2: DECKS VIEW (Hidden initially) -->
+                <div id="decks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="decks-tab" tabindex="0">
+                    <!-- Dynamic Breadcrumb Header -->
+                    <div class="tab-grid-header">
+                        <!-- Current Group Name & Cancel Selection -->
+                        <h2 id="decks-header-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
+                    </div>
+
+                    <!-- Dynamic Card Grid (populated via JS) -->
+                    <div id="decks-container" class="row g-3">
+                        <!-- (+) Create New Deck tile -->
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div id="create-deck" class="card flashcard create-card text-center text-dark-blue cursor-pointer">
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                        <p class="card-text"><i class="fa-solid fa-plus fs-3"></i>
+                                        <span class="fw-bold ">Create New Deck</span></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
     </main>
+
+
+        <!-- Deck Create & Rename Modal -->
+        <div class="modal fade" id="deckModal" tabindex="-1" aria-labelledby="deckModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-dark-blue">
+                <div class="modal-header">
+                            <h1 class="modal-title fs-5 fw-bold" id="deckModalLabel">
+                                <i class="fa-solid fa-folder-plus me-2 text-brand-k"></i>Create Deck
+                            </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            
+            <div class="modal-body">
+                <form id="deckForm">
+                    <div class="mb-2">
+                        <label for="deck-name-input" class="form-label text-uppercase text-muted small fw-bold">
+                            Tag / Deck Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">#</span>
+                            <input type="text" id="deck-name-input" class="form-control" placeholder="e.g. food, verbs" required maxlength="30">
+                        </div>
+                        <div class="form-text text-muted small">This creates or renames a card tag and its corresponding deck.</div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="deckForm" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+    <!-- Flashcard Details Modal (READ-ONLY) -->
+    <div class="modal fade" id="viewCardModal" tabindex="-1" aria-labelledby="viewCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-dark-blue" id="viewCardModalLabel">
+                        <i class="fa-solid fa-eye me-2 text-brand-k"></i>Flashcard Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Core Vocabulary Hero Box -->
+                    <div class=" flashcard text-center py-3 bg-secondary-color-light rounded-5 border mb-4">
+                        <div>
+                            <button type="button" id="view-modal-audio-btn" class="btn btn-custom-primary-outline btn-sm my-3 rounded-pill">
+                                <i class="fa-solid fa-volume-high me-1"></i> Audio
+                            </button>
+                        </div>
+                        <div id="view-modal-korean" class="display-5 fw-bold text-dark-blue mb-1"></div>
+                        <div id="view-modal-phonetic" class="fs-5 text-muted fst-italic mb-2"></div>
+                        <div id="view-modal-english" class="fs-4 text-secondary fw-semibold mb-4"></div>
+                    </div>
+
+                    <div class="row g-3 mx-auto">
+                        <div class="col-12">
+                            <div class="text-uppercase text-muted small fw-bold">Tags</div>
+                            <div id="view-modal-tags" class="mt-1"></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase text-muted small fw-bold">Mastery Level</div>
+                            <div class="fs-5 mt-1 d-flex align-items-center gap-2">
+                                <span id="view-modal-stars"></span>
+                                <span id="view-modal-rating-text" class="badge bg-secondary text-white fs-6 fw-normal"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase text-muted small fw-bold">Best Quiz Speed</div>
+                            <div id="view-modal-best-time" class="fw-bold text-dark-blue mt-1">N/A</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase text-muted small fw-bold">Streak History</div>
+                            <div id="view-modal-streak-history" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="view-modal-edit-btn" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flashcard Edit & Create Modal -->
+    <div class="modal fade" id="editCardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content text-dark-blue">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bold" id="editCardModalLabel">
+                <i class="fa-solid fa-pen-to-square me-2 text-brand-k"></i>Edit Flashcard
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-dark-blue">
+            <form id="edit-card-form">
+                <!-- Field Group 1: Core Vocabulary -->
+                    <div class="modal-section">
+                        <h2 class="text-uppercase text-muted fw-bold small mb-3 border-bottom pb-1">Core Vocabulary</h2>
+                        
+                        <div class="mb-3">
+                            <label for="edit-korean" class="form-label fw-semibold">Korean Term <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edit-korean" required placeholder="e.g. 한국말">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit-phonetic" class="form-label fw-semibold">Phonetic Pronunciation <span class="text-muted fw-normal">(Optional)</span></label>
+                            <input type="text" class="form-control" id="edit-phonetic" placeholder="e.g. [한궁말]">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit-english" class="form-label fw-semibold">English Meaning <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edit-english" required placeholder="e.g. Korean language">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Audio Pronunciation</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" id="preview-modal-audio-btn" class="btn btn-custom-primary-outline btn-sm">
+                                    <i class="fa-solid fa-volume-high me-1"></i> Play Audio
+                                </button>
+                                <span id="modal-audio-status" class="badge bg-light text-dark-blue border">Default Audio Loaded</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Field Group 2: Organization -->
+                    <div class="modal-section">
+                        <h2 class="text-uppercase text-muted fw-bold small mb-3 border-bottom pb-1">Organization</h2>
+                        
+                        <div class="mb-3">
+                            <label for="tagDataList" class="form-label fw-semibold">Tags <span class="text-muted fw-normal">(Add new or existing tags)</span></label>
+                            <div class="input-group">
+                                <input class="form-control" list="tagDatalistOptions" id="tagDataList" placeholder="Type to search...">
+                                <!-- generate options from existing tags -->
+                                <datalist id="tagDatalistOptions">
+                                    <!-- <option value="San Francisco">
+                                    <option value="New York">
+                                    <option value="Seattle">
+                                    <option value="Los Angeles">
+                                    <option value="Chicago"> -->
+                                </datalist>
+                                <button type="button" id="add-tag-btn" class="btn btn-custom-primary-outline">
+                                    <i class="fa-solid fa-plus"></i> Add Tag
+                                </button>
+                            </div>
+                            <div id="modal-tags-preview" class="mt-2 d-flex flex-wrap gap-1">
+                                <!-- Dynamic badge chips rendered via JS -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Field Group 3: Study Progress (System Tracked & Rating Override) -->
+                    <div id="modal-stats-section" class="modal-section">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-1 mb-3">
+                        <h2 class="text-uppercase text-muted fw-bold small mb-0">Study Progress & Metrics</h2>
+                        <i class="fa-solid fa-circle-info text-muted cursor-pointer" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="Streak history tracks your last 3 quiz attempts (scores 0 to 3). A total score of 7+ across 3 attempts marks the word as Memorised!">
+                         </i>
+                        </div>
+                        
+                        <div class="row align-items-center mb-3">
+                            <div class="col-sm-4 fw-semibold">Manual Rating Override:</div>
+                            <div class="col-sm-8 d-flex align-items-center gap-2">
+                                <div id="modal-rating-picker" class="fs-4 cursor-pointer">
+                                    <i class="fa-regular fa-star rating-star-btn text-empty" data-rating="1"></i>
+                                    <i class="fa-regular fa-star rating-star-btn text-empty" data-rating="2"></i>
+                                    <i class="fa-regular fa-star rating-star-btn text-empty" data-rating="3"></i>
+                                </div>
+                                <span id="modal-rating-text" class="badge bg-secondary">Unknown</span>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mb-2">
+                            <div class="col-sm-4 fw-semibold text-muted small">Best Quiz Speed:</div>
+                            <div class="col-sm-8">
+                                <span id="modal-best-time" class="badge bg-light text-dark-blue border">N/A</span>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mb-3">
+                            <div class="col-sm-4 fw-semibold text-muted small">Recent Streak History:</div>
+                            <div class="col-sm-8 d-flex align-items-center gap-2">
+                                <div id="modal-streak-history" class="d-flex gap-1">
+                                    <!-- Dynamic streak icons coloured  to reflect perfromance in last 3 rounds -->
+                                     <i class="fa-solid fa-circle fs-4 text-empty" data-streak-index="1"></i>
+                                     <i class="fa-solid fa-circle fs-4 text-empty" data-streak-index="2"></i>
+                                     <i class="fa-solid fa-circle fs-4 text-empty" data-streak-index="3"></i>
+                                </div>
+                                <button type="button" id="reset-card-stats-btn" class="btn btn-sm btn-link text-danger p-0 ms-auto text-decoration-none">
+                                    <i class="fa-solid fa-rotate-left me-1"></i>Reset Progress Stats
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+            <button type="button" id="delete-card-btn" class="btn btn-outline-danger">
+                <i class="fa-solid fa-trash me-1"></i> Delete
+            </button>
+            <button type="submit" form="edit-card-form" class="btn btn-primary">
+                <i class="fa-solid fa-check me-1"></i> Save Changes
+            </button>
+        </div>
+    </div>
+    </div>
+    </div>
+
+
+    <template id="card-template">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card flashcard library-flashcard">
+                <div class="card-body">
+                    <!-- <h5 class="card-title">Card title</h5> -->
+                    <div class="icon-header-row">
+                        <!-- Select Toggle -->
+                        <button type="button" class="btn card-select-btn" aria-label="Select card">
+                            <i class="fa-regular fa-circle text-muted fs-3 select-icon-off d-none"></i>
+                            <i class="fa-solid fa-circle-check text-cyan fs-3 select-icon-on "></i>
+                        </button>
+
+                        <!-- Audio Playback Button -->
+                        <button type="button" class="btn btn-sm btn-light rounded-circle audio-play-btn" aria-label="Play pronunciation audio">
+                            <i class="fa-solid fa-volume-high text-secondary"></i>
+                        </button>
+
+                        <!-- Mastery Rating Stars -->
+                        <div class="card-rating-stars fs-6" title="Rating: 3/3 (Memorized)">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+
+                    <!-- <p class="card-text text-center" id="korean-word">  Korean </p>
+                    <p class="card-text text-center" id="english-word">  English </p>
+                    <p class="card-text" id="tags">  Tags: </p> -->
+
+                    <!-- Core Vocab Info -->
+                    <div class="text-center my-auto py-2">
+                        <h3 class="card-korean fw-bold mb-1 fs-3">한국말</h3>
+                        <div class="card-phonetic text-muted small mb-2">[한궁말]</div>
+                        <p class="card-english text-secondary mb-0">Korean language (spoken)</p>
+                    </div>
+
+                        <!-- Tags Row -->
+                    <div class="card-tags mt-3 pt-2 border-top">
+                        <span class="badge border">#noun</span>
+                        <span class="badge border">#topik1</span>
+                        <span class="badge border">#language</span>
+                    </div>
+
+                </div>
+
+                <!-- Card Footer Actions -->
+                <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
+                    <!-- Primary View Action with Text -->
+                    <button type="button" class="btn btn-sm btn-outline-primary btn-view-details">
+                        <i class="fa-solid fa-eye me-1"></i> View Details
+                    </button>
+
+                    <!-- Secondary Actions (Icon-Only) -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-card" title="Edit Card" aria-label="Edit Card">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete-card" title="Delete Card" aria-label="Delete Card">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <!-- DECK ITEM TEMPLATE -->
+    <template id="deck-template">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card flashcard library-deck-card ">
+                <div class="card-body">
+                    <div class="deck-header">
+                        <span class="badge bg-secondary-color-light text-dark-blue deck-card-count">0 Cards</span>
+                    </div>
+                    
+                    <div class="deck-content text-center my-3">
+                        <h3 class="deck-title fw-bold text-dark-blue fs-4 mb-1">Deck Title</h3>
+                    </div>
+                </div>
+
+                <!-- Card Footer Actions -->
+                <div class="deck-card-footer bg-transparent  pb-3 px-3">
+                    <!-- Primary View Action with Text -->
+                    <button type="button" class="btn btn-sm btn-outline-primary btn-view-deck">
+                        <i class="fa-solid fa-eye me-1"></i> View Deck
+                    </button>
+
+                    <!-- Secondary Actions (Icon-Only) -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-deck" title="Edit Deck" aria-label="Edit Deck">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete-deck" title="Delete Deck" aria-label="Delete Deck">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
 
     <!-- Footer -->
     <footer id="footer" class=" mt-auto py-5 text-white">
@@ -105,8 +652,7 @@
                 <div class="section col-12 col-md-4 text-center ">
                     <h5 class="text-uppercase fs-6 fw-bold mb-3 text-cyan">Useful Links</h5>
                     <ul class="list-unstyled mb-0 footer-links">
-                        <li class="mb-2"><a href="index.html">Dashboard</a></li>
-                        <li class="mb-2"><a href="library.html">Library</a></li>
+                        <li class="mb-2"><a href="index.html">Library</a></li>
                         <li class="mb-2"><a href="study.html">Study Mode</a></li>
                         <li class="mb-2"><a href="quiz.html">Quizzes</a></li>
                     </ul>
@@ -142,6 +688,9 @@
     
     <!-- Font Awesome Kit -->
     <script src="https://kit.fontawesome.com/3a3514d451.js" crossorigin="anonymous"></script>
+
+    <!-- ProgressBar.js v1.1.0 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.1/progressbar.min.js"></script>
 
     <script src="assets/js/script.js"></script>
 </body>
