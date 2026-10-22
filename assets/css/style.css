@@ -317,6 +317,11 @@ h1{
 
 }
 
+#mastery-circle-container{
+    width: 100px; 
+    height: 100px;
+}
+
 .library-action-button{
     background-color: var(--secondary-color-dark);
     color: var(--neutral-color-white);

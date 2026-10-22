@@ -87,11 +87,11 @@
                         <p>Memorised Words: <span id="memorised-words">0</span></p>
                         <p>Familiar Words: <span id="familiar-words">0</span></p>
                     </div>
-                    <div class="col-4">
-                        <div class="mastery-progress-bar">
-                            Circular Progrss Bar
+                    <div class="col-4 d-flex flex-column align-items-center">
+                        <div id="mastery-circle-container" class="mastery-progress-bar">
+                            <!-- Circular Progrss Bar -->
                         </div>
-                        <p>Mastery: <span id="mastery-percentage">0</span>%</p>
+                        <p class="my-3">Mastery: <span id="mastery-percentage" class="">0</span>%</p>
                     </div>
                     <div class="col-4">
                         <p>Weak Words: <span id="weak-words">0</span></p>
@@ -120,7 +120,7 @@
         <section id="library-content" class="container section">
             <!-- 3. View Mode Tab Bar -->
             <div id="library-tabs" class="mb-3"></div>
-                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                <ul class="nav nav-tabs nav-fill fw-bold" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="all-cards-tab" data-bs-toggle="tab" data-bs-target="#all-cards-tab-pane" type="button" role="tab" aria-controls="all-cards-tab-pane" aria-selected="true">All Cards</button>
                     </li>
@@ -692,6 +692,9 @@
     
     <!-- Font Awesome Kit -->
     <script src="https://kit.fontawesome.com/3a3514d451.js" crossorigin="anonymous"></script>
+
+    <!-- ProgressBar.js v1.1.0 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.1/progressbar.min.js"></script>
 
     <script src="assets/js/script.js"></script>
 </body>

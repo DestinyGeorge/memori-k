@@ -23,6 +23,9 @@ let currentEditingRating = 0;
 
 let currentEditingDeck = null; // Tracks deck being edited (null = create mode)
 
+// Global variable for the progress bar instance
+let masteryProgressBar = null;
+
 /**
  Page Initialization
  */
@@ -106,6 +109,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupCardModalEventListeners();
     setupDeckModalEventListeners();
         
+    //MASTERY PROGRESS BAR
+
+    // Initialize ProgressBar instance
+    initMasteryProgressBar();
+    // Compute stats & animate based on initial LocalStorage cards
+    updateLibraryOverviewStats(cards);
 
     
 });
@@ -203,6 +212,13 @@ function updateLibraryOverviewStats(cards) {
     const totalCards = cards.length;
     // Example formula: Memorised = 100% value, Familiar = 50% value
     const masteryScore = Math.round(((memorised + (familiar * 0.5)) / totalCards) * 100);
+    
+    let masteryRatio = masteryScore/100;
+    // Animate circular progress bar
+    if (!masteryProgressBar) {
+        initMasteryProgressBar();
+    }
+    masteryProgressBar.animate(masteryRatio); // Expects value between 0.0 and 1.0
 
     // Update DOM Spans
     document.getElementById('memorised-words').textContent = memorised;
@@ -211,6 +227,26 @@ function updateLibraryOverviewStats(cards) {
     document.getElementById('unkown-words').textContent = unknown;
     document.getElementById('mastery-percentage').textContent = masteryScore;
 
+}
+
+/**
+ * Initializes the ProgressBar.js SVG circle with a brand gradient
+ */
+function initMasteryProgressBar(){
+    const container = document.getElementById("mastery-circle-container");
+    if (!container) return;
+
+    // Prevent re-creating multiple instances on re-renders
+    container.innerHTML = "";
+
+    masteryProgressBar = new ProgressBar.Circle('#mastery-circle-container',{
+        color: "#7C5CFF",
+        strokeWidth: 10,
+        trailWidth: 10,
+        trailColor: "#e2e8f0",
+        duration: 1200,
+        easing: "easeInOut",
+    });
 }
 
 // TABS
