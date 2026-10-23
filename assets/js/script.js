@@ -272,8 +272,26 @@ function renderActiveView() {
     }
 }
 
+/**
+ * Plays Korean speech audio for a given word using Web Speech API
+ * @param {string} koreanText - The Korean text to speak
+ */
 function playKoreanSpeech(koreanText){
-    //Korean Text-to-Speech
+    if (!koreanText) return;
+
+    // Check if Web Speech API is supported in current browser
+    if ('speechSynthesis' in window) {
+        // Cancel any active speech before starting new utterance
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(koreanText);
+        utterance.lang = 'ko-KR'; // Korean locale
+        utterance.rate = 0.9;      // Slightly slower for learning clarity
+
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert("Sorry, your browser doesn't support speech synthesis.");
+    }
 }
 
 /**
@@ -343,9 +361,7 @@ function renderFlashcards(cardsArray, containerId) {
         // Audio Playback Event Listener
         const audioBtn = clone.querySelector(".audio-play-btn");
         audioBtn.addEventListener("click", () => {
-            if (card.audioUrl) {
-                new Audio(card.audioUrl).play().catch(err => console.log("Audio file missing:", err));
-            }
+           playKoreanSpeech(card.korean);
         });
 
         // Selection Toggle Event Listener
