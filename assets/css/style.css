@@ -209,6 +209,40 @@ h1{
     box-shadow: 0 0 0 0.2rem rgba(67, 139, 255, 0.25);
 }
 
+
+/* Reusable Primary Outline Action Button*/
+.btn-custom-accent-outline {
+    color: var(--accent-purple-base);
+    border: 1.5px solid var(--accent-purple-base);
+    background-color: transparent;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover State */
+.btn-custom-accent-outline:hover {
+    color: var(--neutral-color-white);
+    background-color: var(--accent-purple-base);
+    border-color: var(--accent-purple-base);
+}
+
+/* Clicked / Active Moment */
+.btn-custom-accent-outline:active {
+    background-color: var(--accent-purple-base) !important;
+    color: var(--neutral-color-white) !important;
+    transform: scale(0.97);
+}
+
+/* Focus Outline (Accessibility) */
+.btn-custom-accent-outline:focus {
+    box-shadow: 0 0 0 0.2rem rgba(124, 92, 255, 0.25);
+;
+}
+
+
+
+
+
 /* Navbar */
 #navbar{
     background-color: var(--primary-color-base);
@@ -495,6 +529,16 @@ h1{
 
     opacity: 1;
     visibility: visible;
+}
+
+
+/* STUDY PAGE */
+
+#flashcard-card{
+    width: 60%;
+    aspect-ratio: 5 / 3;
+    max-width: 680px;
+    justify-self: center;
 }
 
 
