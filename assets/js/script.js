@@ -1,6 +1,7 @@
 // LocalStorage Key Constant
 const STORAGE_KEY = 'memorik_cards_data';
 const TAGS_STORAGE_KEY = 'memorik_tags_data';
+const SELECTED_IDS_KEY = 'memorik_selected_card_ids';
 const selectedCardIds = new Set(); // Set prevents duplicates automatically
 
 // Master cards array
@@ -31,6 +32,13 @@ let masteryProgressBar = null;
  */
 document.addEventListener('DOMContentLoaded', async () => {
 
+    // Attach Action button listeners
+    const studyBtn = document.getElementById("study-btn");
+    const quizBtn = document.getElementById("quiz-btn");
+
+    studyBtn?.addEventListener("click", saveSelectedCardsForSession);
+    quizBtn?.addEventListener("click", saveSelectedCardsForSession);
+
     // Cache the Create Tile element ONCE before doing anything else
     const createTileEl = document.getElementById("create-flashcard");
     if (createTileEl) {
@@ -40,7 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     createDeckTile = document.getElementById("create-deck").parentElement;
     
     cards = await loadFlashcardData();
-    updateLibraryOverviewStats(cards);
+    initMasteryProgressBar(); // Initialize ProgressBar instance
+    updateLibraryOverviewStats(cards);  // Compute stats & animate progress bar based on initial LocalStorage cards
 
 
     // DASHBOARD
@@ -109,12 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupCardModalEventListeners();
     setupDeckModalEventListeners();
         
-    //MASTERY PROGRESS BAR
 
-    // Initialize ProgressBar instance
-    initMasteryProgressBar();
-    // Compute stats & animate based on initial LocalStorage cards
-    updateLibraryOverviewStats(cards);
 
     
 });
@@ -247,6 +251,15 @@ function initMasteryProgressBar(){
         duration: 1200,
         easing: "easeInOut",
     });
+}
+
+
+/**
+ * Saves current selected card IDs to LocalStorage before page navigation
+ */
+function saveSelectedCardsForSession() {
+    // Save selected IDs, or default to all card IDs if no specific selection was made
+    localStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(Array.from(selectedCardIds)));
 }
 
 // TABS
