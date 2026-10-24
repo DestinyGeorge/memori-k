@@ -32,7 +32,7 @@
 
     /* Neutral Colors (Backgrounds, Text & Disabled States) */
     --neutral-color-white: #FFFFFF;  /* Page background, form inputs, modal backgrounds */
-    --neutral-color-dark: #1B3764;   /* Navy text (soft readability on white backgrounds) */
+    --neutral-color-dark: #0f172a;   /* Navy text (soft readability on white backgrounds) */
     --neutral-color-muted: #9CA3AF;  /* Slate grey for subtitles, placeholders, inactive text */
     --neutral-color-light: #E5E7EB;  /* Mist grey for disabled buttons & borders */
 }
@@ -40,7 +40,7 @@
 /* Global Styles */
 body{
     font-family: var(--primary-font);
-    color: var(--neutral-color-dark);
+    color: var(--primary-color-base);
 }
 
 h1{
@@ -116,7 +116,7 @@ h1{
 .card-korean,
 /* .card-english, */
 .card-phonetic {
-    color: var(--neutral-color-dark) !important;
+    color: var(--primary-color-base) !important;
 }
 
 
@@ -534,12 +534,75 @@ h1{
 
 /* STUDY PAGE */
 
-#flashcard-card{
+.perspective-container {
+    perspective: 1000px;
+    background: transparent;
     width: 60%;
-    aspect-ratio: 5 / 3;
+    min-width: 280px;
     max-width: 680px;
-    justify-self: center;
+    aspect-ratio: 5 / 3;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* min-height: 280px;  */
+    text-align: center;
+    /* transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); */
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+/* Flipped State */
+.flashcard-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important; /* Overrides default .flashcard margin: 25px */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden; /* Safari */
+    /* background-color: var(--secondary-color-light); */
+}
+
+.flashcard-front {
+    /* background-color: var(--neutral-color-white);
+    border: 2px solid var(--secondary-color-light); */
+    background-color: var(--secondary-color-light);
+    border: 2px solid var(--secondary-color-base);
+}
+
+/* Back face starts mirrored */
+.flashcard-back {
+    transform: rotateY(180deg);
+    /* background-color: var(--secondary-color-light);
+    border: 2px solid var(--secondary-color-base); */
+
+    background-color: var(--selection-color-light);
+    border: 2px solid var(--selection-color-base);
+
+    /* background-color: var(--neutral-color-white);
+    border-top: 4px solid var(--accent-purple-base); */
+
+    /* background-color: var(--accent-purple-base); 
+    border: 2px solid var(--secondary-color-dark); 
+    color: var(--neutral-color-white) !important; */
+
+    /* border: 2px solid var(--accent-purple-base); */
+    
+
+}
+
+
 
 
 /* --- Footer Styling --- */

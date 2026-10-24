@@ -87,26 +87,45 @@
         </section>
 
         <!-- FLASHCARD DISPLAY CONTAINER -->
-        <section class="container flashcard-section">
+        <section class="container flashcard-section section">
             <div class="row">
                 <div class="col-12">
-                    <div id="flashcard-card" class="card flashcard shadow-sm  border-2  text-center p-4 my-2">
-                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                            
-                            <!-- TTS AUDIO BUTTON -->
-                            <button id="tts-audio-btn" class="btn btn-light rounded-circle text-dark-blue mb-3 p-2">
-                                <i class="fa-solid fa-volume-high fs-3"></i>
-                            </button>
+                    <div id="flashcard-card" class="perspective-container">
 
-                            <!-- CARD CONTENT (Dynamically updated via JS) -->
-                            <h2 id="card-main-text" class="display-5 fw-bold mb-2">안녕하세요</h2>
-                            <p id="card-sub-text" class="text-muted fs-5">[안녕하세요]</p>
+                        <!-- Rotating Inner Container -->
+                        <div class="flashcard-inner">
+                        <!-- FRONT FACE -->
+                            <div class=" flashcard-front card flashcard shadow-sm  border-2  text-center p-4 my-2">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    
+                                    <!-- TTS AUDIO BUTTON -->
+                                    <button id="tts-audio-btn" class="btn btn-light rounded-circle text-dark-blue mb-3 p-2">
+                                        <i class="fa-solid fa-volume-high fs-3"></i>
+                                    </button>
+
+                                    <!-- CARD CONTENT (Dynamically updated via JS) -->
+                                    <h2 id="card-main-text" class="display-5 fw-bold mb-2">안녕하세요</h2>
+                                    <p id="card-sub-text" class="text-muted fs-5">[안녕하세요]</p>
+                                </div>
+                            </div>
+
+                            <!-- BACK FACE -->
+                            <div class=" flashcard-back card flashcard shadow-sm  border-2  text-center p-4 my-2">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                            
+                                    <!-- CARD CONTENT (Dynamically updated via JS) -->
+                                    <h2 id="back-english" class="display-5 fw-bold mb-2">안녕하세요</h2>
+
+                                </div>
+                            </div>
                         </div>
+
+
                     </div>
 
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 section">
                     <!-- CONTROLS: PREV / FLIP / NEXT -->
                     <div class="d-flex justify-content-center align-items-center gap-3 my-3">
                         <button id="prev-btn" class="btn btn-custom-accent-outline rounded-circle p-3">
@@ -126,7 +145,7 @@
 
         </section>
 
-        <section class="container">
+        <section class="container section">
             <!-- EXAMPLE BUTTON -->
             <div class=" d-flex justify-content-end my-3">
                 <button id="example-btn" class="btn btn-brand-k rounded-pill px-3">

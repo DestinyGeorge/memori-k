@@ -32,25 +32,37 @@ function loadStudySession() {
  */
 function renderCard() {
     const currentCard = studyCards[currentIndex];
+    const cardInner = document.querySelector(".flashcard-inner");
     
     const mainTextEl = document.getElementById("card-main-text");
     const subTextEl = document.getElementById("card-sub-text");
     const audioBtn = document.getElementById("tts-audio-btn");
 
-    if (!currentCard || !mainTextEl || !subTextEl) return;
+    if (!currentCard) return;
 
+    // Reset flip state on card load
+    cardInner.classList.remove("flipped");
+    isFlipped = false;
 
-    if (!isFlipped) {
-        // FRONT: Korean + Phonetic + Audio
-        mainTextEl.textContent = currentCard.korean;
-        subTextEl.textContent = currentCard.phoneticHangul ? `[${currentCard.phoneticHangul}]` : '';
-        audioBtn?.classList.remove('d-none');
-    } else {
-        // BACK: English Translation
-        mainTextEl.textContent = currentCard.english;
-        subTextEl.textContent = currentCard.notes || '';
-        audioBtn?.classList.add('d-none');
-    }
+    // Populate Front
+    mainTextEl.textContent = currentCard.korean;
+    subTextEl.textContent = currentCard.phoneticHangul ? `[${currentCard.phoneticHangul}]` : '';
+
+    // Populate Back
+    const backEnglishEl = document.getElementById("back-english");
+    backEnglishEl.textContent = currentCard.english;
+
+    // if (!isFlipped) {
+    //     // FRONT: Korean + Phonetic + Audio
+    //     mainTextEl.textContent = currentCard.korean;
+    //     subTextEl.textContent = currentCard.phoneticHangul ? `[${currentCard.phoneticHangul}]` : '';
+    //     audioBtn?.classList.remove('d-none');
+    // } else {
+    //     // BACK: English Translation
+    //     mainTextEl.textContent = currentCard.english;
+    //     subTextEl.textContent = currentCard.notes || '';
+    //     audioBtn?.classList.add('d-none');
+    // }
 
     // Audio
     audioBtn.addEventListener("click", () => {
@@ -139,6 +151,8 @@ function setupNavigationListeners() {
  * Toggles card flip state
  */
 function toggleFlip() {
+    const cardInner = document.querySelector(".flashcard-inner");
+
     isFlipped = !isFlipped;
-    renderCard();
+    cardInner.classList.toggle("flipped", isFlipped);
 }
