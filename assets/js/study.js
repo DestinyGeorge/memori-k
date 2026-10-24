@@ -7,6 +7,8 @@ const SELECTED_IDS_KEY = 'memorik_selected_card_ids';
 let studyCards = [];
 let currentIndex = 0;
 
+let isFlipped = false; // Tracks whether current card shows Front (false) or Back (true)
+
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
     setupNavigationListeners();
@@ -37,9 +39,18 @@ function renderCard() {
 
     if (!currentCard || !mainTextEl || !subTextEl) return;
 
-    // Render Front Side (Korean & Phonetic)
-    mainTextEl.textContent = currentCard.korean;
-    subTextEl.textContent = currentCard.phoneticHangul ? `[${currentCard.phoneticHangul}]` : "";
+
+    if (!isFlipped) {
+        // FRONT: Korean + Phonetic + Audio
+        mainTextEl.textContent = currentCard.korean;
+        subTextEl.textContent = currentCard.phoneticHangul ? `[${currentCard.phoneticHangul}]` : '';
+        audioBtn?.classList.remove('d-none');
+    } else {
+        // BACK: English Translation
+        mainTextEl.textContent = currentCard.english;
+        subTextEl.textContent = currentCard.notes || '';
+        audioBtn?.classList.add('d-none');
+    }
 
     // Audio
     audioBtn.addEventListener("click", () => {
@@ -93,10 +104,24 @@ function updateNavigationButtons() {
 function setupNavigationListeners() {
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
+    const flipBtn = document.getElementById('flip-btn');
+    const flashcardEl = document.getElementById('flashcard-card');
 
-    nextBtn?.addEventListener('click', () => {
+    // Flip Controls
+    flipBtn?.addEventListener("click", toggleFlip);
+    
+    // Flip on flashcard body click
+    flashcardEl?.addEventListener("click", (e) => {
+        // Prevent flip if clicking the audio button
+        if (e.target.closest('#tts-audio-btn')) return;
+        toggleFlip();
+    });
+
+    // Navigation Controls
+    nextBtn?.addEventListener("click", () => {
         if (currentIndex < studyCards.length - 1) {
             currentIndex++;
+            isFlipped = false; // reset to front for new card
             renderCard();
         }
     });
@@ -104,7 +129,16 @@ function setupNavigationListeners() {
     prevBtn?.addEventListener("click", () => {
         if (currentIndex > 0) {
             currentIndex--;
+            isFlipped = false; // reset to front for new card
             renderCard();
         }
     });
+}
+
+/**
+ * Toggles card flip state
+ */
+function toggleFlip() {
+    isFlipped = !isFlipped;
+    renderCard();
 }
