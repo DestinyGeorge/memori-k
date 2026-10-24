@@ -36,7 +36,6 @@ function renderCard() {
     
     const mainTextEl = document.getElementById("card-main-text");
     const subTextEl = document.getElementById("card-sub-text");
-    const audioBtn = document.getElementById("tts-audio-btn");
 
     if (!currentCard) return;
 
@@ -51,23 +50,6 @@ function renderCard() {
     // Populate Back
     const backEnglishEl = document.getElementById("back-english");
     backEnglishEl.textContent = currentCard.english;
-
-    // if (!isFlipped) {
-    //     // FRONT: Korean + Phonetic + Audio
-    //     mainTextEl.textContent = currentCard.korean;
-    //     subTextEl.textContent = currentCard.phoneticHangul ? `[${currentCard.phoneticHangul}]` : '';
-    //     audioBtn?.classList.remove('d-none');
-    // } else {
-    //     // BACK: English Translation
-    //     mainTextEl.textContent = currentCard.english;
-    //     subTextEl.textContent = currentCard.notes || '';
-    //     audioBtn?.classList.add('d-none');
-    // }
-
-    // Audio
-    audioBtn.addEventListener("click", () => {
-        playKoreanSpeech(currentCard.korean);
-    })
 
     // Update Navigation Buttons (Disable boundary states)
     updateNavigationButtons();
@@ -118,6 +100,13 @@ function setupNavigationListeners() {
     const nextBtn = document.getElementById("next-btn");
     const flipBtn = document.getElementById('flip-btn');
     const flashcardEl = document.getElementById('flashcard-card');
+    const audioBtn = document.getElementById("tts-audio-btn");
+
+    // Audio Control (Bound ONCE here to avoid listener duplication)
+    audioBtn?.addEventListener("click", (e) => {
+        const currentCard = studyCards[currentIndex];
+        playKoreanSpeech(currentCard.korean);
+    });
 
     // Flip Controls
     flipBtn?.addEventListener("click", toggleFlip);
