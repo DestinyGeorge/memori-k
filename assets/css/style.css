@@ -602,6 +602,11 @@ h1{
 
 }
 
+/* Helper to instantly reset card orientation without playing flip transitions */
+.no-transition {
+    transition: none !important;
+}
+
 
 
 

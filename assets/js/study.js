@@ -40,8 +40,12 @@ function renderCard() {
     if (!currentCard) return;
 
     // Reset flip state on card load
+    cardInner.classList.add("no-transition"); //Disable transition to reset rotation instantly without revealing the back face of next card
     cardInner.classList.remove("flipped");
     isFlipped = false;
+
+    // Force DOM reflow so the transition removal takes immediate effect
+    void cardInner.offsetHeight;
 
     // Populate Front
     mainTextEl.textContent = currentCard.korean;
@@ -50,6 +54,9 @@ function renderCard() {
     // Populate Back
     const backEnglishEl = document.getElementById("back-english");
     backEnglishEl.textContent = currentCard.english;
+
+    // Re-enable transitions for user flip actions
+    cardInner.classList.remove("no-transition");
 
     // Update Navigation Buttons (Disable boundary states)
     updateNavigationButtons();
