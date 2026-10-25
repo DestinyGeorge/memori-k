@@ -426,7 +426,7 @@ h1{
     border-radius: 20px;
 }
 
-.flashcard:hover {
+#cards-container .flashcard:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(27, 55, 100, 0.08);
 }
@@ -533,6 +533,18 @@ h1{
 
 
 /* STUDY PAGE */
+
+#flashcard-card .flashcard{
+    box-shadow: 0 2px 8px rgba(27, 55, 100, 0.1);
+}
+
+#flashcard-card:hover {
+    transform: translateY(-2px);
+}
+
+#flashcard-card .flashcard:hover {
+    box-shadow: 0 6px 16px rgba(27, 55, 100, 0.12);
+}
 
 .perspective-container {
     perspective: 1000px;
