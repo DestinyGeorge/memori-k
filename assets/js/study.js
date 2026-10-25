@@ -128,18 +128,12 @@ function setupNavigationListeners() {
     // Navigation Controls
     nextBtn?.addEventListener("click", () => {
         if (currentIndex < studyCards.length - 1) {
-            currentIndex++;
-            isFlipped = false; // reset to front for new card
-            renderCard();
+            navigateWithSlide("next"); // Increments index and calls renderCard which also resets the card to front
         }
     });
 
     prevBtn?.addEventListener("click", () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            isFlipped = false; // reset to front for new card
-            renderCard();
-        }
+        navigateWithSlide("prev");
     });
 }
 
@@ -151,4 +145,39 @@ function toggleFlip() {
 
     isFlipped = !isFlipped;
     cardInner.classList.toggle("flipped", isFlipped);
+}
+
+/**
+ * Handles sliding transitions between cards
+ * @param {'next' | 'prev'} direction 
+ */
+function navigateWithSlide(direction) {
+
+    const flashcard= document.getElementById("flashcard-card");
+
+    const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+    const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+
+    // Play Slide Out Animation
+    flashcard.classList.add(outClass);
+
+    setTimeout(() => {
+        // Increment/Decrement state & update content off-screen
+        if (direction === 'next' && currentIndex < studyCards.length - 1) {
+            currentIndex++;
+        } else if (direction === 'prev' && currentIndex > 0) {
+            currentIndex--;
+        }
+        renderCard(); // Resets flip state & updates text while card is invisible
+
+        // Swap exit animation class with entry animation class
+        flashcard.classList.remove(outClass);
+        flashcard.classList.add(inClass);
+
+        //Clean up slide classes after slide-in finishes
+        setTimeout(() => {
+            flashcard.classList.remove(inClass);
+        }, 200);
+
+    }, 200); // Matches the CSS animation duration
 }

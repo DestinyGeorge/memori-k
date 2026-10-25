@@ -607,7 +607,52 @@ h1{
     transition: none !important;
 }
 
+/* CARD SLIDE ANIMATIONS */
 
+/* Slide Out to Left (Next Card) */
+.slide-out-left {
+    animation: slideOutLeft 0.2s ease-in-out forwards;
+}
+
+/* Slide In from Right (Next Card) */
+.slide-in-right {
+    animation: slideInRight 0.2s ease-in-out forwards;
+}
+
+/* Slide Out to Right (Prev Card) */
+.slide-out-right {
+    animation: slideOutRight 0.2s ease-in-out forwards;
+}
+
+/* Slide In from Left (Prev Card) */
+.slide-in-left {
+    animation: slideInLeft 0.2s ease-in-out forwards;
+}
+
+@keyframes slideOutLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+
+.flashcard-section{
+    overflow-x: hidden;
+}
 
 
 /* --- Footer Styling --- */
