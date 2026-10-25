@@ -118,7 +118,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupCardModalEventListeners();
     setupDeckModalEventListeners();
         
+    // HANDLING STUDY PAGE REDIRECTION
+    // Check if coming from Study Mode edit link
+    const urlParams = new URLSearchParams(window.location.search); // href = `library.html?edit=${currentCard.id}`
+    const cardIdToEdit = urlParams.get('edit'); // edit parameter is only used when redirecting from study page edit button.
 
+    if (cardIdToEdit) { //no value would be null which is falsy  
+        const cardToEdit = cards.find(c => String(c.id) === String(cardIdToEdit));
+        if (cardToEdit) openCardModal(cardToEdit); // only opens modal if the id is found in the cards data
+        
+        // Remove ?edit= parameter from address bar
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 
     
 });

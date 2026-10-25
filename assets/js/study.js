@@ -25,6 +25,13 @@ function loadStudySession() {
     studyCards = allCards.filter(card => savedIds.includes(String(card.id)));
 
     renderCard();
+
+    // Direct redirect from Study Mode to Library Edit Modal
+    const editBtn = document.getElementById("edit-btn");
+    editBtn.addEventListener('click', () => {
+        const currentCard = studyCards[currentIndex];
+        window.location.href = `index.html?edit=${currentCard.id}`; //redirect link
+    });
 }
 
 /**
