@@ -666,6 +666,30 @@ h1{
     overflow-x: hidden;
 }
 
+#example-container .word{
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 4px; /
+    /* cursor: pointer; */
+}
+
+#example-container .word:hover{
+    color: var(--accent-purple-base);
+}
+
+#example-container .card-header{
+    background-color: var(--secondary-color-base);
+    /* background-color: transparent; */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+#example-container .card{
+    color: var(--neutral-color-dark);
+    /* background-color: var(--secondary-color-light); */
+    border-radius: 20px;
+}
+
 
 /* --- Footer Styling --- */
 #footer {

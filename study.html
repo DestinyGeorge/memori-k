@@ -148,11 +148,56 @@
         <section class="container section">
             <!-- EXAMPLE BUTTON -->
             <div class=" d-flex justify-content-end my-3">
-                <button id="example-btn" class="btn btn-brand-k rounded-pill px-3">
+                <button id="example-btn" class="btn btn-brand-k rounded-pill px-3" data-bs-toggle="collapse" href="#example-container">
                     <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Example
                 </button>
             </div>
-            <div id="example-container" class="my-3">
+            <div id="example-container" class="collapse my-3">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Example Sentence</h2>
+                            </div>
+                            
+                            <div id="example-content" class="">
+                                <div class="p-2">
+                                    <div class="sentence-header">
+                                        
+                                        <p class="korean-sentence">
+                                            <button class="btn-play-full-tts btn">
+                                            <i class="fa-solid fa-volume-high text-purple"></i>
+                                            </button>
+                                            
+                                        <span class="word">저는</span>  <span class="word">한국어</span> <span class="word">를</span> <span class="word">공부하고 있습니다</span>.</p>
+                                    </div>
+                                    <p class="english-translation px-3"> I am studying Korean.</p>
+                                </div>
+
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <span class="word" >저</span>  - 
+                                        <span class="meaning">I (polite)</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="word">한국어</span>  - 
+                                        <span class="meaning">Korean language</span>
+                                    </li>
+                                </ul>
+                                
+
+                                <!-- Regenerate Action -->
+                                <div class="d-flex justify-content-end m-3">
+                                    <button class="btn-regenerate btn btn-brand-k rounded-pill px-3">
+                                        <i class="fa-solid fa-rotate-right"></i> Regenerate New Example
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </section>
