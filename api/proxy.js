@@ -1,4 +1,6 @@
-module.exports = function (req, res) {
+import { GoogleGenAI } from "@google/genai";
+
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -7,10 +9,26 @@ module.exports = function (req, res) {
         return res.status(200).end();
     }
 
-    console.log("Hello from local Vercel serverless function!");
+    try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is missing.' });
+        }
 
-    return res.status(200).json({ 
-        message: "Hello from local backend!",
-        timestamp: new Date().toISOString()
-    });
+        const ai = new GoogleGenAI({ apiKey });
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-3.8-flash',
+            contents: 'Say "Hello World from Gemini AI!" in Korean with English translation.',
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            gemini_response: response.text
+        });
+
+    } catch (error) {
+        console.error('Gemini API Error:', error);
+        return res.status(500).json({ error: error.message });
+    }
 };
