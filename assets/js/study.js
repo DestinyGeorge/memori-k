@@ -12,6 +12,17 @@ let isFlipped = false; // Tracks whether current card shows Front (false) or Bac
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
     setupNavigationListeners();
+
+    // 4. Initial Trigger Setup
+    document.getElementById("example-btn")?.addEventListener("click", function () {
+    // const exampleContainer = document.getElementById("example-container");
+    let currentCard = studyCards[currentIndex];
+    const keyword = currentCard.korean; 
+    const meaning = currentCard.english; 
+
+    loadAIExampleSentence(keyword, meaning);
+    
+    });
 });
 
 /**
@@ -187,4 +198,75 @@ function navigateWithSlide(direction) {
         }, 200);
 
     }, 200); // Matches the CSS animation duration
+}
+
+
+// AI EXAMPLE SENTENCE
+
+// 1. Core Fetch & Render Function
+async function loadAIExampleSentence(keyword, meaning) {
+    const contentArea = document.getElementById("example-content");
+    //  if (!contentArea) return;
+
+    contentArea.innerHTML = `
+        <div class="p-4 text-center">
+            <img src="assets/images/tutor-writing-blue.jpg" 
+                 alt="Korean Tutor Writing" 
+                 class="tutor-status-img mb-3">
+                
+            <div class="spinner-border text-purple" role="status">
+               <span class="visually-hidden">Loading...</span>
+            </div>
+            
+            <div class="d-flex align-items-center justify-content-center gap-2 mt-2">
+                <p class="fw-semibold text-purple mb-0">
+                    Your Korean tutor is scribbling down a custom example sentence... ✍️
+                </p>
+            </div>
+            <small class="text-muted d-block mt-1">Drafting something awesome for you!</small>
+        </div>
+    `;
+
+    try {
+        const url = `/api/proxy?keyword=${encodeURIComponent(keyword)}&meaning=${encodeURIComponent(meaning)}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderExampleCard(data, keyword, meaning);
+
+    } catch (error) {
+        console.error("AI Example Fetch Error:", error);
+
+        contentArea.innerHTML = `
+            <div class="p-4 text-center">
+                <img src="assets/images/tutor-overwhelmed-blue.jpg" 
+                     alt="Overwhelmed Korean Tutor" 
+                     class="tutor-status-img mb-3">
+                
+                <h6 class="fw-bold text-dark-blue mb-2">Tutor Overload! 💼</h6>
+                <p class="small text-muted mb-3 px-2">
+                    Your Korean tutor is overwhelmed with students right now and requested <strong>3 to 5 business seconds</strong> to recover!
+                </p>
+                
+                <button class="btn btn-brand-k rounded-pill px-4 btn-retry">
+                    <i class="fa-solid fa-rotate-right me-1"></i> Try Again
+                </button>
+            </div>
+        `;
+
+        // Attach retry handler
+        contentArea.querySelector(".btn-retry")?.addEventListener("click", () => {
+        loadAIExampleSentence(keyword, meaning);
+        });
+    }
+}
+
+
+// Dynamic HTML Renderer
+function renderExampleCard(data, keyword, meaning) {
+    console.log("hello");
 }
