@@ -9,18 +9,28 @@ let currentIndex = 0;
 
 let isFlipped = false; // Tracks whether current card shows Front (false) or Back (true)
 
+// Cache to store generated example sentences by card ID
+const exampleCache = {};
+
+// Toggle mock mode for UI development
+const USE_MOCK_DATA = true;
+
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
     setupNavigationListeners();
 
     // 4. Initial Trigger Setup
     document.getElementById("example-btn")?.addEventListener("click", function () {
-    // const exampleContainer = document.getElementById("example-container");
-    let currentCard = studyCards[currentIndex];
-    const keyword = currentCard.korean; 
-    const meaning = currentCard.english; 
+        let currentCard = studyCards[currentIndex];
+        const keyword = currentCard.korean; 
+        const meaning = currentCard.english; 
 
-    loadAIExampleSentence(keyword, meaning);
+        // Check if example cached for this card ID
+        if (exampleCache[currentCard.id]) {
+            renderExampleCard(exampleCache[currentCard.id]);
+        } else {
+            loadAIExampleSentence(keyword, meaning);
+        }
     
     });
 });
@@ -206,6 +216,7 @@ function navigateWithSlide(direction) {
 // 1. Core Fetch & Render Function
 async function loadAIExampleSentence(keyword, meaning) {
     const contentArea = document.getElementById("example-content");
+    const currentCard = studyCards[currentIndex];
     //  if (!contentArea) return;
 
     contentArea.innerHTML = `
@@ -227,6 +238,44 @@ async function loadAIExampleSentence(keyword, meaning) {
         </div>
     `;
 
+    // Mock response branch
+    if (USE_MOCK_DATA) {
+        // data returned from my api
+        const mockData = { 
+            korean: `새 ${keyword}를 사서 기분이 정말 좋아요.`,
+            translation: `I am really happy because I bought a new ${meaning}.`,
+            vocabulary: [
+                { word: "새", meaning: "new", partOfSpeech: "determiner" },
+                { word: `${keyword}를`, meaning: `${meaning} (object)`, partOfSpeech: "noun + particle" },
+                { word: "사서", meaning: "bought and / because I bought", partOfSpeech: "verb" },
+                { word: "기분이", meaning: "feeling / mood (subject)", partOfSpeech: "noun + particle" },
+                { word: "정말", meaning: "really / truly", partOfSpeech: "adverb" },
+                { word: "좋아요.", meaning: "is good / feels good", partOfSpeech: "adjective" }
+            ],
+            grammar: [
+                {
+                    pattern: "-아/어서",
+                    explanation: "A connective ending used here to express cause or reason ('because' or 'so')."
+                },
+                {
+                    pattern: "-을/를",
+                    explanation: "An object-marking particle attached to nouns indicating the direct object of a transitive verb."
+                },
+                {
+                    pattern: "-이/가 좋다",
+                    explanation: "An expression meaning 'to feel good' or 'to like'."
+                }
+            ]
+        };
+
+        setTimeout(() => {
+            exampleCache[currentCard.id] = mockData; // Save to separate cache lookup by card ID
+            renderExampleCard(mockData);
+        }, 500);
+        return;
+    }
+
+    // Live API Fetch
     try {
         const url = `/api/proxy?keyword=${encodeURIComponent(keyword)}&meaning=${encodeURIComponent(meaning)}`;
         const response = await fetch(url);
@@ -236,7 +285,8 @@ async function loadAIExampleSentence(keyword, meaning) {
         }
 
         const data = await response.json();
-        renderExampleCard(data, keyword, meaning);
+        exampleCache[currentCard.id] = data; // Save to separate cache lookup by card ID
+        renderExampleCard(data);
 
     } catch (error) {
         console.error("AI Example Fetch Error:", error);
@@ -267,6 +317,7 @@ async function loadAIExampleSentence(keyword, meaning) {
 
 
 // Dynamic HTML Renderer
-function renderExampleCard(data, keyword, meaning) {
+function renderExampleCard(data) {
     console.log("hello");
+    console.log(data);
 }
