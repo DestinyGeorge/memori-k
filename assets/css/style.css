@@ -666,6 +666,11 @@ h1{
     overflow-x: hidden;
 }
 
+#example-container {
+    /* ensures example-container is visible */
+    scroll-margin-top: 90px; 
+}
+
 #example-container .word{
     text-decoration: underline;
     text-decoration-style: dotted;

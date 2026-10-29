@@ -14,13 +14,13 @@ let isFlipped = false; // Tracks whether current card shows Front (false) or Bac
 let exampleCache = JSON.parse(localStorage.getItem(EXAMPLES_STORAGE_KEY)) || {};
 
 // Toggle mock mode for UI development
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
     setupNavigationListeners();
 
-    // 4. Initial Trigger Setup
+    // Initial Trigger Setup
     document.getElementById("example-btn")?.addEventListener("click", function () {
         let currentCard = studyCards[currentIndex];
         const keyword = currentCard.korean; 
@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
     });
+
+    // Auto-scroll after collapse panel has opened
+    document.getElementById("example-container")?.addEventListener("shown.bs.collapse", function () {
+    this.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 });
 
 /**
@@ -72,6 +77,9 @@ function renderCard() {
     cardInner.classList.add("no-transition"); //Disable transition to reset rotation instantly without revealing the back face of next card
     cardInner.classList.remove("flipped");
     isFlipped = false;
+
+    // Reset example sentence section for the new card
+    resetExampleContainer();
 
     // Force DOM reflow so the transition removal takes immediate effect
     void cardInner.offsetHeight;
@@ -464,6 +472,26 @@ function renderExampleCard(data) {
                 loadAIExampleSentence(currentCard.korean, currentCard.english);
             }
         };
+    }
+}
+
+/**
+ * Resets the AI Example section state when changing flashcards
+ */
+function resetExampleContainer() {
+    const exampleContainer = document.getElementById("example-container");
+    const exampleContent = document.getElementById("example-content");
+    const exampleStatus = document.getElementById("example-status");
+
+    
+    exampleContent?.classList.add("d-none"); // Hide the example content panel
+
+    // Collapse the Bootstrap container if open
+    if (exampleContainer && exampleContainer.classList.contains("show")) {
+        const bsCollapse = bootstrap.Collapse.getInstance(exampleContainer);
+        if (bsCollapse) {
+            bsCollapse.hide();
+        }
     }
 }
 
