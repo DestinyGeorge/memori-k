@@ -2,6 +2,7 @@
 const STORAGE_KEY = 'memorik_cards_data';
 const TAGS_STORAGE_KEY = 'memorik_tags_data';
 const SELECTED_IDS_KEY = 'memorik_selected_card_ids';
+const EXAMPLES_STORAGE_KEY = 'memorik_example_cache';
 
 // State Variables
 let studyCards = [];
@@ -10,10 +11,10 @@ let currentIndex = 0;
 let isFlipped = false; // Tracks whether current card shows Front (false) or Back (true)
 
 // Cache to store generated example sentences by card ID
-const exampleCache = {};
+let exampleCache = JSON.parse(localStorage.getItem(EXAMPLES_STORAGE_KEY)) || {};
 
 // Toggle mock mode for UI development
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
@@ -213,9 +214,29 @@ function navigateWithSlide(direction) {
 
 // AI EXAMPLE SENTENCE
 
-// 1. Core Fetch & Render Function
+/**
+ * Persists exampleCache object to LocalStorage
+ */
+function saveExampleCache() {
+    try {
+        localStorage.setItem(EXAMPLES_STORAGE_KEY, JSON.stringify(exampleCache));
+    } catch (e) {
+        console.error("Failed to save example cache to LocalStorage:", e);
+    }
+}
+
+
+/**
+ * Fetches or generates an AI example sentence for a given card keyword and meaning.
+ * Displays loading/error UI states in #example-status and persists results to exampleCache.
+ *
+ * @async
+ * @param {string} keyword - The Korean word from the current flashcard.
+ * @param {string} meaning - The corresponding English translation/meaning.
+ * @returns {Promise<void>}
+ */
 async function loadAIExampleSentence(keyword, meaning) {
-    const contentArea = document.getElementById("example-content");
+    const contentArea = document.getElementById("example-status");
     const currentCard = studyCards[currentIndex];
     //  if (!contentArea) return;
 
@@ -241,37 +262,66 @@ async function loadAIExampleSentence(keyword, meaning) {
     // Mock response branch
     if (USE_MOCK_DATA) {
         // data returned from my api
-        const mockData = { 
-            korean: `새 ${keyword}를 사서 기분이 정말 좋아요.`,
-            translation: `I am really happy because I bought a new ${meaning}.`,
-            vocabulary: [
-                { word: "새", meaning: "new", partOfSpeech: "determiner" },
-                { word: `${keyword}를`, meaning: `${meaning} (object)`, partOfSpeech: "noun + particle" },
-                { word: "사서", meaning: "bought and / because I bought", partOfSpeech: "verb" },
-                { word: "기분이", meaning: "feeling / mood (subject)", partOfSpeech: "noun + particle" },
-                { word: "정말", meaning: "really / truly", partOfSpeech: "adverb" },
-                { word: "좋아요.", meaning: "is good / feels good", partOfSpeech: "adjective" }
-            ],
-            grammar: [
+        const mockApiResponse = {
+            "status": "success",
+            "data": {
+                "korean": "새 차를 사서 기분이 정말 좋아요.",
+                "translation": "I am really happy because I bought a new car.",
+                "vocabulary": [
                 {
-                    pattern: "-아/어서",
-                    explanation: "A connective ending used here to express cause or reason ('because' or 'so')."
+                    "word": "새",
+                    "meaning": "new",
+                    "partOfSpeech": "determiner"
                 },
                 {
-                    pattern: "-을/를",
-                    explanation: "An object-marking particle attached to nouns indicating the direct object of a transitive verb."
+                    "word": "차를",
+                    "meaning": "car (with object marker)",
+                    "partOfSpeech": "noun + particle"
                 },
                 {
-                    pattern: "-이/가 좋다",
-                    explanation: "An expression meaning 'to feel good' or 'to like'."
+                    "word": "사서",
+                    "meaning": "bought and / because I bought",
+                    "partOfSpeech": "verb"
+                },
+                {
+                    "word": "기분이",
+                    "meaning": "feeling / mood (with subject marker)",
+                    "partOfSpeech": "noun + particle"
+                },
+                {
+                    "word": "정말",
+                    "meaning": "really / truly",
+                    "partOfSpeech": "adverb"
+                },
+                {
+                    "word": "좋아요.",
+                    "meaning": "is good / feels good",
+                    "partOfSpeech": "adjective"
                 }
-            ]
-        };
+                ],
+                "grammar": [
+                {
+                    "pattern": "-아/어서",
+                    "explanation": "A connective ending used here to express cause or reason ('because' or 'so')."
+                },
+                {
+                    "pattern": "-을/를",
+                    "explanation": "An object-marking particle attached to nouns indicating the direct object of a transitive verb."
+                },
+                {
+                    "pattern": "-이/가 좋다",
+                    "explanation": "An expression meaning 'to feel good' or 'to like', where the thing felt or liked is marked by the subject particle."
+                }
+                ]
+            }
+            };
 
         setTimeout(() => {
-            exampleCache[currentCard.id] = mockData; // Save to separate cache lookup by card ID
-            renderExampleCard(mockData);
-        }, 500);
+            contentArea.innerHTML ="";
+            const exampleData = mockApiResponse.data;
+            //exampleCache[currentCard.id] = exampleData; // Save to separate cache lookup by card ID
+            renderExampleCard(exampleData);
+        }, 3000);
         return;
     }
 
@@ -284,8 +334,11 @@ async function loadAIExampleSentence(keyword, meaning) {
         throw new Error(`Server returned HTTP ${response.status}`);
         }
 
-        const data = await response.json();
+        const result = await response.json();
+        const data = result.data;
+        contentArea.innerHTML ="";
         exampleCache[currentCard.id] = data; // Save to separate cache lookup by card ID
+        saveExampleCache();
         renderExampleCard(data);
 
     } catch (error) {
@@ -316,8 +369,101 @@ async function loadAIExampleSentence(keyword, meaning) {
 }
 
 
-// Dynamic HTML Renderer
+/**
+ * Renders the structured AI example sentence data into a template.
+ * Dynamically builds interactive Korean word spans, vocabulary items, and grammar patterns
+ * with individual click-to-speak TTS audio handlers.
+ *
+ * @param {Object} data - The example sentence data.
+ * @param {string} data.korean - The complete Korean example sentence.
+ * @param {string} data.translation - The English translation of the Korean sentence.
+ * @param {Array<{word: string, meaning: string, partOfSpeech?: string}>} [data.vocabulary] - Vocabulary item breakdowns.
+ * @param {Array<{pattern: string, explanation: string}>} [data.grammar] - Grammar pattern explanations.
+ * @returns {void}
+ */
 function renderExampleCard(data) {
-    console.log("hello");
-    console.log(data);
+    let contentArea = document.getElementById("example-content");
+    contentArea.classList.remove("d-none");
+
+    // Populate Sentence & Translation
+    const sentenceEl = document.getElementById("example-sentence-text");
+    const translationEl = document.getElementById("example-translation-text");
+
+    if (sentenceEl){
+        sentenceEl.innerHTML = "";
+
+        if (data.vocabulary && data.vocabulary.length > 0) {
+            data.vocabulary.forEach((item, index) => {
+                const wordSpan = document.createElement("span");
+                wordSpan.className = "word me-1";
+                wordSpan.textContent = item.word;
+
+                // Play individual word audio when clicked in the sentence
+                wordSpan.addEventListener("click", () => {
+                    playKoreanSpeech(item.word);
+                });
+
+                sentenceEl.appendChild(wordSpan);
+            });
+        } else {
+            // Fallback if vocabulary array isn't available
+            sentenceEl.textContent = data.korean;
+        }
+    }
+    if (translationEl) translationEl.textContent = data.translation;
+
+    // Populate Vocabulary List using <template>
+    const vocabList = document.getElementById("example-vocab-list");
+    const vocabTemplate = document.getElementById("vocab-item-template");
+    if (vocabList && vocabTemplate && data.vocabulary) {
+        vocabList.innerHTML = "";
+        data.vocabulary.forEach(item => {
+            const clone = vocabTemplate.content.cloneNode(true);
+            clone.querySelector(".vocab-word").textContent = item.word;
+            clone.querySelector(".vocab-pos").textContent = item.partOfSpeech ? `(${item.partOfSpeech})` : "";
+            clone.querySelector(".vocab-meaning").textContent = item.meaning;
+
+            clone.querySelector(".vocab-word").addEventListener("click",() => {
+                playKoreanSpeech(item.word);
+            });
+            
+            vocabList.appendChild(clone);
+        });
+    }
+
+    // Populate Grammar List using <template>
+    const grammarList = document.getElementById("example-grammar-list");
+    const grammarTemplate = document.getElementById("grammar-item-template");
+    if (grammarList && grammarTemplate && data.grammar) {
+        grammarList.innerHTML = "";
+        data.grammar.forEach(item => {
+            const clone = grammarTemplate.content.cloneNode(true);
+            clone.querySelector(".grammar-pattern").textContent = item.pattern;
+            clone.querySelector(".grammar-explanation").textContent = item.explanation;
+
+            clone.querySelector(".grammar-pattern").addEventListener("click",() => {
+                playKoreanSpeech(item.pattern);
+            });
+
+            grammarList.appendChild(clone);
+        });
+    }
+
+    // Bind Audio & Regenerate Handlers
+    const ttsBtn = document.getElementById("example-tts-btn");
+    if (ttsBtn) {
+        ttsBtn.onclick = () => playKoreanSpeech(data.korean);
+    }
+
+    const regenBtn = document.getElementById("example-regenerate-btn");
+    if (regenBtn) {
+        regenBtn.onclick = () => {
+            const currentCard = studyCards[currentIndex];
+            if (currentCard) {
+                contentArea.classList.add("d-none")
+                loadAIExampleSentence(currentCard.korean, currentCard.english);
+            }
+        };
+    }
 }
+

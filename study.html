@@ -153,28 +153,41 @@
                 </button>
             </div>
             <div id="example-container" class="collapse my-3">
-                <div class="row justify-content-center">
+                <div class="row justify-content-center text-dark-blue">
                     <div class="col-12 col-md-8 col-lg-6">
                         <div class="card">
                             <div class="card-header">
                                 <h2>Example Sentence</h2>
                             </div>
+
+                            <div id="example-status">
+
+                            </div>
                             
-                            <div id="example-content" class="">
+                            <div id="example-content" class="d-none">
                                 <div class="p-2">
                                     <div class="sentence-header">
                                         
                                         <p class="korean-sentence">
-                                            <button class="btn-play-full-tts btn">
+                                            <button id="example-tts-btn" class=" btn">
                                             <i class="fa-solid fa-volume-high text-purple"></i>
                                             </button>
                                             
-                                        <span class="word">저는</span>  <span class="word">한국어</span> <span class="word">를</span> <span class="word">공부하고 있습니다</span>.</p>
+                                            <!-- <span class="word">저는</span>  <span class="word">한국어</span> <span class="word">를</span> <span class="word">공부하고 있습니다</span>. -->
+                                            
+                                            <span id="example-sentence-text"></span>
+                                        </p>
                                     </div>
-                                    <p class="english-translation px-3"> I am studying Korean.</p>
+                                    <p id="example-translation-text" class="px-3"> 
+                                        <!-- I am studying Korean. -->
+                                    </p>
                                 </div>
 
-                                <ul class="list-group">
+                                <!-- Sentence Breakdown Section -->
+                                <div class="px-3 pt-2">
+                                    <small class="text-dark-blue fw-bold text-uppercase" style="letter-spacing: 0.5px;">Sentence Breakdown</small>
+                                </div>
+                                <ul id="example-vocab-list" class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <span class="word" >저</span>  - 
                                         <span class="meaning">I (polite)</span>
@@ -184,11 +197,17 @@
                                         <span class="meaning">Korean language</span>
                                     </li>
                                 </ul>
+
+                                <!-- Grammar Patterns Section -->
+                                <div class="px-3 pt-4">
+                                    <small class="text-dark-blue fw-bold text-uppercase" style="letter-spacing: 0.5px;">Grammar Patterns</small>
+                                </div>
+                                <ul id="example-grammar-list" class="list-group list-group-flush"></ul>
                                 
 
                                 <!-- Regenerate Action -->
                                 <div class="d-flex justify-content-end m-3">
-                                    <button class="btn-regenerate btn btn-brand-k rounded-pill px-3">
+                                    <button id="example-regenerate-btn" class="btn-regenerate btn btn-brand-k rounded-pill px-3">
                                         <i class="fa-solid fa-rotate-right"></i> Regenerate New Example
                                     </button>
                                 </div>
@@ -204,6 +223,22 @@
         
 
     </main>
+
+    <!-- ITEM TEMPLATES -->
+    <template id="vocab-item-template">
+        <li class="list-group-item">
+            <span class="vocab-word word fw-bold"></span> 
+            <span class="vocab-pos text-muted small me-1"></span> - 
+            <span class="vocab-meaning text-secondary ms-1"></span>
+        </li>
+    </template>
+
+    <template id="grammar-item-template">
+        <li class="list-group-item">
+            <span class="grammar-pattern fw-bold word me-1"></span>: 
+            <span class="grammar-explanation text-secondary small"></span>
+        </li>
+    </template>
 
     <!-- Footer -->
     <footer id="footer" class=" mt-auto py-5 text-white">
