@@ -14,7 +14,7 @@ let isFlipped = false; // Tracks whether current card shows Front (false) or Bac
 let exampleCache = JSON.parse(localStorage.getItem(EXAMPLES_STORAGE_KEY)) || {};
 
 // Toggle mock mode for UI development
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
@@ -461,6 +461,7 @@ function renderExampleCard(data) {
     const ttsBtn = document.getElementById("example-tts-btn");
     if (ttsBtn) {
         ttsBtn.onclick = () => playKoreanSpeech(data.korean);
+        // ttsBtn.onclick = () => playSentenceAudio(data.korean);
     }
 
     const regenBtn = document.getElementById("example-regenerate-btn");
@@ -495,3 +496,31 @@ function resetExampleContainer() {
     }
 }
 
+
+async function playSentenceAudio(text) {
+    try {
+        const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+
+        if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.audio) {
+            // Audio data returned is base64-encoded audio/wav
+            const audio = new Audio(`data:audio/wav;base64,${data.audio}`);
+            audio.play();
+        } else {
+            throw new Error('No audio property in response');
+        }
+    } catch (err) {
+        console.warn('Gemini TTS failed, falling back to Web Speech API:', err.message);
+        // fallback to browser speech
+        playKoreanSpeech(text); 
+    }
+}
