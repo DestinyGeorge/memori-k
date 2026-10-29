@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         const ai = new GoogleGenAI({ apiKey });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-3.8-flash',
+            model: 'gemini-3.6-flash',
             contents: `Generate a natural Korean example sentence for a language learner for the target flashcard word: "${targetWord}"${targetMeaning}.
 
 Requirements:
