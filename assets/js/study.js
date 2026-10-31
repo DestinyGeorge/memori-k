@@ -16,6 +16,10 @@ let exampleCache = JSON.parse(localStorage.getItem(EXAMPLES_STORAGE_KEY)) || {};
 // Toggle mock mode for UI development
 const USE_MOCK_DATA = false;
 
+// Audio state for Gemini TTS sentence audio
+let sentenceAudioCache = null; // Holds base64 string for the current active sentence
+let activeAudio = null;        // Holds current playing HTMLAudioElement instance
+
 document.addEventListener('DOMContentLoaded', () => {
     loadStudySession();
     setupNavigationListeners();
@@ -28,7 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check if example cached for this card ID
         if (exampleCache[currentCard.id]) {
-            renderExampleCard(exampleCache[currentCard.id]);
+            const cachedData = exampleCache[currentCard.id];
+            // Fetch audio ONLY if audio is not already cached in memory for this sentence
+            if (!sentenceAudioCache) {
+                fetchSentenceAudio(cachedData.korean).then(audioBase64 => {
+                    sentenceAudioCache = audioBase64;
+                });
+            }
+
+            renderExampleCard(cachedData);
         } else {
             loadAIExampleSentence(keyword, meaning);
         }
@@ -327,7 +339,13 @@ async function loadAIExampleSentence(keyword, meaning) {
         setTimeout(() => {
             contentArea.innerHTML ="";
             const exampleData = mockApiResponse.data;
-            //exampleCache[currentCard.id] = exampleData; // Save to separate cache lookup by card ID
+
+            // Clear old audio & fetch new audio ONCE for the newly generated sentence
+            sentenceAudioCache = null;
+            fetchSentenceAudio(data.korean).then(audioBase64 => {
+                sentenceAudioCache = audioBase64;
+            });
+
             renderExampleCard(exampleData);
         }, 3000);
         return;
@@ -347,6 +365,14 @@ async function loadAIExampleSentence(keyword, meaning) {
         contentArea.innerHTML ="";
         exampleCache[currentCard.id] = data; // Save to separate cache lookup by card ID
         saveExampleCache();
+
+        // Clear old audio & fetch new audio ONCE for the newly generated sentence
+        sentenceAudioCache = null;
+        fetchSentenceAudio(data.korean).then(audioBase64 => {
+            sentenceAudioCache = audioBase64;
+        });
+
+
         renderExampleCard(data);
 
     } catch (error) {
@@ -460,8 +486,7 @@ function renderExampleCard(data) {
     // Bind Audio & Regenerate Handlers
     const ttsBtn = document.getElementById("example-tts-btn");
     if (ttsBtn) {
-        ttsBtn.onclick = () => playKoreanSpeech(data.korean);
-        // ttsBtn.onclick = () => playSentenceAudio(data.korean);
+        ttsBtn.onclick = () => playCurrentSentenceAudio(data.korean);
     }
 
     const regenBtn = document.getElementById("example-regenerate-btn");
@@ -480,6 +505,14 @@ function renderExampleCard(data) {
  * Resets the AI Example section state when changing flashcards
  */
 function resetExampleContainer() {
+
+    // Stop active audio playback
+    if (activeAudio) {
+        activeAudio.pause();
+        activeAudio = null;
+    }
+    sentenceAudioCache = null; //clear cache for old sentence
+
     const exampleContainer = document.getElementById("example-container");
     const exampleContent = document.getElementById("example-content");
     const exampleStatus = document.getElementById("example-status");
@@ -496,8 +529,16 @@ function resetExampleContainer() {
     }
 }
 
+/**
+ * Fetches base64 audio string from serverless proxy.
+ * 
+ * @async
+ * @param {string} text - The Korean text to convert to speech via Gemini TTS API.
+ * @returns {Promise<string|null>} Resolves to base64 audio string if successful, or null if fetch fails.
+ */
+async function fetchSentenceAudio(text) {
+    if (!text) return null;
 
-async function playSentenceAudio(text) {
     try {
         const response = await fetch('/api/tts', {
             method: 'POST',
@@ -506,21 +547,45 @@ async function playSentenceAudio(text) {
         });
 
         if (!response.ok) {
-        throw new Error(`Server returned HTTP ${response.status}`);
+            throw new Error(`Server returned HTTP ${response.status}`);
         }
 
         const data = await response.json();
-        
-        if (data.audio) {
-            // Audio data returned is base64-encoded audio/wav
-            const audio = new Audio(`data:audio/wav;base64,${data.audio}`);
-            audio.play();
-        } else {
-            throw new Error('No audio property in response');
-        }
-    } catch (err) {
-        console.warn('Gemini TTS failed, falling back to Web Speech API:', err.message);
-        // fallback to browser speech
-        playKoreanSpeech(text); 
+        return data.audio || null;
+    } catch (error) {
+        console.warn('Gemini TTS fetch failed:', error.message);
+        return null;
     }
+}
+
+/**
+ * Plays cached Gemini TTS audio or falls back to Web Speech API.
+ * 
+ * @param {string} koreanText - The Korean sentence text to read aloud as fallback.
+ * @returns {void}
+ */
+function playCurrentSentenceAudio(koreanText) {
+    if (!koreanText) return;
+
+    // Stop any currently playing Gemini TTS audio
+    if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        activeAudio = null;
+    }
+
+    // Stop Web Speech API if running
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+    }
+
+    // Play cached base64 audio if it exists
+    if (sentenceAudioCache) {
+        activeAudio = new Audio(`data:audio/wav;base64,${sentenceAudioCache}`);
+        activeAudio.play().catch(err => console.warn('Audio playback error:', err));
+        return;
+    }
+
+    // Fallback to Web Speech API if API failed / returned null
+    playKoreanSpeech(koreanText);
 }
