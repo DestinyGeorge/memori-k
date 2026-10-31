@@ -14,7 +14,7 @@ let isFlipped = false; // Tracks whether current card shows Front (false) or Bac
 let exampleCache = JSON.parse(localStorage.getItem(EXAMPLES_STORAGE_KEY)) || {};
 
 // Toggle mock mode for UI development
-const USE_MOCK_DATA = false;
+let USE_MOCK_DATA = false;
 
 // Audio state for Gemini TTS sentence audio
 let sentenceAudioCache = null; // Holds base64 string for the current active sentence
@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!sentenceAudioCache) {
                 fetchSentenceAudio(cachedData.korean).then(audioBase64 => {
                     sentenceAudioCache = audioBase64;
+                })
+                .finally(() => {
+                    enableTTSButton();
                 });
             }
 
@@ -344,6 +347,9 @@ async function loadAIExampleSentence(keyword, meaning) {
             sentenceAudioCache = null;
             fetchSentenceAudio(data.korean).then(audioBase64 => {
                 sentenceAudioCache = audioBase64;
+            })
+            .finally(() => {
+                enableTTSButton();
             });
 
             renderExampleCard(exampleData);
@@ -370,6 +376,9 @@ async function loadAIExampleSentence(keyword, meaning) {
         sentenceAudioCache = null;
         fetchSentenceAudio(data.korean).then(audioBase64 => {
             sentenceAudioCache = audioBase64;
+        })
+        .finally(() => {
+            enableTTSButton();
         });
 
 
@@ -485,7 +494,16 @@ function renderExampleCard(data) {
 
     // Bind Audio & Regenerate Handlers
     const ttsBtn = document.getElementById("example-tts-btn");
+    const icon = ttsBtn?.querySelector("i");
     if (ttsBtn) {
+        // Disable button while audio loads
+        ttsBtn.disabled = true;
+        ttsBtn.title = "Preparing audio...";
+        
+        icon.classList.remove("text-purple");
+        icon.classList.add("text-muted");
+        
+
         ttsBtn.onclick = () => playCurrentSentenceAudio(data.korean);
     }
 
@@ -588,4 +606,20 @@ function playCurrentSentenceAudio(koreanText) {
 
     // Fallback to Web Speech API if API failed / returned null
     playKoreanSpeech(koreanText);
+}
+
+/**
+ * Re-enables the TTS button and restores its default styling once audio is ready or fetch completes.
+ */
+function enableTTSButton() {
+    const ttsBtn = document.getElementById("example-tts-btn");
+    const icon = ttsBtn?.querySelector("i");
+
+    if (ttsBtn) {
+        ttsBtn.disabled = false;
+        ttsBtn.title = "Play sentence audio";
+        
+        icon.classList.remove("text-muted");
+        icon.classList.add("text-purple");
+    }
 }
