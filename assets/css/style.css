@@ -705,6 +705,85 @@ h1{
 }
 
 
+/* QUIZ PAGE */
+
+#start-screen .card{
+    background-color: var(--neutral-color-lightt);
+    border-color: var(--secondary-color-light);
+    border-radius: 20px;
+    max-width: 720px;
+    width: 100%;
+    justify-self: center;
+}
+
+.info-badge{
+    /* border: 1px solid var(--primary-color-base); */
+    border-radius: 20px;
+    background-color: var(--secondary-color-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#start-screen #rules{
+    background-color: var(--secondary-color-light);
+    border-radius: 20px;
+    /* width: 100%;
+    justify-self: center; */
+}
+
+#start-screen #start-btn{
+    background-color: var(--secondary-color-dark);
+    font-weight: bold;
+    color: var(--neutral-color-white);
+    border-radius: 50px;
+    padding: 15px 70px 15px 70px;
+    text-align: center;
+}
+
+#start-screen .list-group-item{
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#options-container{
+ min-width: 300px;
+}
+
+#quiz-screen .flashcard{
+    aspect-ratio: 5/3;
+
+}
+
+#question-container .flashcard{
+    max-width: 600px;
+    min-width: 280px;
+    font-size: xx-large;
+}
+
+#options-container .flashcard{
+    aspect-ratio: 4/2;
+    max-width: 280px;
+    min-width: 120px;
+    background-color: var(--secondary-color-light);
+    font-size:x-large;
+    font-weight: bold;
+    color: var(--primary-color-base);
+    
+    
+}
+
+#options-container .card-body{
+    width: 100%;
+}
+
+.option{
+    padding: 0px;
+}
+
 /* --- Footer Styling --- */
 #footer {
     background-color: var(--primary-color-base); /* Deep Ocean background */
