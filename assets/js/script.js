@@ -147,12 +147,9 @@ function resetAppData() {
     console.log("App Data Reset")
 }
 
-// document.getElementById("reset-app-data").addEventListener("click", resetAppData);
-
-
 // LIBRARY
 /**
- * 1. Load Data: Checks LocalStorage first; if empty, fetches default-data.json
+ * Load Data: Checks LocalStorage first; if empty, fetches default-data.json
  */
 async function loadFlashcardData() {
     const localCards = localStorage.getItem(STORAGE_KEY);
@@ -354,7 +351,6 @@ function renderFlashcards(cardsArray, containerId) {
 
         // Render Rating Stars (0 to 3 stars)
         const starsContainer = clone.querySelector(".card-rating-stars");
-        // starsContainer.title = `Rating: ${card.rating}/3`;
         starsContainer.title = ``
         switch(card.rating){
             case 0:
@@ -552,12 +548,6 @@ function openDeckView(tag) {
         });
     }
 
-    // Filter global cards for this deck tag
-    // const deckCards = cards.filter(card => card.tags && card.tags.includes(tag));
-
-    // // Render cards into #decks-container (reusing renderFlashcards logic)
-    // renderFlashcards(deckCards, "decks-container");
-
     applyFilters(); // Filters for cards in selected deck before rerendering cards
 
 }
@@ -576,9 +566,6 @@ function resetDecksView() {
     if (headerTitleEl) {
         headerTitleEl.innerHTML = "All Decks";
     }
-
-    // // Re-render main deck tiles
-    // renderDecks(decks);
 
     renderActiveView(); // Will call renderDecks(decks) and lock toolbar
 }
@@ -876,11 +863,6 @@ function renderModalStreakHistory(streakArray = [0, 0, 0]) {
         3: "Instant recall speed"
     };
 
-    // container.innerHTML = streakArray.map((score, idx) => {
-    //     const colorClass = scoreColorMap[score];
-    //     return `<i class="fa-solid fa-circle fs-4 ${colorClass}" title="Score ${score}/3"></i>`;
-    // }).join(" ");
-
     container.innerHTML = streakArray.map((score) => {
         const colorClass = scoreColorMap[score] || scoreColorMap[0];
         const labelText = scoreLabelMap[score] || scoreLabelMap[0];
@@ -960,7 +942,6 @@ function saveCardForm() {
     }
 
     // Persist to LocalStorage & Refresh UI
-    // localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
     saveStateToLocalStorage();
     updateLibraryOverviewStats(cards);
     populateTagFilters(cards); // Re-builds sidebar checkboxes using updated decks array
@@ -1246,7 +1227,6 @@ function handleCardSelectionDropdown(e){
     }
     // Update UI & Re-render cards to show updated checkmarks
     updateSelectionToolBarUI();
-    // renderFlashcards(filteredCards, "cards-container");
 
     // Re-render active container
     renderActiveView();
@@ -1277,7 +1257,6 @@ function handleToolBarSelectionButton(){
     }
 
     updateSelectionToolBarUI();
-    // renderFlashcards(filteredCards, "cards-container");
     // Re-render active container
     renderActiveView();
 }
@@ -1438,7 +1417,6 @@ function applyFilters(e) {
         resultsCountEl.textContent = filteredCards.length;
     }
 
-    // renderFlashcards(filteredCards, "cards-container");
     // Re-render active container
     renderActiveView();
 }
@@ -1488,9 +1466,6 @@ function handleSortChange(e) {
 
     // Sort active filtered cards in place
     filteredCards = sortCards(filteredCards, sortCriterion);
-
-    // Re-render grid with new order
-    // renderFlashcards(filteredCards, "cards-container");
 
     // Re-render active container
     renderActiveView();

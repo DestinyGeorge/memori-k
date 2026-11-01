@@ -36,11 +36,6 @@
             <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- <form class="d-flex" role="search">
-                    <input class="form-control custom-search-input me-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button class="btn custom-search-button" type="submit">Search</button>
-            </form> -->
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto ">
                     <li class="nav-item">
@@ -58,13 +53,7 @@
             </div>
         </div>
     </nav>
-    
-    <!-- Header -->
-    <!-- <header>
 
-        <h1>MemoriK</h1>
-
-    </header> -->
     <!-- Main -->
     <main id="library-page">
 
@@ -96,19 +85,15 @@
                     </div>
                  </div>
                 <div id="overview-actions" class="mt-3 d-flex justify-content-center align-items-center gap-4 gap-md-5 gap-lg-6 flex-wrap">
-                    <!-- Action Buttons: "Study" and "Quizzes" -->
-                    <!-- <div class="row text-center"> -->
-                        <!-- <div class="col-12 col-md-6"> -->
-                            <a href="study.html" id="study-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
-                            Study </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
-                            </a>
-                        <!-- </div> -->
-                        <!-- <div class="col-12 col-md-6"> -->
-                            <a href="quiz.html" id="quiz-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
-                            Quiz </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
-                            </a>
-                        <!-- </div> -->
-                    <!-- </div> -->
+                 
+                    <a href="study.html" id="study-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
+                    Study </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
+                    </a>
+                
+                    <a href="quiz.html" id="quiz-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
+                    Quiz </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
+                    </a>
+
                 </div>
             </div>
         </header>
@@ -131,7 +116,7 @@
             <div id="selection-toolbar" class=" toolbar border d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <!-- Left: Batch Selection Control -->
                 <div class="d-flex align-items-center gap-2">
-                    <!-- Icon Toggle Button (Matches card structure) -->
+                    <!-- Icon Toggle Button -->
                     <button type="button" id="toolbar-select-toggle-btn" class="btn p-0 border-0" aria-label="Toggle batch selection">
                         <i id="toolbar-icon-off" class="fa-regular fa-circle text-muted fs-4"></i>
                         <i id="toolbar-icon-on" class="fa-solid fa-circle-check text-cyan fs-4 d-none"></i>
@@ -174,9 +159,6 @@
                     </div>
 
                     <div class="col-4 text-end d-flex justify-content-end align-items-center gap-2">
-                        <!-- <div id="sort">
-                            Sort
-                        </div> -->
                         <label for="sort-select" class="fw-semibold mb-0 d-none d-sm-inline">
                             <i class="fa-solid fa-arrow-down-short-wide text-muted me-1"></i>Sort:
                         </label>
@@ -195,7 +177,6 @@
                 <h3 class="h6 fw-bold mb-3">Filter By</h3>
 
                 <div id="ratings-filter" class="mb-3">
-                    <!-- <p>Ratings <i class="fa-solid fa-angle-down d-none"></i> <i class="fa-solid fa-angle-up"></i></p> -->
                     <button type="button" class="btn p-0 border-0 fw-semibold filter-toggle-btn d-flex align-items-center gap-2 mb-2" id="ratings-toggle">
                         <span>Ratings</span>
                         <i class="fa-solid fa-angle-down angle-down d-none"></i>
@@ -228,8 +209,7 @@
 
                 <div id="tag-filter"></div>
 
-                <!-- Tag filter template -->
-                <!-- <p>Tags <i class="fa-solid fa-angle-down d-none"></i><i class="fa-solid fa-angle-up"></i></p> -->
+                <!-- Tag filter -->
                  <button type="button" class="btn p-0 border-0 fw-semibold filter-toggle-btn d-flex align-items-center gap-2 mb-2" id="tags-toggle">
                     <span>Tags</span>
                     <i class="fa-solid fa-angle-down angle-down d-none"></i>
@@ -246,7 +226,7 @@
                 <!-- TAB 1: ALL CARDS VIEW (Active by Default) -->
                 <div id="all-cards-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="all-cards-tab" tabindex="0">
                     <div class="tab-grid-header">
-                        <!-- Current Group Name & Cancel Selection -->
+                        <!-- Current Group Name -->
                         <h2 id="active-group-title" class="h5 mb-0 text-uppercase fw-bold">All Cards</h2>
                     </div>
 
@@ -257,7 +237,6 @@
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div id="create-flashcard" class="card flashcard create-card text-center text-dark-blue cursor-pointer" >
                                     <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                        <!-- <h5 class="card-title">Card title</h5> -->
                                         <p class="card-text"><i class="fa-solid fa-plus fs-3"></i>
                                         <span class="fw-bold ">Create New Flashcard</span></p>
                                     </div>
@@ -272,7 +251,7 @@
                 <div id="decks-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="decks-tab" tabindex="0">
                     <!-- Dynamic Breadcrumb Header -->
                     <div class="tab-grid-header">
-                        <!-- Current Group Name & Cancel Selection -->
+                        <!-- Current Group Name -->
                         <h2 id="decks-header-title" class="h5 mb-0 text-uppercase fw-bold">All Decks</h2>
                     </div>
 
@@ -442,11 +421,6 @@
                                 <input class="form-control" list="tagDatalistOptions" id="tagDataList" placeholder="Type to search...">
                                 <!-- generate options from existing tags -->
                                 <datalist id="tagDatalistOptions">
-                                    <!-- <option value="San Francisco">
-                                    <option value="New York">
-                                    <option value="Seattle">
-                                    <option value="Los Angeles">
-                                    <option value="Chicago"> -->
                                 </datalist>
                                 <button type="button" id="add-tag-btn" class="btn btn-custom-primary-outline">
                                     <i class="fa-solid fa-plus"></i> Add Tag
@@ -545,11 +519,7 @@
                             <i class="fa-solid fa-star"></i>
                         </div>
                     </div>
-
-                    <!-- <p class="card-text text-center" id="korean-word">  Korean </p>
-                    <p class="card-text text-center" id="english-word">  English </p>
-                    <p class="card-text" id="tags">  Tags: </p> -->
-
+                    
                     <!-- Core Vocab Info -->
                     <div class="text-center my-auto py-2">
                         <h3 class="card-korean fw-bold mb-1 fs-3">한국말</h3>
