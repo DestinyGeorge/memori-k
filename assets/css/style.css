@@ -776,6 +776,15 @@ h1{
     
 }
 
+/* Error Page */
+
+#error .card{
+    color: var(--primary-color-base);
+    border-radius: 20px;
+    border-color: var(--secondary-color-light);
+    box-shadow: 0 6px 16px rgba(27, 55, 100, 0.12);
+}
+
 #options-container .card-body{
     width: 100%;
 }
