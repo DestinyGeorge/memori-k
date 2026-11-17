@@ -284,6 +284,11 @@ h1{
 /* Library */
 
 /* Library Overview*/
+#library-options-menu:hover,
+#library-options-menu:focus{
+    color: var(--secondary-color-dark);
+}
+
 #mastery-circle-container{
     width: 100px; 
     height: 100px;

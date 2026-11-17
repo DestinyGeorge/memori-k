@@ -63,8 +63,17 @@
             <!-- Section Title & Summary Stats -->
             <div id="library-overview-panel" class="p-3 container">
 
-                <div id="more-options" class="d-flex justify-content-end mb-3">
-                    <i class="fa-solid fa-ellipsis-vertical fa-2x"></i>
+                <div class="dropdown d-flex justify-content-end mb-3">
+                    <button class="btn btn-link text-dark-blue p-0" type="button" id="library-options-menu" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical fa-2x"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="library-options-menu">
+                        <li>
+                        <button class="dropdown-menu-item dropdown-item" id="reset-app-data">
+                            <i class="fa-solid fa-rotate-left me-2 text-dark-blue"></i>Reset Application Data
+                        </button>
+                        </li>
+                    </ul>
                 </div>
 
                 <!-- Title, Mastery Doughnut/Percentage, Word Count Stats -->
