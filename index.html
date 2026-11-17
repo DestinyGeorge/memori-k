@@ -42,11 +42,11 @@
                     <a class="nav-link active" aria-current="page" href="index.html">Library</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link disabled" href="study.html" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
+                    <a class="nav-link disabled" role="link" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
                         Study<i class="fa-solid fa-lock fs-6 ms-1"></i></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link disabled" href="quiz.html" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
+                    <a class="nav-link disabled" role="link" tabindex="-1" aria-disabled="true" title="Select cards from the Library first to start studying">
                         Quiz<i class="fa-solid fa-lock fs-6 ms-1"></i></a>
                     </li>
                 </ul>
@@ -94,13 +94,13 @@
                     </div>
                  </div>
                 <div id="overview-actions" class="mt-3 d-flex justify-content-center align-items-center gap-4 gap-md-5 gap-lg-6 flex-wrap">
-                 
-                    <a href="study.html" id="study-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
-                    Study </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
+
+                    <a data-href="study.html" role="link" id="study-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
+                    Study <i class="fa-solid fa-lock ms-1 action-icon"></i>
                     </a>
                 
-                    <a href="quiz.html" id="quiz-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
-                    Quiz </i> <i class="fa-solid fa-lock ms-1 action-icon"></i>
+                    <a data-href="quiz.html" role="link" id="quiz-btn" class="btn library-action-button btn-brand-k disabled " aria-disabled="true" title="Select at least 1 card to start">
+                    Quiz <i class="fa-solid fa-lock ms-1 action-icon"></i>
                     </a>
 
                 </div>
@@ -110,7 +110,7 @@
         <!-- MAIN LIBRARY CONTENT AREA -->
         <section id="library-content" class="container section">
             <!-- 3. View Mode Tab Bar -->
-            <div id="library-tabs" class="mb-3"></div>
+            <div id="library-tabs" class="pt-3">
                 <ul class="nav nav-tabs nav-fill fw-bold" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="all-cards-tab" data-bs-toggle="tab" data-bs-target="#all-cards-tab-pane" type="button" role="tab" aria-controls="all-cards-tab-pane" aria-selected="true">All Cards</button>
@@ -289,7 +289,7 @@
 
 
         <!-- Deck Create & Rename Modal -->
-        <div class="modal fade" id="deckModal" tabindex="-1" aria-labelledby="deckModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deckModal" tabindex="-1" role="dialog" aria-labelledby="deckModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content text-dark-blue">
                 <div class="modal-header">
@@ -322,13 +322,13 @@
         </div>
 
     <!-- Flashcard Details Modal (READ-ONLY) -->
-    <div class="modal fade" id="viewCardModal" tabindex="-1" aria-labelledby="viewCardModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewCardModal" tabindex="-1" role="dialog" aria-labelledby="viewCardModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold text-dark-blue" id="viewCardModalLabel">
+                    <h1 class="modal-title fs-5 fw-bold text-dark-blue" id="viewCardModalLabel">
                         <i class="fa-solid fa-eye me-2 text-brand-k"></i>Flashcard Details
-                    </h5>
+                    </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -379,7 +379,7 @@
     </div>
 
     <!-- Flashcard Edit & Create Modal -->
-    <div class="modal fade" id="editCardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editCardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editCardModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content text-dark-blue">
         <div class="modal-header">

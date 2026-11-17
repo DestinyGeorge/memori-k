@@ -1153,6 +1153,8 @@ function updateSelectionToolBarUI(){
         if (isEnabled) {
             btn.classList.remove("disabled");
             btn.removeAttribute("aria-disabled");
+            btn.setAttribute("href", btn.dataset.href);
+            btn.removeAttribute("role");
             
             // Swap Lock icon to Play icon
             if (iconEl) {
@@ -1162,6 +1164,8 @@ function updateSelectionToolBarUI(){
         } else {
             btn.classList.add("disabled");
             btn.setAttribute("aria-disabled", "true");
+            btn.removeAttribute("href");
+            btn.setAttribute("role", "link");
 
             // Swap Play icon back to Lock icon
             if (iconEl) {
