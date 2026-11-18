@@ -144,7 +144,7 @@ function resetAppData() {
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(TAGS_STORAGE_KEY);
     location.reload(); // Reloads page to re-trigger default-deck.json fetch
-    console.log("App Data Reset")
+    console.log("App Data Reset");
 }
 
 // LIBRARY
@@ -270,11 +270,6 @@ function saveSelectedCardsForSession() {
     localStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(Array.from(selectedCardIds)));
 }
 
-// TABS
-
-const allCardsTabButton = document.getElementById("all-cards-tab");
-const decksTabButton = document.getElementById("decks-tab");
-
 // RENDER TAB CONTENT
 
 /**
@@ -351,7 +346,7 @@ function renderFlashcards(cardsArray, containerId) {
 
         // Render Rating Stars (0 to 3 stars)
         const starsContainer = clone.querySelector(".card-rating-stars");
-        starsContainer.title = ``
+        starsContainer.title = ``;
         switch(card.rating){
             case 0:
                 starsContainer.title = `Unkown`;
@@ -363,7 +358,7 @@ function renderFlashcards(cardsArray, containerId) {
                 starsContainer.title = `Familiar`;
                 break;
             case 3:
-                starsContainer.title = `Memorised`
+                starsContainer.title = `Memorised`;
                 break;
         }
 
@@ -445,7 +440,7 @@ function renderFlashcards(cardsArray, containerId) {
         });
 
         // Edit card trigger
-        editBtn = clone.querySelector(".btn-edit-card");
+        let editBtn = clone.querySelector(".btn-edit-card");
         editBtn.addEventListener("click", () => {
             openCardModal(card); 
         });
@@ -657,9 +652,9 @@ function openViewCardModal(card) {
     // Tags
     const tagsContainer = document.getElementById("view-modal-tags");
     if (tagsContainer) {
-        tagsContainer.innerHTML = card.tags && card.tags.length > 0
-            ? card.tags.map(tag => `<span class="badge bg-secondary-color-light text-dark-blue border">#${tag}</span>`).join(" ")
-            : `<span class="text-muted small">No tags</span>`;
+        tagsContainer.innerHTML = card.tags && card.tags.length > 0 ? 
+        card.tags.map(tag => `<span class="badge bg-secondary-color-light text-dark-blue border">#${tag}</span>`).join(" "): 
+        `<span class="text-muted small">No tags</span>`;
     }
 
     // Stars & Rating Label
@@ -1123,7 +1118,7 @@ function updateDeckGridToolBarState() {
 function updateSelectionToolBarUI(){
 
     //set selected count text to reflect number of cards in selectedCardIds
-    selectionCountTextEl = document.getElementById("selected-count-text");
+    let selectionCountTextEl = document.getElementById("selected-count-text");
     selectionCountTextEl.textContent = selectedCardIds.size;
 
     // Toggle toolbar icon on or boff based on selected card count
@@ -1248,14 +1243,13 @@ function handleCardSelectionDropdown(e){
 function handleToolBarSelectionButton(){
     const hasSelections = selectedCardIds.size > 0;
     let cardSelectionDropDownEl = document.getElementById("select-card-count");
-    let filteredCardIds = filteredCards.map(card => card.id);
     
     if (hasSelections){
-        selectedCardIds.clear()
+        selectedCardIds.clear();
         cardSelectionDropDownEl.value = "all";
     } else{ // if there are no selected cards
         filteredCards.forEach(element => {
-            selectedCardIds.add(element.id)
+            selectedCardIds.add(element.id);
         });
         cardSelectionDropDownEl.value = "all";
     }
@@ -1402,9 +1396,9 @@ function applyFilters(e) {
         const tagMatch = checkedTags.length === 0 || checkedTags.some(tag => card.tags?.includes(tag));
 
         // IF inside a deck view, card MUST also belong to that deck!
-        const deckMatch = (currentView === 'deck-detail') 
-            ? card.tags?.includes(activeDeckTag)  // if in deck view, checks if the current card's tags array contains the active deck tag
-            : true; // the user is in 'all cards' or 'decks.' All cards has no active deck constraints so it 'matches'
+        const deckMatch = (currentView === 'deck-detail') ? 
+        card.tags?.includes(activeDeckTag):   // if in deck view, checks if the current card's tags array contains the active deck tag
+        true; // the user is in 'all cards' or 'decks.' All cards has no active deck constraints so it 'matches'
 
         // A card must satisfy active rating rules AND active tag rules AND deck rules to be included in filteredCards
         return ratingMatch && tagMatch && deckMatch;
