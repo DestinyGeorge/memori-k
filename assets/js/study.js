@@ -1,6 +1,5 @@
 // LocalStorage Key Constant
 const STORAGE_KEY = 'memorik_cards_data';
-const TAGS_STORAGE_KEY = 'memorik_tags_data';
 const SELECTED_IDS_KEY = 'memorik_selected_card_ids';
 const EXAMPLES_STORAGE_KEY = 'memorik_example_cache';
 
@@ -345,7 +344,7 @@ async function loadAIExampleSentence(keyword, meaning) {
 
             // Clear old audio & fetch new audio ONCE for the newly generated sentence
             sentenceAudioCache = null;
-            fetchSentenceAudio(data.korean).then(audioBase64 => {
+            fetchSentenceAudio(exampleData.korean).then(audioBase64 => {
                 sentenceAudioCache = audioBase64;
             })
             .finally(() => {
@@ -512,7 +511,7 @@ function renderExampleCard(data) {
         regenBtn.onclick = () => {
             const currentCard = studyCards[currentIndex];
             if (currentCard) {
-                contentArea.classList.add("d-none")
+                contentArea.classList.add("d-none");
                 loadAIExampleSentence(currentCard.korean, currentCard.english);
             }
         };
@@ -533,7 +532,6 @@ function resetExampleContainer() {
 
     const exampleContainer = document.getElementById("example-container");
     const exampleContent = document.getElementById("example-content");
-    const exampleStatus = document.getElementById("example-status");
 
     
     exampleContent?.classList.add("d-none"); // Hide the example content panel
