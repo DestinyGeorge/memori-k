@@ -92,7 +92,7 @@
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                     
                                     <!-- TTS AUDIO BUTTON -->
-                                    <button id="tts-audio-btn" class="btn btn-light rounded-circle text-dark-blue mb-3 p-2">
+                                    <button id="tts-audio-btn" class="btn btn-light rounded-circle text-dark-blue mb-3 p-2" aria-label="Listen to pronunciation">
                                         <i class="fa-solid fa-volume-high fs-3"></i>
                                     </button>
 
@@ -121,7 +121,7 @@
                 <div class="col-12 section">
                     <!-- CONTROLS: PREV / FLIP / NEXT -->
                     <div class="d-flex justify-content-center align-items-center gap-3 my-3">
-                        <button id="prev-btn" class="btn btn-custom-accent-outline rounded-circle p-3">
+                        <button id="prev-btn" class="btn btn-custom-accent-outline rounded-circle p-3" aria-label="Previous card">
                             <i class="fa-solid fa-caret-left fs-4"></i>
                         </button>
 
@@ -129,7 +129,7 @@
                             Flip
                         </button>
 
-                        <button id="next-btn" class="btn btn-custom-accent-outline rounded-circle p-3">
+                        <button id="next-btn" class="btn btn-custom-accent-outline rounded-circle p-3" aria-label="Next card">
                             <i class="fa-solid fa-caret-right fs-4"></i>
                         </button>
                     </div>
@@ -162,7 +162,7 @@
                                     <div class="sentence-header">
                                         
                                         <p class="korean-sentence">
-                                            <button id="example-tts-btn" class=" btn rounded-circle">
+                                            <button id="example-tts-btn" class=" btn rounded-circle" aria-label="Listen to example sentence">
                                             <i class="fa-solid fa-volume-high text-purple"></i>
                                             </button>
                                             
@@ -216,7 +216,7 @@
     <!-- ITEM TEMPLATES -->
     <template id="vocab-item-template">
         <li class="list-group-item">
-            <span class="vocab-word word fw-bold"></span> 
+            <span class="vocab-word word fw-bold" role="button" tabindex="0"></span> 
             <span class="vocab-pos text-muted small me-1"></span> - 
             <span class="vocab-meaning text-secondary ms-1"></span>
         </li>
@@ -224,7 +224,7 @@
 
     <template id="grammar-item-template">
         <li class="list-group-item">
-            <span class="grammar-pattern fw-bold word me-1"></span>: 
+            <span class="grammar-pattern fw-bold word me-1" role="button" tabindex="0"></span>: 
             <span class="grammar-explanation text-secondary small"></span>
         </li>
     </template>
